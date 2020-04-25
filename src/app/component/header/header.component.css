@@ -1,0 +1,7 @@
+.headerComponent {
+    align-content: center;
+    margin-bottom: -15px;
+}
+.headerLabel {
+    font-weight:bold; font-size:40px; color: blue;
+}

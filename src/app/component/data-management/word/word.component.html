@@ -1,0 +1,212 @@
+<div class="table-container">
+    <mat-form-field>
+        <mat-label>Search</mat-label>
+        <input matInput (keyup)="onFilter($event)" placeholder="Ex. nhân">
+    </mat-form-field>
+    <mat-form-field class="float-right">
+        <mat-label>View column list</mat-label>
+        <mat-select [(value)]='selectedViewColumn' multiple (selectionChange)='onViewModeChangeHandler($event)'>
+            <mat-option *ngFor="let mode of viewColumns" [value]="mode.value" [disabled]="mode.value == config.viewColumnsDef.select || mode.value == config.viewColumnsDef.id">
+                {{mode.viewValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-table matSort [dataSource]="dataSource">
+        <!-- selection Column -->
+        <ng-container matColumnDef="select">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                </mat-checkbox>
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef>
+                <mat-checkbox (change)="$event ? onMasterToggle() : null" [checked]="selection.hasValue() && onIsAllSelected()" [indeterminate]="selection.hasValue() && !onIsAllSelected()">
+                </mat-checkbox>
+            </mat-footer-cell>
+        </ng-container>
+
+        <!-- id Column -->
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef> id </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" readonly class="form-control" [(ngModel)]='element._id' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef>
+                <mat-form-field class="mat-form-field-action">
+                    <mat-label>Actions on selected rows</mat-label>
+                    <mat-select class="mat-select-action" (selectionChange)="onSelectionChange($event)" [(value)]='selectedAction'>
+                        <mat-option class="mat-option-action" *ngFor="let action of actions" [disabled]="(!selection._selected || selection._selected.length == 0) 
+                                && (action.value == config.optionValue.delete || action.value == config.optionValue.update)" [value]="action.value">
+                            {{action.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-footer-cell>
+        </ng-container>
+
+        <!-- Word Column -->
+        <ng-container matColumnDef="word">
+            <mat-header-cell *matHeaderCellDef> Word </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" class="form-control" [(ngModel)]='element.word' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- tag Column -->
+        <ng-container matColumnDef="type">
+            <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-select class="pl10" [(value)]='element.type'>
+                    <mat-option *ngFor="let option of types" [value]="option.value">
+                        {{option.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- Pronunciation Column -->
+        <ng-container matColumnDef="pronun">
+            <mat-header-cell *matHeaderCellDef> Pronunciation </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" class="form-control" [(ngModel)]='element.pronun' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- Kanji Column -->
+        <ng-container matColumnDef="kanji">
+            <mat-header-cell *matHeaderCellDef> Kanji </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" class="form-control" [(ngModel)]='element.kanji' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- Chinese meaning Column -->
+        <ng-container matColumnDef="chinaMeaning">
+            <mat-header-cell *matHeaderCellDef> Chinese </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" class="form-control" [(ngModel)]='element.chinaMeaning' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- Meaning Column -->
+        <ng-container matColumnDef="meaning">
+            <mat-header-cell *matHeaderCellDef> Meaning </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" class="form-control" [(ngModel)]='element.meaning' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- Example Column -->
+        <ng-container matColumnDef="example">
+            <mat-header-cell *matHeaderCellDef> Example </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" class="form-control" [(ngModel)]='element.example' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- exampleMeaning Column -->
+        <ng-container matColumnDef="exampleMeaning">
+            <mat-header-cell *matHeaderCellDef> Example meaning </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" class="form-control" [(ngModel)]='element.exampleMeaning' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- language Column -->
+        <ng-container matColumnDef="language">
+            <mat-header-cell *matHeaderCellDef> Language </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-select class="pl10" [(value)]='element.language'>
+                    <mat-option *ngFor="let option of languages" [value]="option.value">
+                        {{option.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- data source Column -->
+        <ng-container matColumnDef="dataSource">
+            <mat-header-cell *matHeaderCellDef> Data Source </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-select class="pl10" [(value)]='element.dataSource'>
+                    <mat-option *ngFor="let option of dataSources" [value]="option.value">
+                        {{option.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- tag Column -->
+        <ng-container matColumnDef="tags">
+            <mat-header-cell *matHeaderCellDef> Tags </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-select class="pl10" [(value)]='element.tags' multiple>
+                    <mat-option *ngFor="let option of tags" [value]="option.value">
+                        {{option.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- Created Date Column -->
+        <ng-container matColumnDef="createdDate">
+            <mat-header-cell *matHeaderCellDef> Created Date </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" readonly class="form-control" [(ngModel)]='element.createdDate' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- Created By Column -->
+        <ng-container matColumnDef="createdBy">
+            <mat-header-cell *matHeaderCellDef> Created By </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" readonly class="form-control" [(ngModel)]='element.createdBy' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- Updated Date Column -->
+        <ng-container matColumnDef="updatedDate">
+            <mat-header-cell *matHeaderCellDef> Updated Date </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" readonly class="form-control" [(ngModel)]='element.updatedDate' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- Updated By Column -->
+        <ng-container matColumnDef="updatedBy">
+            <mat-header-cell *matHeaderCellDef> Updated By </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" readonly class="form-control" [(ngModel)]='element.updatedBy' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <mat-header-row class="darkgray" *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+        <mat-row [ngClass]='row.rowColor' *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <mat-footer-row class="darkgray" *matFooterRowDef="displayedColumns; sticky:true"></mat-footer-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
+</div>
+<div class="container">
+    <input type="file" name="file" ng2FileSelect [uploader]="uploader" />
+    <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+          Upload
+    </button>
+</div>
+
+<div [innerHTML]=dataUploaded></div>

@@ -1,0 +1,77 @@
+<div class="rightBody" align="center">
+  <label class="rightBodyTitle" i18n='@@rightBodyTitle'>All your stored words</label><br/>
+  <label class="chooseModeView" i18n='@@chooseViewColumn'>Choose view column</label>:
+  <mat-form-field>
+      <mat-select [(value)]='selectedViewColumn' multiple (selectionChange)='onViewModeChangeHandler($event)'>
+          <mat-option *ngFor="let mode of viewColumns" 
+            [value]="mode.value" 
+            [disabled]="mode.value == config.viewColumnsDef.word || mode.value == config.viewColumnsDef.meaning">
+          {{mode.viewValue}}
+          </mat-option>
+      </mat-select>
+  </mat-form-field>
+
+  <div class="table-container">
+    <mat-table [dataSource]="dataSource">
+      <!-- word Column -->
+      <ng-container matColumnDef="word">
+        <mat-header-cell *matHeaderCellDef i18n="@@word"> Word </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.word}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef> <label i18n="@@trained">Trained</label> / <label i18n="@@total">Total</label> </mat-footer-cell>
+      </ng-container>
+    
+      <!-- type Column -->
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef i18n="@@type"> Type </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.type}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+      </ng-container>
+    
+      <!-- Pronunciation Column -->
+      <ng-container matColumnDef="pronun">
+        <mat-header-cell *matHeaderCellDef i18n="@@pronunciation"> Pronunciation </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.pronun}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+      </ng-container>
+
+      <!-- Kanji Column -->
+      <ng-container matColumnDef="kanji">
+        <mat-header-cell *matHeaderCellDef i18n="@@kanji"> Kanji </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.kanji}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+      </ng-container>
+
+      <!-- Chinese meaning Column -->
+      <ng-container matColumnDef="chinaMeaning">
+        <mat-header-cell *matHeaderCellDef i18n="@@chinese"> Chinese </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.chinaMeaning}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+      </ng-container>
+
+      <!-- Meaning Column -->
+      <ng-container matColumnDef="meaning">
+        <mat-header-cell *matHeaderCellDef i18n="@@meaning"> Meaning </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.meaning}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef> {{onGetTotalTrained()}} / {{dataSource.length}} </mat-footer-cell>
+      </ng-container>
+    
+      <!-- Example Column -->
+      <ng-container matColumnDef="example">
+        <mat-header-cell *matHeaderCellDef i18n="@@example"> Example </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.example}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+      </ng-container>
+
+      <!-- Title Column -->
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef i18n="@@title"> Title </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+      </ng-container>
+    
+      <mat-header-row class="darkgray" *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+      <mat-row [ngClass]='row.rowColor' *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      <mat-footer-row class="darkgray" *matFooterRowDef="displayedColumns; sticky:true"></mat-footer-row>
+    </mat-table>    
+  </div>
+</div>

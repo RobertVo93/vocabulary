@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light" *ngIf="currentUser">
+    <a class="navbar-brand" routerLink=""><img src="assets/logo/icon.png" /> <label class="headerLabel" i18n='@@learningNewWordsApp'>Learning app</label><br /></a>
+    <button class="navbar-toggler" type="button" (click)="toggleNavbar()" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+    <div class="collapse navbar-collapse" [ngClass]="{ 'show': navbarOpen }">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link cursor-pointer" [matMenuTriggerFor]="menu1">Training</a>
+                <mat-menu #menu1="matMenu">
+                    <a class="nav-link" routerLinkActive="active" routerLink="train/word" mat-menu-item>Word</a>
+                    <a class="nav-link" routerLinkActive="active" routerLink="train/kanji" mat-menu-item>Kanji</a>
+                </mat-menu>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link cursor-pointer" [matMenuTriggerFor]="menu2">Import</a>
+                <mat-menu #menu2="matMenu">
+                    <a class="nav-link" routerLinkActive="active" routerLink="import/word" mat-menu-item>Word</a>
+                    <a class="nav-link" routerLinkActive="active" routerLink="import/kanji" mat-menu-item>Kanji</a>
+                </mat-menu>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link cursor-pointer" [matMenuTriggerFor]="menu3">Data Management</a>
+                <mat-menu #menu3="matMenu">
+                    <a class="nav-link" routerLinkActive="active" routerLink="management/word" mat-menu-item>Word V1</a>
+                    <a class="nav-link" routerLinkActive="active" routerLink="management/kanji" mat-menu-item>Kanji</a>
+                    <a class="nav-link" routerLinkActive="active" routerLink="management/tag" mat-menu-item>Tags</a>
+                    <a class="nav-link" routerLinkActive="active" routerLink="management/user" mat-menu-item>Users</a>
+                    <a class="nav-link" routerLinkActive="active" routerLink="management/datasource" mat-menu-item>Data Sources</a>
+                    <a class="nav-link" routerLinkActive="active" routerLink="management/role" mat-menu-item>Roles</a>
+                    <a class="nav-link" routerLinkActive="active" routerLink="management/language" mat-menu-item>Languages</a>
+                    <a class="nav-link" routerLinkActive="active" routerLink="management/wordv2" mat-menu-item>Word V2</a>
+                </mat-menu>
+            </li>
+        </ul>
+        <a class="nav-item nav-link cursor-pointer" (click)="signOut()">Logout</a>
+    </div>
+</nav>
+<div class="container">
+    <app-alert></app-alert>
+    <router-outlet></router-outlet>
+</div>

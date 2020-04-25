@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="headerLabel" datatype="html">
+        <source>Study new word every day</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/header/header.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Dataset" datatype="html">
+        <source>Dataset</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/header/header.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="leftBodyTitle" datatype="html">
+        <source>Typing your word </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/body/left/left.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="inputWord" datatype="html">
+        <source>Input word</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/body/left/left.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chooseMode" datatype="html">
+        <source>Choose mode</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/body/left/left.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="position" datatype="html">
+        <source>Position</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/body/left/left.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="rightBodyTitle" datatype="html">
+        <source>All your stored words</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/body/right/right.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chooseViewColumn" datatype="html">
+        <source>Choose view column</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/body/right/right.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="word" datatype="html">
+        <source> Word </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/body/right/right.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="trained" datatype="html">
+        <source>Trained</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/body/right/right.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="total" datatype="html">
+        <source>Total</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/body/right/right.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="type" datatype="html">
+        <source> Type </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/body/right/right.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pronunciation" datatype="html">
+        <source> Pronunciation </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/body/right/right.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meaning" datatype="html">
+        <source> Meaning </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/body/right/right.component.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="example" datatype="html">
+        <source> Example </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/body/right/right.component.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="title" datatype="html">
+        <source> Title </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/component/body/right/right.component.html</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

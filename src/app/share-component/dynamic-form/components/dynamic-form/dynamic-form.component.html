@@ -1,0 +1,13 @@
+<div>
+    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+        <div *ngFor="let question of questions" class="form-row">
+            <app-question class="w100" [question]="question" [form]="form" [errorMessages]="error_messages"></app-question>
+        </div>
+
+        <div *ngIf="form.errors" class="red">
+            <span *ngIf="form.errors.passwordNotMatch">
+                (*) Password and Confirm Password must be the same
+            </span>
+        </div>
+    </form>
+</div>

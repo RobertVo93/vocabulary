@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+    <p>{{data.message}}</p>
+    <app-dynamic-form *ngIf='data.questions != null' [questions]="questions$ | async"></app-dynamic-form>
+</div>
+<div mat-dialog-actions class="actions">
+    <button mat-button class="btn-cancel float-right" (click)="onCancel()" *ngIf="data.action.cancel">Cancel</button>
+    <button mat-button class="btn-primary float-right" [disabled]="(enableValidation && !dynamicFormComponent.form.valid)" (click)="onSave()" *ngIf="data.action.save" cdkFocusInitial type="submit">Save</button>
+    <button mat-button class="btn-primary float-right" [mat-dialog-close]="" *ngIf="data.action.ok" cdkFocusInitial type="submit">OK</button>
+    <button mat-button class="btn-primary float-right" (click)="onUpdate()" *ngIf="data.action.update" cdkFocusInitial type="submit">Update</button>
+    <button mat-button class="btn-delete float-right" (click)="onDelete()" *ngIf="data.action.delete" cdkFocusInitial type="submit">Delete</button>
+</div>

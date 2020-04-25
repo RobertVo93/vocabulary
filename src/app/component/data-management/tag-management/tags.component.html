@@ -1,0 +1,106 @@
+<div class="table-container">
+    <mat-form-field>
+        <mat-label>Search</mat-label>
+        <input matInput (keyup)="onFilter($event)" placeholder="Ex. nhân">
+    </mat-form-field>
+    <mat-form-field class="float-right">
+        <mat-label>View column list</mat-label>
+        <mat-select [(value)]='selectedViewColumn' multiple (selectionChange)='onViewModeChangeHandler($event)'>
+            <mat-option *ngFor="let mode of viewColumns" [value]="mode.value" [disabled]="mode.value == config.viewColumnsDef.name 
+                    || mode.value == config.viewColumnsDef.select
+                    || mode.value == config.viewColumnsDef.id">
+                {{mode.viewValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-table matSort [dataSource]="dataSource">
+        <!-- selection Column -->
+        <ng-container matColumnDef="select">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                    [checked]="selection.isSelected(row)">
+                </mat-checkbox>
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef>
+                <mat-checkbox (change)="$event ? onMasterToggle() : null"
+                    [checked]="selection.hasValue() && onIsAllSelected()"
+                    [indeterminate]="selection.hasValue() && !onIsAllSelected()">
+                </mat-checkbox>
+            </mat-footer-cell>
+        </ng-container>
+
+        <!-- id Column -->
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef> id </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" readonly class="form-control" [(ngModel)]='element._id' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef>
+                <mat-form-field class="mat-form-field-action">
+                    <mat-label>Actions on selected rows</mat-label>
+                    <mat-select class="mat-select-action" (selectionChange)="onSelectionChange($event)"
+                        [(value)]='selectedAction'>
+                        <mat-option class="mat-option-action" *ngFor="let action of actions" 
+                        [disabled]="(!selection._selected || selection._selected.length == 0) 
+                                && (action.value == config.optionValue.delete || action.value == config.optionValue.update)"
+                        [value]="action.value">
+                            {{action.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-footer-cell>
+        </ng-container>
+
+        <!-- name Column -->
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" class="form-control" [(ngModel)]='element.name' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- Created Date Column -->
+        <ng-container matColumnDef="createdDate">
+            <mat-header-cell *matHeaderCellDef> Created Date </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" readonly class="form-control" [(ngModel)]='element.createdDate' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- Created By Column -->
+        <ng-container matColumnDef="createdBy">
+            <mat-header-cell *matHeaderCellDef> Created By </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" readonly class="form-control" [(ngModel)]='element.createdBy' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- Updated Date Column -->
+        <ng-container matColumnDef="updatedDate">
+            <mat-header-cell *matHeaderCellDef> Updated Date </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" readonly class="form-control" [(ngModel)]='element.updatedDate' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- Updated By Column -->
+        <ng-container matColumnDef="updatedBy">
+            <mat-header-cell *matHeaderCellDef> Updated By </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" readonly class="form-control" [(ngModel)]='element.updatedBy' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <mat-header-row class="darkgray" *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+        <mat-row [ngClass]='row.rowColor' *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <mat-footer-row class="darkgray" *matFooterRowDef="displayedColumns; sticky:true"></mat-footer-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
+</div>

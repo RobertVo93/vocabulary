@@ -1,0 +1,7 @@
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.nav-link {
+    color: rgba(0, 0, 0, .8) !important;
+}

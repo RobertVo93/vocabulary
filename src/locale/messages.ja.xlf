@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="Dataset" datatype="html">
+        <source>Dataset</source>
+        <target>データセット</target>
+      </trans-unit>
+      <trans-unit id="headerLabel" datatype="html">
+        <source>Study new word every day</source>
+        <target>毎日新しい単語を勉強する</target>
+      </trans-unit>
+      <trans-unit id="leftBodyTitle" datatype="html">
+        <source>Typing your word </source>
+        <target>言葉を入力している</target>
+      </trans-unit>
+      <trans-unit id="inputWord" datatype="html">
+        <source>Input word</source>
+        <target>入力語</target>
+      </trans-unit>
+      <trans-unit id="chooseMode" datatype="html">
+        <source>Choose mode</source>
+        <target>モードを選ぶ</target>
+      </trans-unit>
+      <trans-unit id="chooseViewColumn" datatype="html">
+        <source>Choose view column</source>
+        <target>ビュー列を選ぶ</target>
+      </trans-unit>
+      <trans-unit id="position" datatype="html">
+        <source>Position</source>
+        <target>位置</target>
+      </trans-unit>
+      <trans-unit id="rightBodyTitle" datatype="html">
+        <source>All your stored words</source>
+        <target>全ての保存された単語</target>
+      </trans-unit>
+      <trans-unit id="word" datatype="html">
+        <source>Word </source>
+        <target>単語</target>
+      </trans-unit>
+      <trans-unit id="trained" datatype="html">
+        <source>Trained</source>
+        <target>トレーン</target>
+      </trans-unit>
+      <trans-unit id="total" datatype="html">
+        <source>Total</source>
+        <target>合計</target>
+      </trans-unit>
+      <trans-unit id="type" datatype="html">
+        <source> Type </source>
+        <target>タイプ</target>
+      </trans-unit>
+      <trans-unit id="pronunciation" datatype="html">
+        <source> Pronunciation </source>
+        <target>発音</target>
+      </trans-unit>
+      <trans-unit id="meaning" datatype="html">
+        <source> Meaning </source>
+        <target>意味</target>
+      </trans-unit>
+      <trans-unit id="example" datatype="html">
+        <source> Example </source>
+        <target>例</target>
+      </trans-unit>
+      <trans-unit id="title" datatype="html">
+        <source> Title </source>
+        <target>タイトル</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

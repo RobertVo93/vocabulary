@@ -1,0 +1,42 @@
+.table-container {
+    position: relative;
+}
+
+.table-container .mat-table {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.table-container .mat-table .mat-header-row {
+    position: absolute;
+    top: -50px;
+    left: 0px;
+    right: 18px;
+    background: #fff;
+}
+
+.mat-cell {
+    text-align: left;
+}
+
+.mat-column-select {
+    flex: 0 0 50px !important;
+}
+
+.mat-column-id {
+    flex: 0 0 200px !important;
+}
+
+.mat-column-createdBy,
+.mat-column-updatedBy {
+    flex: 0 0 100px !important;
+}
+
+.mat-column-createdDate,
+.mat-column-updatedDate {
+    flex: 0 0 120px !important;
+}
+
+input {
+    font-size: 12px;
+}

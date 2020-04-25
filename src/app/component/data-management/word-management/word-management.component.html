@@ -1,0 +1,86 @@
+<div class="rightBody" align="center">
+    <mat-form-field>
+        <mat-label i18n='@@Dataset'>Dataset</mat-label>
+        <mat-select [(value)]='selectedDataset' (selectionChange)='onChangeHandler($event)'>
+            <mat-option *ngFor="let data of dataset" [value]="data.value">
+                {{data.viewValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <!-- <mat-form-field class="ml20">
+        <mat-label i18n='@@Dataset'>view columns</mat-label>
+        <mat-select [(value)]='selectedViewColumn' multiple (selectionChange)='onViewModeChangeHandler($event)'>
+            <mat-option *ngFor="let mode of viewColumns" [value]="mode.value"
+                [disabled]="mode.value == config.viewColumnsDef.word || mode.value == config.viewColumnsDef.meaning">
+                {{mode.viewValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field> -->
+    <div class="table-container">
+        <mat-table [dataSource]="dataSource">
+            <!-- word Column -->
+            <ng-container matColumnDef="word">
+                <mat-header-cell *matHeaderCellDef i18n="@@word"> Word </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <input type="text" class="form-control" [(ngModel)]='element.word'/> </mat-cell>
+                <mat-footer-cell *matFooterCellDef>
+                    <button class="custom-button" (click)="onExport()"
+                        title="Export data table to txt file">Download</button>
+                </mat-footer-cell>
+            </ng-container>
+
+            <!-- type Column -->
+            <ng-container matColumnDef="type">
+                <mat-header-cell *matHeaderCellDef i18n="@@type"> Type </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <input type="text" class="form-control" [(ngModel)]='element.type'/> </mat-cell>
+                <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+
+            <!-- Pronunciation Column -->
+            <ng-container matColumnDef="pronun">
+                <mat-header-cell *matHeaderCellDef i18n="@@pronunciation"> Pronunciation </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <input type="text" class="form-control" [(ngModel)]='element.pronun'/> </mat-cell>
+                <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+
+            <!-- Kanji Column -->
+            <ng-container matColumnDef="kanji">
+                <mat-header-cell *matHeaderCellDef i18n="@@kanji"> Kanji </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <input type="text" class="form-control" [(ngModel)]='element.kanji'/> </mat-cell>
+                <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+
+            <!-- Chinese meaning Column -->
+            <ng-container matColumnDef="chinaMeaning">
+                <mat-header-cell *matHeaderCellDef i18n="@@chinese"> Chinese </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <input type="text" class="form-control" [(ngModel)]='element.chinaMeaning'/> </mat-cell>
+                <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+
+            <!-- Meaning Column -->
+            <ng-container matColumnDef="meaning">
+                <mat-header-cell *matHeaderCellDef i18n="@@meaning"> Meaning </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <input type="text" class="form-control" [(ngModel)]='element.meaning'/></mat-cell>
+                <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+
+            <!-- Example Column -->
+            <ng-container matColumnDef="example">
+                <mat-header-cell *matHeaderCellDef i18n="@@example"> Example </mat-header-cell>
+                <mat-cell *matCellDef="let element"><input type="text" class="form-control" [(ngModel)]='element.example'/> </mat-cell>
+                <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+
+            <!-- Title Column -->
+            <ng-container matColumnDef="title">
+                <mat-header-cell *matHeaderCellDef i18n="@@title"> Title </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <input type="text" class="form-control" [(ngModel)]='element.title'/> </mat-cell>
+                <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+            </ng-container>
+
+            <mat-header-row class="darkgray" *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+            <mat-row [ngClass]='row.rowColor' *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            <mat-footer-row class="darkgray" *matFooterRowDef="displayedColumns; sticky:true"></mat-footer-row>
+        </mat-table>
+        <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
+    </div>
+</div>

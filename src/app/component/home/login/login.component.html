@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="logo">Login</div>
+    <div class="login-item">
+        <form (ngSubmit)="onSubmit()" [formGroup]="form" class="form form-login">
+
+            <div class="form-field">
+                <label class="mb0" for="login-email"><fa name="user"></fa><span class="hidden">Email</span></label>
+                <input formControlName="email" id="login-email" type="email" class="form-input" placeholder="Email" required ngModel>
+            </div>
+
+            <div class="form-field">
+                <label class="mb0" for="login-password"><fa name="lock"></fa><span class="hidden">Password</span></label>
+                <input formControlName="password" id="login-password" type="password" class="form-input" placeholder="Password" required ngModel>
+            </div>
+
+            <div class="form-row form-field">
+                <input type="submit" [disabled]="!form.valid" value="Log in" />
+            </div>
+        </form>
+    </div>
+</div>
