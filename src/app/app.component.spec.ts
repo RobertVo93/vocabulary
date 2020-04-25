@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'language-angular-app'`, () => {
+  it(`should have as title 'vocabulary'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('language-angular-app');
+    expect(app.title).toEqual('vocabulary');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('language-angular-app app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('vocabulary app is running!');
   });
 });

@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class AppComponent {
 	currentUser: JwtResponse;
 	navbarOpen = false;
-	title = 'language-angular-app';
+	title = 'vocabulary';
 
     constructor(
         private router: Router,

@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "language-angular-app": {
+        "vocabulary": {
             "projectType": "application",
             "schematics": {},
             "root": "",
@@ -13,7 +13,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "outputPath": "dist/language-angular-app",
+                        "outputPath": "dist/vocabulary",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
@@ -103,24 +103,24 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "language-angular-app:build"
+                        "browserTarget": "vocabulary:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "language-angular-app:build:production"
+                            "browserTarget": "vocabulary:build:production"
                         },
                         "ja": {
-                            "browserTarget": "language-angular-app:build:production-ja"
+                            "browserTarget": "vocabulary:build:production-ja"
                         },
                         "en": {
-                            "browserTarget": "language-angular-app:build:production-en"
+                            "browserTarget": "vocabulary:build:production-en"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "language-angular-app:build"
+                        "browserTarget": "vocabulary:build"
                     }
                 },
                 "test": {
@@ -159,16 +159,16 @@
                     "builder": "@angular-devkit/build-angular:protractor",
                     "options": {
                         "protractorConfig": "e2e/protractor.conf.js",
-                        "devServerTarget": "language-angular-app:serve"
+                        "devServerTarget": "vocabulary:serve"
                     },
                     "configurations": {
                         "production": {
-                            "devServerTarget": "language-angular-app:serve:production"
+                            "devServerTarget": "vocabulary:serve:production"
                         }
                     }
                 }
             }
         }
     },
-    "defaultProject": "language-angular-app"
+    "defaultProject": "vocabulary"
 }

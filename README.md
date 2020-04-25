@@ -45,7 +45,7 @@ const app = express();
 // Serve only the static files form the dist directory
 app.use(bodyParser.urlencoded({ extended: true }))
 app.get('/*', function(req,res) {
-   res.sendFile(path.join(__dirname+'/dist/language-angular-app/index.html'));
+   res.sendFile(path.join(__dirname+'/dist/vocabulary/index.html'));
 });
 // Start the app by listening on the default Heroku port
 app.listen(process.env.PORT || 8080);
@@ -65,11 +65,11 @@ MongoClient.connect(uri, {
 
 Step 1: `npm install -g angular-cli-ghpages` (Run only for the first time when your environment haven't installed angular-cli-ghpages yet.
 
-step 2: `ng build --prod --base-href https://robertvo93.github.io/language-angular-app/`
+step 2: `ng build --prod --base-href https://robertvo93.github.io/vocabulary/`
 
-step 3: `ng build --prod --base-href=/language-angular-app/`
+step 3: `ng build --prod --base-href=/vocabulary/`
 
-step 4: `ngh --dir=dist/language-angular-app`
+step 4: `ngh --dir=dist/vocabulary`
 
 ## Deploy heroku cloud (https://itnext.io/how-to-deploy-angular-application-to-heroku-1d56e09c5147)
 
