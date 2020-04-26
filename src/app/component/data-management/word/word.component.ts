@@ -10,9 +10,9 @@ import { LanguageService } from '../language/language.service';
 import { Words } from 'src/app/class/words';
 import { TagsService } from '../tag-management/tags.service';
 import { DataSourcesService } from '../data-sources/data-sources.service';
-import {  FileUploader } from 'ng2-file-upload';
-import { ResponseData } from 'src/app/class/responseData';
-import * as download from 'downloadjs';
+// import {  FileUploader } from 'ng2-file-upload';
+// import { ResponseData } from 'src/app/class/responseData';
+// import * as download from 'downloadjs';
 
 @Component({
 	selector: 'app-word',
@@ -32,8 +32,7 @@ export class WordComponent implements OnInit {
 	dataSource;                         //data source for rendering table
 	selection;
 	pageSizeOptions: number[];          //list of page size option
-	public uploader: FileUploader;
-	dataUploaded;
+	//public uploader: FileUploader;
 
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -41,14 +40,14 @@ export class WordComponent implements OnInit {
 		, private langService: LanguageService, private dataSourceService: DataSourcesService, private tagService: TagsService) { }
 
 	ngOnInit() {
-		var scope = this;
-		this.uploader  = new FileUploader({ url: this.config.apiServiceURL.upload, itemAlias: 'file' });
-		this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
-		this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-			const responseData = new ResponseData(JSON.parse(response));
-			const url = `${this.config.apiServiceURL.server}${responseData.returnObj.replace('public','')}`;
-			download(url);
-		};
+		// var scope = this;
+		// this.uploader  = new FileUploader({ url: this.config.apiServiceURL.upload, itemAlias: 'file' });
+		// this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
+		// this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+		// 	const responseData = new ResponseData(JSON.parse(response));
+		// 	const url = `${this.config.apiServiceURL.server}${responseData.returnObj.replace('public','')}`;
+		// 	download(url);
+		// };
 		this.selectedViewColumn = [
 			this.config.viewColumnsDef.select
 			, this.config.viewColumnsDef.id
@@ -76,9 +75,9 @@ export class WordComponent implements OnInit {
 		this.getAllData();
 	}
 
-	onUploadImage(){
-		this.uploader.uploadAll();
-	}
+	// onUploadImage(){
+	// 	this.uploader.uploadAll();
+	// }
 	/**
 	 * filter by text
 	 * @param event 
