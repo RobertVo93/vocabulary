@@ -16,7 +16,7 @@ export class AuthService {
     public currentUser: Observable<JwtResponse>;
 
 	constructor(private httpClient: HttpClient, private config: Config) {
-		this.AUTH_SERVER = this.config.apiServiceURL.server;
+		this.AUTH_SERVER = this.config.apiServiceURL.serverAPI;
 		this.currentUserSubject = new BehaviorSubject<JwtResponse>(JSON.parse(localStorage.getItem('CURRENT_USER')));
         this.currentUser = this.currentUserSubject.asObservable();
 	}

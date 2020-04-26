@@ -11,6 +11,8 @@ import { Words } from 'src/app/class/words';
 import { TagsService } from '../tag-management/tags.service';
 import { DataSourcesService } from '../data-sources/data-sources.service';
 import {  FileUploader } from 'ng2-file-upload';
+import { ResponseData } from 'src/app/class/responseData';
+import * as download from 'downloadjs';
 
 @Component({
 	selector: 'app-word',
@@ -43,9 +45,9 @@ export class WordComponent implements OnInit {
 		this.uploader  = new FileUploader({ url: this.config.apiServiceURL.upload, itemAlias: 'file' });
 		this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
 		this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-			scope.dataUploaded = response;
-			console.log('FileUpload:uploaded successfully:', item, status, response);
-			alert('Your file has been uploaded successfully');
+			const responseData = new ResponseData(JSON.parse(response));
+			const url = `${this.config.apiServiceURL.server}${responseData.returnObj.replace('public','')}`;
+			download(url);
 		};
 		this.selectedViewColumn = [
 			this.config.viewColumnsDef.select
@@ -74,6 +76,9 @@ export class WordComponent implements OnInit {
 		this.getAllData();
 	}
 
+	onUploadImage(){
+		this.uploader.uploadAll();
+	}
 	/**
 	 * filter by text
 	 * @param event 

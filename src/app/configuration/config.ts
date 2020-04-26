@@ -155,13 +155,14 @@ export class Config {
     }
     
     apiServiceURL = {
-        tags: `${environment.serverURL}/tags`,
-        users: `${environment.serverURL}/users`,
-        dataSources: `${environment.serverURL}/dataSources`,
-        roles: `${environment.serverURL}/roles`,
-        languages: `${environment.serverURL}/languages`,
-        words: `${environment.serverURL}/words`,
-        upload: `${environment.serverURL}/upload`,
+        tags: `${environment.serverURL}/api/tags`,
+        users: `${environment.serverURL}/api/users`,
+        dataSources: `${environment.serverURL}/api/dataSources`,
+        roles: `${environment.serverURL}/api/roles`,
+        languages: `${environment.serverURL}/api/languages`,
+        words: `${environment.serverURL}/api/words`,
+        upload: `${environment.serverURL}/api/upload`,
+        serverAPI: `${environment.serverURL}/api`,
         server: `${environment.serverURL}`
     }
 
