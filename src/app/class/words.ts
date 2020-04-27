@@ -15,27 +15,7 @@ export class Words {
         this._id = (obj != null && obj._id != null)? obj._id : null;
         this.word = (obj != null && obj.word != null)? obj.word : null;
         this.kanji = (obj != null && obj.kanji != null)? obj.kanji : null;
-        if(obj != null && obj.type != null){
-            if(obj.type.indexOf("v") == 0){
-                this.type = this.config.wordType.verb;
-            }
-            else if(obj.type.indexOf("adj") == 0){
-                this.type = this.config.wordType.adjective;
-            }
-            else if(obj.type.indexOf('n') == 0){
-                this.type = this.config.wordType.noun;
-            }
-            else if(obj.type.indexOf('p')==0){
-                this.type = this.config.wordType.prep;
-            }
-            else if(obj.type.indexOf('ad') == 0){
-                this.type = this.config.wordType.adverd;
-            }
-        }
-        else{
-            this.type = null;
-        }
-        //this.type = (obj != null && obj.type != null)? obj.type : null;
+        this.type = (obj != null && obj.type != null)? obj.type : null;
         this.pronun = (obj != null && obj.pronun != null)? obj.pronun : null;
         this.meaning = (obj != null && obj.meaning != null)? obj.meaning : null;
         this.example = (obj != null && obj.example != null)? obj.example : null;

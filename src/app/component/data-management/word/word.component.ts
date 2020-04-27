@@ -10,11 +10,6 @@ import { LanguageService } from '../language/language.service';
 import { Words } from 'src/app/class/words';
 import { TagsService } from '../tag-management/tags.service';
 import { DataSourcesService } from '../data-sources/data-sources.service';
-import { Word } from 'src/app/interface/word';
-import { DataSources } from 'src/app/class/dataSources';
-// import {  FileUploader } from 'ng2-file-upload';
-// import { ResponseData } from 'src/app/class/responseData';
-// import * as download from 'downloadjs';
 
 @Component({
 	selector: 'app-word',
@@ -36,7 +31,6 @@ export class WordComponent implements OnInit {
 	dataSourceAll: Words[];				//all datasource
 	selection;
 	pageSizeOptions: number[];          //list of page size option
-	//public uploader: FileUploader;
 
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -44,14 +38,6 @@ export class WordComponent implements OnInit {
 		, private langService: LanguageService, private dataSourceService: DataSourcesService, private tagService: TagsService) { }
 
 	ngOnInit() {
-		// var scope = this;
-		// this.uploader  = new FileUploader({ url: this.config.apiServiceURL.upload, itemAlias: 'file' });
-		// this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
-		// this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-		// 	const responseData = new ResponseData(JSON.parse(response));
-		// 	const url = `${this.config.apiServiceURL.server}${responseData.returnObj.replace('public','')}`;
-		// 	download(url);
-		// };
 		this.selectedViewColumn = [
 			this.config.viewColumnsDef.select
 			, this.config.viewColumnsDef.id
@@ -78,110 +64,6 @@ export class WordComponent implements OnInit {
 		this.selection = new SelectionModel<Words>(true, []);
 		this.getAllData();
 	}
-
-	updateDataToDatabase() {
-		const doulingo = this.getWordDataWithDatasetId(1);
-		const mimikara = this.getWordDataWithDatasetId(2);
-		const minanoNihongo = this.getWordDataWithDatasetId(3);
-		const collection = this.getWordDataWithDatasetId(4);
-
-		const dbData: Words[] = [];
-		//doulingo
-		for (var i = 0; i < doulingo.length; i++) {
-			var words: Words = new Words(doulingo[i]);
-			words.tags = ['5e9a7ffc0e6b793ba8475cb4'];
-			words.language = '5e9c68f3154d814b846d3442';
-			words.dataSource = '5e9d0ceac65a5e0017c0c909';
-			dbData.push(words);
-		}
-
-		//mimikara
-		for (var i = 0; i < mimikara.length; i++) {
-			var words: Words = new Words(mimikara[i]);
-			words.tags = ['5e9a7ffc0e6b793ba8475cb4'];
-			words.language = '5e9c68f3154d814b846d3442';
-			words.dataSource = '5e9d0d0ac65a5e0017c0c90a';
-			dbData.push(words);
-		}
-
-		//minanoNihongo
-		for (var i = 0; i < minanoNihongo.length; i++) {
-			var words: Words = new Words(minanoNihongo[i]);
-			words.tags = ['5e9a7ffc0e6b793ba8475cb4'];
-			words.language = '5e9c68f3154d814b846d3442';
-			words.dataSource = '5ea63f444923c812508db1e9';
-			dbData.push(words);
-		}
-
-		//collection
-		for (var i = 0; i < collection.length; i++) {
-			var words: Words = new Words(collection[i]);
-			words.tags = ['5e9a7ffc0e6b793ba8475cb4'];
-			words.language = '5e9c68f3154d814b846d3442';
-			words.dataSource = '5e9c641246f30b38246cefa1';
-			dbData.push(words);
-		}
-
-		this.service.createData(dbData).subscribe(
-			(res) => {
-				this.dialog.open(CommonDialogComponent, {
-					width: '300px',
-					data: {
-						title: this.config.commonMessage.notification
-						, message: this.config.commonMessage.createSuccessfull
-						, action: {
-							ok: true
-						}
-					}
-				}).afterClosed().subscribe(response => {
-					location.reload();
-				});
-			},
-			(err) => {
-				console.log(err);
-				this.dialog.open(CommonDialogComponent, {
-					width: '300px',
-					data: {
-						title: this.config.commonMessage.alert
-						, message: this.config.commonMessage.createError
-						, action: {
-							ok: true
-						}
-					}
-				});
-			}
-		)
-	}
-	/**
-   * get words data source
-   * @param datasetId dataset Id
-   */
-	private getWordDataWithDatasetId(datasetId: number): Word[] {
-		let words: Word[];
-		let fileName: string = '';
-		switch (datasetId) {
-			case 1:
-				fileName = this.config.dataSetFileName.duolingo;
-				break;
-			case 2:
-				fileName = this.config.dataSetFileName.mimikara;
-				break;
-			case 3:
-				fileName = this.config.dataSetFileName.minanoNihongo;
-				break;
-			case 4:
-				fileName = this.config.dataSetFileName.collection;
-				break;
-			default:
-				break;
-		}
-		let sourceFile = require('src/dataset/' + fileName); //read file source
-		words = sourceFile.wordData;
-		return words;
-	}
-	// onUploadImage(){
-	// 	this.uploader.uploadAll();
-	// }
 
 	/**
    * handle event change dropdown list dataset
@@ -386,14 +268,7 @@ export class WordComponent implements OnInit {
 	private async getAllData() {
 		let dataConverted = await this.service.getAllData();
 		if (dataConverted) {
-			this.dataSourceAll = dataConverted;
-			// this.dataSource = new MatTableDataSource<Words>(dataConverted);
-			// this.dataSource.paginator = this.paginator;
-			// this.dataSource.sort = this.sort;
-			// this.pageSizeOptions = [20, 50, 100];
-			// if (this.dataSource.data.length > 100) {
-			// 	this.pageSizeOptions.push(this.dataSource.data.length);
-			// }
+			this.dataSourceAll = dataConverted
 		}
 	}
 
