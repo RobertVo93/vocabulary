@@ -40,3 +40,7 @@
 input {
     font-size: 12px;
 }
+
+.pl25percent {
+    padding-left: 25%;
+}

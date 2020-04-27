@@ -3,6 +3,14 @@
         <mat-label>Search</mat-label>
         <input matInput (keyup)="onFilter($event)" placeholder="Ex. nhân">
     </mat-form-field>
+    <mat-form-field class="pl25percent">
+        <mat-label>Data source</mat-label>
+        <mat-select [(value)]='selectedDatasource' (selectionChange)='onChangeHandler($event)'>
+            <mat-option *ngFor="let option of dataSources" [value]="option.value">
+                {{option.viewValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
     <mat-form-field class="float-right">
         <mat-label>View column list</mat-label>
         <mat-select [(value)]='selectedViewColumn' multiple (selectionChange)='onViewModeChangeHandler($event)'>
@@ -210,3 +218,4 @@
 </div>
 
 <div [innerHTML]=dataUploaded></div> -->
+<button (click)="updateDataToDatabase()">clone db</button>

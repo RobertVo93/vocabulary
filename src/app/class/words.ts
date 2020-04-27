@@ -10,13 +10,50 @@ import { TagsService } from '../component/data-management/tag-management/tags.se
 
 export class Words {
     private config: Config;
-    constructor(){
+    constructor(obj?){
         this.config = new Config();
+        this._id = (obj != null && obj._id != null)? obj._id : null;
+        this.word = (obj != null && obj.word != null)? obj.word : null;
+        this.kanji = (obj != null && obj.kanji != null)? obj.kanji : null;
+        if(obj != null && obj.type != null){
+            if(obj.type.indexOf("v") == 0){
+                this.type = this.config.wordType.verb;
+            }
+            else if(obj.type.indexOf("adj") == 0){
+                this.type = this.config.wordType.adjective;
+            }
+            else if(obj.type.indexOf('n') == 0){
+                this.type = this.config.wordType.noun;
+            }
+            else if(obj.type.indexOf('p')==0){
+                this.type = this.config.wordType.prep;
+            }
+            else if(obj.type.indexOf('ad') == 0){
+                this.type = this.config.wordType.adverd;
+            }
+        }
+        else{
+            this.type = null;
+        }
+        //this.type = (obj != null && obj.type != null)? obj.type : null;
+        this.pronun = (obj != null && obj.pronun != null)? obj.pronun : null;
+        this.meaning = (obj != null && obj.meaning != null)? obj.meaning : null;
+        this.example = (obj != null && obj.example != null)? obj.example : null;
+        this.exampleMeaning = (obj != null && obj.title != null)? obj.title : null;
+        this.kanjiExplain = (obj != null && obj.kanjiExplain != null)? obj.kanjiExplain : null;
+        this.chinaMeaning = (obj != null && obj.chinaMeaning != null)? obj.chinaMeaning : null;
+        this.language = (obj != null && obj.language != null)? obj.language : null;
+        this.dataSource = (obj != null && obj.dataSource != null)? obj.dataSource : null;
+        this.tags = (obj != null && obj.tags != null)? obj.tags : null;
+        this.createdBy = (obj != null && obj.createdBy != null)? obj.createdBy : null;
+        this.createdDate = (obj != null && obj.createdDate != null)? obj.createdDate : null;
+        this.modifiedBy = (obj != null && obj.modifiedBy != null)? obj.modifiedBy : null;
+        this.modifiedDate = (obj != null && obj.modifiedDate != null)? obj.modifiedDate : null;
     }
     _id: any;
     word: string;
     kanji: string;
-    type: string;
+    type: number;
     pronun: string;
     meaning: string;
     example: string;
@@ -25,7 +62,7 @@ export class Words {
     chinaMeaning: string;
     language: any;
     dataSource: any;
-    tags: [];
+    tags: string[];
     
     createdBy: string;
     createdDate: Date;

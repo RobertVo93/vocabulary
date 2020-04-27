@@ -10,4 +10,7 @@ export interface Word{
     kanjiExplain: string;
     chinaMeaning: string;
     rowColor: string;
+    tags: string[];
+    language: any;
+    dataSource: any;
 }
