@@ -55,7 +55,7 @@ export class CommonService {
      * @param wordList list of training words
      * @param type type of training
      */
-    checkInputWordExisted(inputValue: string, wordList: Word[], type: WordEnum): boolean {
+    checkInputWordExisted(inputValue: string, wordList: Words[], type: WordEnum): boolean {
         let result: boolean = false;
         let property: string = '';
         switch (type) {

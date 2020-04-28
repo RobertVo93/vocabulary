@@ -1,10 +1,8 @@
 .leftBody {
     float: left;
     width: 49%;
-    min-height: 250px;
+    min-height: calc(100vh - 150px);
     border: solid 1px blue;
-    border-left: solid 1px blue;
-    border-right: solid 1px blue;
 }
 
 .leftBodyTitle {
@@ -30,9 +28,8 @@
 .rightBody {
     float: right;
     width: 49%;
-    border-top: solid 1px blue;
-    border-left: solid 1px blue;
-    border-right: solid 1px blue;
+    border: solid 1px blue;
+    min-height: calc(100vh - 150px);
 }
 
 .rightBodyTitle {
@@ -51,7 +48,7 @@
 }
 
 .table-container .mat-table {
-    max-height: calc(100vh - 270px);
+    max-height: calc(100vh - 220px);
     overflow-y: auto;
 }
 

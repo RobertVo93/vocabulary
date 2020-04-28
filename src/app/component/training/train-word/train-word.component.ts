@@ -19,13 +19,12 @@ export class TrainWordComponent implements OnInit {
 	selectedTestMode: number = WordEnum.word; //selected test mode
 	ranges: Option[];      //list of test part (20 words for 1 part)
 	selectedRanges: number[];  //selected parts
-	isAutoNext: boolean = false; //auto next word flag
 	showHideButtonName: string = "Show more";  //button's name
 	isShowMore: boolean = false;  //flag show kanji explain
 
-	allWordDataInDB: Words[];
-	allWordData: Words[];  //word's data source (all)
-	wordData: Words[];     //word's data for training
+	allWordDataInDB: Words[];	//all word's data in Database
+	allWordData: Words[];  		//all word's data base on selected dataset
+	wordData: Words[];     		//word's data for training
 	listIndexWord: number[] = [];  //list available index of words that haven't trained yet
 	numberOfRandomWords: number = 0;
 
@@ -42,10 +41,11 @@ export class TrainWordComponent implements OnInit {
 	viewColumns: Option[];  //list of column could be viewed
 	selectedViewColumn: number[] = [this.config.viewColumnsDef.word, this.config.viewColumnsDef.meaning]; //list of selected column to be view (init with word's column)
 	displayedColumns: string[]; //list of displaying column in the screen
-	dataSource: Words[];  //data source for rendering table
+	dataSource: Words[];  //data source for rendering table on right hand side
 	dataset: Option[];    //option for dropdownlist 'Dataset'
 	selected: number = 0;  //selected dataset
-	constructor(private common: CommonService, private config: Config, private wordService: WordService, private dataSourceService: DataSourcesService) { }
+	constructor(private common: CommonService, private config: Config, 
+		private wordService: WordService, private dataSourceService: DataSourcesService) { }
 
 	ngOnInit() {
 		let promises = [
@@ -105,7 +105,6 @@ export class TrainWordComponent implements OnInit {
 	 */
 	updateDataBaseOnSelectedDataset(selectedDatasetID: number): any {
 		this.allWordData = this.getWordDataWithDatasetId(selectedDatasetID);
-		this.dataSource = this.common.clone(this.allWordData);
 		this.ranges = this.getAllRange();
 	}
 
@@ -200,14 +199,11 @@ export class TrainWordComponent implements OnInit {
 	onKeyUpInput(event: any) {
 		this.inputWord = event.target.value;
 		//update color for text (when error => show red color)
-		//this.inputColor = this.common.checkInputWordExisted(this.inputWord, this.wordData, this.selectedTestMode)
-		//	? this.config.color.blue : this.config.color.red;
+		this.inputColor = this.common.checkInputWordExisted(this.inputWord, this.wordData, this.selectedTestMode)
+			? this.config.color.blue : this.config.color.red;
 
 		if (event.which == 13) {  //enter keycode or auto next
 			this.compareInputNormally();
-		}
-		else if (this.isAutoNext && this.inputWord != '') {
-			this.compareInputAutomatically();
 		}
 	}
 
@@ -215,6 +211,7 @@ export class TrainWordComponent implements OnInit {
 	 * move next training word
 	 */
 	onMoveNextWord() {
+		this.dataSource[this.trainingWordIndex].rowColor = this.config.color.bgTrainedRowColor;
 		this.trainedNO++;
 		this.processNewWord();
 	}
@@ -282,6 +279,7 @@ export class TrainWordComponent implements OnInit {
 		else {
 			this.wordData = this.getWordDataByRandomNumber(this.numberOfRandomWords);
 		}
+		this.dataSource = this.common.clone(this.wordData);
 
 		//store all index that will be trained.
 		for (let i = 0; i < this.wordData.length; i++) {
@@ -297,7 +295,8 @@ export class TrainWordComponent implements OnInit {
 		//store all index that will be trained.
 		for (let i = 0; i < this.wordData.length; i++) {
 			this.listIndexWord.push(i);
-			//this.wordData[i].rowColor = null;
+			this.wordData[i].rowColor = null;
+			this.dataSource[i].rowColor = null;
 		}
 		this.processNewWord();  //process the first element for testing
 	}
@@ -400,19 +399,7 @@ export class TrainWordComponent implements OnInit {
 			alert(this.inputWord + ' is not exist in database');  //TODO: create modal popup for this message
 		}
 		else {
-			this.trainedNO++;
-			this.processNewWord();
-		}
-	}
-
-	/**
-	 * handle action to compare inputed value with the training word automatically
-	 */
-	private compareInputAutomatically() {
-		//find index number of input word
-		let isTheSame: boolean = this.common.compareInputWordWithTraining(this.inputWord, this.trainingWord, this.selectedTestMode);
-		//compare the input word with the training word
-		if (isTheSame) {
+			this.dataSource[this.trainingWordIndex].rowColor = this.config.color.bgTrainedRowColor;
 			this.trainedNO++;
 			this.processNewWord();
 		}

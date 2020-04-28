@@ -9,14 +9,10 @@ import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './component/header/header.component';
-import { LeftComponent } from './component/body/left/left.component';
-import { RightComponent } from './component/body/right/right.component';
 import { AngularMaterialModule } from './angular-material.module';
 import { PubSubService } from './services/data.service';
 import { CommonService } from './services/common.service';
 import { Config } from './configuration/config';
-import { VocabularyComponent } from './component/training/vocabulary/vocabulary.component';
 import { KanjiComponent } from './component/training/kanji/kanji.component';
 import { ConvertToWordComponent } from './component/convert-excel/convert-to-word/convert-to-word.component';
 import { ConvertToKanjiComponent } from './component/convert-excel/convert-to-kanji/convert-to-kanji.component';
@@ -45,10 +41,6 @@ import { TrainWordComponent } from './component/training/train-word/train-word.c
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
-    LeftComponent,
-    RightComponent,
-    VocabularyComponent,
     KanjiComponent,
     ConvertToWordComponent,
     ConvertToKanjiComponent,

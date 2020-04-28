@@ -48,6 +48,7 @@ export class Words {
     createdDate: Date;
     modifiedBy: string;
     modifiedDate: Date;
+	rowColor: any;
 
     /**
      * each attribute need add to question => load form

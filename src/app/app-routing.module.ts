@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { VocabularyComponent } from './component/training/vocabulary/vocabulary.component';
 import { KanjiComponent } from './component/training/kanji/kanji.component';
 import { ConvertToWordComponent } from './component/convert-excel/convert-to-word/convert-to-word.component';
 import { ConvertToKanjiComponent } from './component/convert-excel/convert-to-kanji/convert-to-kanji.component';
