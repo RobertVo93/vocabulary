@@ -1,0 +1,83 @@
+.leftBody {
+    float: left;
+    width: 49%;
+    min-height: 250px;
+    border: solid 1px blue;
+    border-left: solid 1px blue;
+    border-right: solid 1px blue;
+}
+
+.leftBodyTitle {
+    font-weight: bold;
+    font-size: 40px;
+    color: red;
+}
+
+.chooseMode {
+    margin-left: 20px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.positionSelection {
+    width: 100px;
+}
+
+.button-border {
+    border: 1px solid;
+}
+
+.rightBody {
+    float: right;
+    width: 49%;
+    border-top: solid 1px blue;
+    border-left: solid 1px blue;
+    border-right: solid 1px blue;
+}
+
+.rightBodyTitle {
+    font-weight: bold;
+    font-size: 40px;
+    color: red;
+}
+
+.chooseModeView {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.table-container {
+    position: relative;
+}
+
+.table-container .mat-table {
+    max-height: calc(100vh - 270px);
+    overflow-y: auto;
+}
+
+.table-container .mat-table .mat-header-row {
+    position: absolute;
+    top: -50px;
+    left: 0px;
+    right: 18px;
+    background: #fff;
+}
+
+.mat-cell {
+    text-align: left;
+}
+
+.headerComponent {
+    align-content: center;
+    margin-bottom: -15px;
+}
+
+.headerLabel {
+    font-weight: bold;
+    font-size: 40px;
+    color: blue;
+}
+
+.container {
+    max-width: 100% !important;
+}

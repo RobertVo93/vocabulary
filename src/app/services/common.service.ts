@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Word } from 'src/app/interface/word';
 import { WordEnum } from 'src/app/configuration/enums';
 import { Kanji } from '../interface/kanji';
+import { Words } from '../class/words';
 
 @Injectable()
 export class CommonService {
@@ -142,7 +143,7 @@ export class CommonService {
      * @param trainingWord the selected training word
      * @param type type of training
      */
-    compareInputWordWithTraining(inputValue: string, trainingWord: Word, type: WordEnum): boolean {
+    compareInputWordWithTraining(inputValue: string, trainingWord: Words, type: WordEnum): boolean {
         let result: boolean = false;
         let property: string = '';
         switch (type) {

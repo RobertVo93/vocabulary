@@ -20,7 +20,6 @@ import { VocabularyComponent } from './component/training/vocabulary/vocabulary.
 import { KanjiComponent } from './component/training/kanji/kanji.component';
 import { ConvertToWordComponent } from './component/convert-excel/convert-to-word/convert-to-word.component';
 import { ConvertToKanjiComponent } from './component/convert-excel/convert-to-kanji/convert-to-kanji.component';
-import { WordManagementComponent } from './component/data-management/word-management/word-management.component';
 import { KanjiManagementComponent } from './component/data-management/kanji-management/kanji-management.component';
 import { InlineEditComponent } from './share-component/inline-edit/inline-edit.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -41,6 +40,7 @@ import { JwtInterceptor } from './services/authentication/jwt.interceptor';
 import { ErrorInterceptor } from './services/authentication/error.interceptor';
 import { AlertComponent } from './share-component/alert/alert.component';
 import { WordComponent } from './component/data-management/word/word.component';
+import { TrainWordComponent } from './component/training/train-word/train-word.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +52,6 @@ import { WordComponent } from './component/data-management/word/word.component';
     KanjiComponent,
     ConvertToWordComponent,
     ConvertToKanjiComponent,
-    WordManagementComponent,
     KanjiManagementComponent,
     InlineEditComponent,
     TagsComponent,
@@ -66,7 +65,8 @@ import { WordComponent } from './component/data-management/word/word.component';
     LoginComponent,
     HomeComponent,
     AlertComponent,
-    WordComponent
+    WordComponent,
+    TrainWordComponent
   ],
   imports: [
     BrowserModule,

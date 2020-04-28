@@ -229,10 +229,10 @@ export class Config {
     }
 
     wordType = {
-        prep: 1,
-        noun: 2,
-        adjective: 3,
-        verb: 4,
-        adverd: 5
+        1: 'prep',
+        2: 'noun',
+        3: 'adjective',
+        4: 'verb',
+        5: 'adverd'
     }
 }

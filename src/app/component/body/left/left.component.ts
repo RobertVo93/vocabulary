@@ -295,15 +295,15 @@ export class LeftComponent implements OnInit {
   private compareInputNormally() {
     this.inputWord = this.inputWord.slice(0, -1); //remove last element (/n)
     //find index number of input word
-    let isTheSame: boolean = this.common.compareInputWordWithTraining(this.inputWord, this.trainingWord, this.selectedTestMode);
-    //if input word not map any words available in data base => alert
-    if (!isTheSame) {
-      alert(this.inputWord + ' is not exist in database');  //TODO: create modal popup for this message
-    }
-    else {
-      this.data.sendData(this.config.pubSubKey.currentTrainingWordIndex, this.trainingWordIndex);  //pubsub the current training word index to right body
-      this.processNewWord();
-    }
+    // let isTheSame: boolean = this.common.compareInputWordWithTraining(this.inputWord, this.trainingWord, this.selectedTestMode);
+    // //if input word not map any words available in data base => alert
+    // if (!isTheSame) {
+    //   alert(this.inputWord + ' is not exist in database');  //TODO: create modal popup for this message
+    // }
+    // else {
+    //   this.data.sendData(this.config.pubSubKey.currentTrainingWordIndex, this.trainingWordIndex);  //pubsub the current training word index to right body
+    //   this.processNewWord();
+    // }
   }
 
   /**
@@ -311,11 +311,11 @@ export class LeftComponent implements OnInit {
    */
   private compareInputAutomatically() {
     //find index number of input word
-    let isTheSame: boolean = this.common.compareInputWordWithTraining(this.inputWord, this.trainingWord, this.selectedTestMode);
-    //compare the input word with the training word
-    if (isTheSame) {
-      this.data.sendData(this.config.pubSubKey.currentTrainingWordIndex, this.trainingWordIndex);  //pubsub the current training word index to right body
-      this.processNewWord();
-    }
+    // let isTheSame: boolean = this.common.compareInputWordWithTraining(this.inputWord, this.trainingWord, this.selectedTestMode);
+    // //compare the input word with the training word
+    // if (isTheSame) {
+    //   this.data.sendData(this.config.pubSubKey.currentTrainingWordIndex, this.trainingWordIndex);  //pubsub the current training word index to right body
+    //   this.processNewWord();
+    // }
   }
 }

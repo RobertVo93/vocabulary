@@ -81,8 +81,8 @@ export class Words {
         let options:Option[] = [];
         for(var option in this.config.wordType){
             options.push({
-                value: parseInt(this.config.wordType[option]),
-                viewValue: option
+                value: parseInt(option),
+				viewValue: this.config.wordType[option]
             })
         }
 
