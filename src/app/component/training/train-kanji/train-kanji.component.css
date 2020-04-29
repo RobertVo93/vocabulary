@@ -1,18 +1,20 @@
 .leftBody {
     float: left;
     width: 49%;
-    min-height:calc(100vh - 100px);
+    min-height: calc(100vh - 125px);
     border: solid 1px blue;
 }
+
 .leftBodyTitle {
     font-weight: bold;
-    font-size: 40px; 
-    color:red;
+    font-size: 40px;
+    color: red;
 }
+
 .chooseMode {
     margin-left: 20px;
-    font-weight:bold; 
-    font-size:20px;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 .positionSelection {
@@ -26,21 +28,25 @@
 .rightBody {
     float: right;
     width: 49%;
-    min-height:calc(100vh - 100px);
+    min-height: calc(100vh - 125px);
     border: solid 1px blue;
 }
+
 .rightBodyTitle {
-    font-weight: bold; 
-    font-size: 40px; 
-    color:red;
+    font-weight: bold;
+    font-size: 40px;
+    color: red;
 }
+
 .table-container {
     position: relative;
 }
+
 .table-container .mat-table {
     max-height: calc(100vh - 270px);
     overflow-y: auto;
 }
+
 .table-container .mat-table .mat-header-row {
     position: absolute;
     top: -50px;
@@ -48,7 +54,8 @@
     right: 18px;
     background: #fff;
 }
-.mat-cell{
+
+.mat-cell {
     text-align: left;
 }
 
@@ -58,5 +65,7 @@
 }
 
 .headerLabel {
-    font-weight:bold; font-size:40px; color: blue;
+    font-weight: bold;
+    font-size: 40px;
+    color: blue;
 }
