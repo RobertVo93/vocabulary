@@ -44,7 +44,7 @@ export class TrainWordComponent implements OnInit {
 	dataSource: Words[];  //data source for rendering table on right hand side
 	dataset: Option[];    //option for dropdownlist 'Dataset'
 	selected: number = 0;  //selected dataset
-	constructor(private common: CommonService, private config: Config, 
+	constructor(private common: CommonService, public config: Config, 
 		private wordService: WordService, private dataSourceService: DataSourcesService) { }
 
 	ngOnInit() {

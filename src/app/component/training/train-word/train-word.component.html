@@ -47,7 +47,7 @@
         <div *ngIf='previousTrainingWord.example != ""'>
             <strong>Example: {{previousTrainingWord.example}}</strong>
             <div class="red">
-                {{previousTrainingWord.title}}
+                {{previousTrainingWord.exampleMeaning}}
             </div>
         </div>
         <img [attr.title]="trainingWord.meaning" src="assets/images/{{previousTrainingWord.pronun | lowercase}}.jpg" class="details-image row" />
