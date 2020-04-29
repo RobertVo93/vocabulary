@@ -141,13 +141,13 @@ export class Config {
     }
 
     kanjiLevels = {
-        kanjiAll: -1,
-        kanjiNone: 0,
-        kanjiN1: 1,
-        kanjiN2: 2,
-        kanjiN3: 3,
-        kanjiN4: 4,
-        kanjiN5: 5
+        '-1': '--All--',
+        '0': '--None--',
+        '1': 'JLPT N1',
+        '2': 'JLPT N2',
+        '3': 'JLPT N3',
+        '4': 'JLPT N4',
+        '5': 'JLPT N5'
     }
 
     cookieKeyName = {
@@ -161,6 +161,7 @@ export class Config {
         roles: `${environment.serverURL}/api/roles`,
         languages: `${environment.serverURL}/api/languages`,
         words: `${environment.serverURL}/api/words`,
+        kanjis: `${environment.serverURL}/api/kanjis`,
         upload: `${environment.serverURL}/api/upload`,
         serverAPI: `${environment.serverURL}/api`,
         server: `${environment.serverURL}`

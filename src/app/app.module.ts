@@ -13,10 +13,9 @@ import { AngularMaterialModule } from './angular-material.module';
 import { PubSubService } from './services/data.service';
 import { CommonService } from './services/common.service';
 import { Config } from './configuration/config';
-import { KanjiComponent } from './component/training/kanji/kanji.component';
+import { TrainKanjiComponent } from './component/training/train-kanji/train-kanji.component';
 import { ConvertToWordComponent } from './component/convert-excel/convert-to-word/convert-to-word.component';
 import { ConvertToKanjiComponent } from './component/convert-excel/convert-to-kanji/convert-to-kanji.component';
-import { KanjiManagementComponent } from './component/data-management/kanji-management/kanji-management.component';
 import { InlineEditComponent } from './share-component/inline-edit/inline-edit.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TagsComponent } from './component/data-management/tag-management/tags.component';
@@ -37,14 +36,14 @@ import { ErrorInterceptor } from './services/authentication/error.interceptor';
 import { AlertComponent } from './share-component/alert/alert.component';
 import { WordComponent } from './component/data-management/word/word.component';
 import { TrainWordComponent } from './component/training/train-word/train-word.component';
+import { KanjiComponent } from './component/data-management/kanji/kanji.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    KanjiComponent,
+    TrainKanjiComponent,
     ConvertToWordComponent,
     ConvertToKanjiComponent,
-    KanjiManagementComponent,
     InlineEditComponent,
     TagsComponent,
     CommonDialogComponent,
@@ -58,7 +57,8 @@ import { TrainWordComponent } from './component/training/train-word/train-word.c
     HomeComponent,
     AlertComponent,
     WordComponent,
-    TrainWordComponent
+    TrainWordComponent,
+    KanjiComponent
   ],
   imports: [
     BrowserModule,

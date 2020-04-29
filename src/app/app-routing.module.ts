@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { KanjiComponent } from './component/training/kanji/kanji.component';
+import { TrainKanjiComponent } from './component/training/train-kanji/train-kanji.component';
 import { ConvertToWordComponent } from './component/convert-excel/convert-to-word/convert-to-word.component';
 import { ConvertToKanjiComponent } from './component/convert-excel/convert-to-kanji/convert-to-kanji.component';
-import { KanjiManagementComponent } from './component/data-management/kanji-management/kanji-management.component';
 import { TagsComponent } from './component/data-management/tag-management/tags.component';
 import { UserManagementComponent } from './component/data-management/user-management/user-management.component';
 import { DataSourcesComponent } from './component/data-management/data-sources/data-sources.component';
@@ -14,6 +13,7 @@ import { HomeComponent } from './component/home/home/home.component';
 import { AuthGuard } from './services/authentication/auth.guard';
 import { WordComponent } from './component/data-management/word/word.component';
 import { TrainWordComponent } from './component/training/train-word/train-word.component';
+import { KanjiComponent } from './component/data-management/kanji/kanji.component';
 
 
 const routes: Routes = [
@@ -22,14 +22,14 @@ const routes: Routes = [
   {canActivate: [AuthGuard], path: 'import/word', component: ConvertToWordComponent},
   {canActivate: [AuthGuard], path: 'import/kanji', component: ConvertToKanjiComponent},
   {canActivate: [AuthGuard], path: 'train/word', component: TrainWordComponent},
-  {canActivate: [AuthGuard], path: 'train/kanji', component: KanjiComponent},
-  {canActivate: [AuthGuard], path: 'management/kanji', component: KanjiManagementComponent},
+  {canActivate: [AuthGuard], path: 'train/kanji', component: TrainKanjiComponent},
+  {canActivate: [AuthGuard], path: 'management/kanji', component: KanjiComponent},
+  {canActivate: [AuthGuard], path: 'management/word', component: WordComponent},
   {canActivate: [AuthGuard], path: 'management/tag', component: TagsComponent},
   {canActivate: [AuthGuard], path: 'management/user', component: UserManagementComponent},
   {canActivate: [AuthGuard], path: 'management/datasource', component: DataSourcesComponent},
   {canActivate: [AuthGuard], path: 'management/role', component: RoleComponent},
   {canActivate: [AuthGuard], path: 'management/language', component: LanguageComponent},
-  {canActivate: [AuthGuard], path: 'management/word', component: WordComponent},
 
   // otherwise redirect to home
   { path: '**', redirectTo: '' }

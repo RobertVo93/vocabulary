@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { KanjiManagementComponent } from './kanji-management.component';
+import { TrainKanjiComponent } from './train-kanji.component';
 
-describe('KanjiManagementComponent', () => {
-  let component: KanjiManagementComponent;
-  let fixture: ComponentFixture<KanjiManagementComponent>;
+describe('KanjiComponent', () => {
+  let component: TrainKanjiComponent;
+  let fixture: ComponentFixture<TrainKanjiComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ KanjiManagementComponent ]
+      declarations: [ TrainKanjiComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(KanjiManagementComponent);
+    fixture = TestBed.createComponent(TrainKanjiComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
