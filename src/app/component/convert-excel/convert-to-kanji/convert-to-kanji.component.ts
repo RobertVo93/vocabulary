@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { Config } from 'src/app/configuration/config';
-import { Kanji } from 'src/app/interface/kanji';
 import { CommonService } from 'src/app/services/common.service';
+import { Kanjis } from 'src/app/class/kanjis';
+import { KanjiService } from '../../data-management/kanji/kanji.service';
+import { MatDialog } from '@angular/material';
+import { CommonDialogComponent } from 'src/app/share-component/common-dialog/common-dialog.component';
 
 @Component({
 	selector: 'app-convert-to-kanji',
@@ -11,13 +14,49 @@ import { CommonService } from 'src/app/services/common.service';
 })
 export class ConvertToKanjiComponent implements OnInit {
 
-	constructor(private config: Config, private common: CommonService) { }
+	constructor(private config: Config, private common: CommonService, public service: KanjiService, public dialog: MatDialog) { }
 	fileName: string = 'file\'s name';
 	selectedFileName: string = 'Choose file';
 	showResult: boolean = false;
 	ngOnInit() {
 	}
 	datas: any;
+
+	/**
+	 * Import kanji to database
+	 */
+	onImportDB(){
+		let kanji = this.convertToKanjiObject(this.datas);//convert excel data to WordObject
+		this.service.createData(kanji).subscribe(
+			(res) => {
+				this.dialog.open(CommonDialogComponent, {
+					width: '300px',
+					data: {
+						title: this.config.commonMessage.notification
+						, message: this.config.commonMessage.createSuccessfull
+						, action: {
+							ok: true
+						}
+					}
+				}).afterClosed().subscribe(response => {
+					location.reload();
+				});
+			},
+			(err) => {
+				console.log(err);
+				this.dialog.open(CommonDialogComponent, {
+					width: '300px',
+					data: {
+						title: this.config.commonMessage.alert
+						, message: this.config.commonMessage.createError
+						, action: {
+							ok: true
+						}
+					}
+				});
+			}
+		)
+	}
 
 	/**
 	 * upload file excel
@@ -42,11 +81,11 @@ export class ConvertToKanjiComponent implements OnInit {
 	 * convert data to kanji object
 	 * @param data data need to convert
 	 */
-	private convertToKanjiObject(data: any[][]): Kanji[] {
-		let result: Kanji[] = [];
+	private convertToKanjiObject(data: any[][]): Kanjis[] {
+		let result: Kanjis[] = [];
 		for (var i = 0; i < data.length; i++) {
 			var splitArr = data[i]['name'].split(' - ');	//Ex: data[i]['name'] = "ác - ác tâm.PNG"
-			var kanji: any = {};
+			var kanji = new Kanjis();
 			kanji.fullName = data[i]['name'];				//Ex: ác - ác tâm.PNG
 			kanji.word = splitArr[0];						//Ex: ác
 			if(splitArr[1] == null) {
@@ -54,8 +93,6 @@ export class ConvertToKanjiComponent implements OnInit {
 				continue;
 			}
 			kanji.meaning = splitArr[1].split('.')[0];		//Ex: ác tâm
-			kanji.lastModified = data[i]['lastModified'];
-			kanji.lastModifiedDate = this.common.convertDateToStringByFormat(data[i]['lastModifiedDate'], 'yyyy/MM/dd HH:mmm:SS');
 			kanji.order = data[i]['lastModified'];
 			result.push(kanji);
 		}

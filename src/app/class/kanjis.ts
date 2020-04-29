@@ -40,6 +40,7 @@ export class Kanjis {
     modifiedBy: string;
     modifiedDate: Date;
     rowColor: string;
+    order: number;
 
     /**
      * each attribute need add to question => load form

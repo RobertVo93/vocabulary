@@ -414,6 +414,59 @@ export class KanjiComponent implements OnInit {
 			}
 		});
 	}
+	
+	/**Upload data from js file to Database */
+	/**
+	 * get words data source
+	 * @param datasetId dataset Id
+	 */
+	private getWordDataWithDatasetId(): Kanjis[] {
+		let words: Kanjis[];
+		let fileName: string = this.config.dataSetFileName.kanji;
+		let sourceFile = require('src/dataset/' + fileName); //read file source
+		words = sourceFile.wordData;
+		return words;
+	}
+
+	updateDataToDatabase() {
+		const doulingo = this.getWordDataWithDatasetId();
+
+		const dbData: Kanjis[] = [];
+		//doulingo
+		for (var i = 0; i < doulingo.length; i++) {
+			var words: Kanjis = new Kanjis(doulingo[i]);
+			dbData.push(words);
+		}
+		this.service.createData(dbData).subscribe(
+			(res) => {
+				this.dialog.open(CommonDialogComponent, {
+					width: '300px',
+					data: {
+						title: this.config.commonMessage.notification
+						, message: this.config.commonMessage.createSuccessfull
+						, action: {
+							ok: true
+						}
+					}
+				}).afterClosed().subscribe(response => {
+					location.reload();
+				});
+			},
+			(err) => {
+				console.log(err);
+				this.dialog.open(CommonDialogComponent, {
+					width: '300px',
+					data: {
+						title: this.config.commonMessage.alert
+						, message: this.config.commonMessage.createError
+						, action: {
+							ok: true
+						}
+					}
+				});
+			}
+		)
+	}
 }
 
 

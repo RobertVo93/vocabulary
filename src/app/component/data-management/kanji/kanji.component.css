@@ -25,6 +25,15 @@ input {
     margin-right: 2px;
 }
 
+.view-column-list {
+    float: right;
+}
+
+.mat-column-word,
+.mat-column-meaning {
+    flex: 0 0 10% !important;
+}
+
 .mat-column-select {
     flex: 0 0 50px !important;
 }
@@ -78,5 +87,5 @@ input {
 }
 
 .mat-header-cell {
-    padding-left: 10px;
+    padding-left: 20px;
 }

@@ -4,8 +4,7 @@
         <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
     </div>
     <div class="custom-file">
-        <input type="file" (change)="onFileChange($event)" multiple="true" class="custom-file-input cursor-pointer"
-            id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+        <input type="file" (change)="onFileChange($event)" multiple="true" class="custom-file-input cursor-pointer" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
         <label class="custom-file-label" for="inputGroupFile01">{{selectedFileName}}</label>
     </div>
 </div>
@@ -13,3 +12,4 @@
     <input class="custom-file-name-textbox border-right-none" type="text" [(ngModel)]='fileName' />
     <button class="custom-button" (click)="export()">Download!</button>
 </div>
+<button class="custom-button" (click)="onImportDB()">Import to Database</button>
