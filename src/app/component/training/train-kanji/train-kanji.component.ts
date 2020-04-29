@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Kanji } from 'src/app/interface/kanji';
 import { Config } from 'src/app/configuration/config';
 import { Option } from 'src/app/interface/option';
 import { WordEnum } from 'src/app/configuration/enums';
 import { CommonService } from 'src/app/services/common.service';
+import { Kanjis } from 'src/app/class/kanjis';
+import { KanjiService } from '../../data-management/kanji/kanji.service';
 
 
 @Component({
@@ -25,12 +26,12 @@ export class TrainKanjiComponent implements OnInit {
 	trained: number = 0;   //number of trained kanji
 
 	//data variables
-	originalData: Kanji[];          //all initial kanji data
-	allKanjiData: Kanji[];          //all filtered kanji data
-	kanjiData: Kanji[];             //selected kanji data
-	previousTrainingKanji: Kanji;   //the previous training kanji
-	trainingKanji: Kanji;           //the current training kanji
-	nextTrainingKanji: Kanji;       //the next training kanji, use for preloading
+	originalData: Kanjis[];          //all initial kanji data
+	allKanjiData: Kanjis[];          //all filtered kanji data
+	kanjiData: Kanjis[];             //selected kanji data
+	previousTrainingKanji: Kanjis;   //the previous training kanji
+	trainingKanji: Kanjis;           //the current training kanji
+	nextTrainingKanji: Kanjis;       //the next training kanji, use for preloading
 	trainingKanjiIndex: number;     //the index of current training kanji
 	nextTrainingKanjiIndex: number;  //the next index of current training kanji.
 
@@ -45,14 +46,15 @@ export class TrainKanjiComponent implements OnInit {
 	isLastKanji: boolean = false; //flag check last training kanji
 
 	wordEnum = WordEnum;
-	constructor(private common: CommonService, private config: Config) { }
+	constructor(private common: CommonService, private config: Config, private kanjiService: KanjiService) { }
 
 	ngOnInit() {
 		this.kanjiLevels = this.getListOfKanjiLevel(); //get all dataset
 		this.selectedKanjiLevel = this.kanjiLevels[0].value;
 		this.testModes = this.getAllTestMode(); //get test mode
-		this.originalData = this.getAllKanji();
-		this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel);
+		this.getAllKanji().then((value) => {
+			this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel);
+		});
 	}
 
 	/**
@@ -88,9 +90,6 @@ export class TrainKanjiComponent implements OnInit {
 		if (event.which == 13) {  //enter keycode or auto next
 			this.compareInputNormally();
 		}
-		else if (this.isAutoNext && this.inputKanji != '') {
-			this.compareInputAutomatically();
-		}
 	}
 
 	/**
@@ -110,14 +109,9 @@ export class TrainKanjiComponent implements OnInit {
 	}
 
 	private updateDataBaseOnSelectedKanjiLevel(selected) {
-		if (selected == this.config.kanjiLevels['-1']) {
-			this.allKanjiData = this.common.clone(this.originalData);
-		}
-		else {
-			this.allKanjiData = this.common.clone(this.originalData.filter(function (val, index) {
-				return val.JLPTLevel == selected;
-			}));
-		}
+		this.allKanjiData = this.common.clone(this.originalData.filter(function (val, index) {
+			return val.JLPTLevel == selected || selected == -1;	//-1 is all
+		}));
 		this.ranges = this.getAllRange();
 	}
 	/**
@@ -139,12 +133,11 @@ export class TrainKanjiComponent implements OnInit {
 	 * get kanjis data source
 	 * @param datasetId dataset Id
 	 */
-	private getAllKanji(): Kanji[] {
-		let kanji: Kanji[];
-		let fileName: string = this.config.dataSetFileName.kanji;
-		let sourceFile = require('src/dataset/' + fileName); //read file source
-		kanji = sourceFile.wordData;
-		return kanji;
+	private async getAllKanji() {
+		let dataConverted = await this.kanjiService.getAllData();
+		if (dataConverted) {
+			this.originalData = dataConverted;
+		}
 	}
 
 	/**
@@ -271,7 +264,7 @@ export class TrainKanjiComponent implements OnInit {
 	/**
 	 * random the new kanji for training
 	 */
-	private randomNewKanji(): Kanji {
+	private randomNewKanji(): Kanjis {
 		//random an index number of available traing kanjis
 		let randomNumber: number = this.common.random(this.listIndexKanji.length);
 		//get available index in trainging kanji
@@ -279,7 +272,7 @@ export class TrainKanjiComponent implements OnInit {
 		this.nextTrainingKanjiIndex = this.listIndexKanji[randomNumber];
 
 		//get kanji
-		let kanji: Kanji = this.kanjiData[this.nextTrainingKanjiIndex];
+		let kanji: Kanjis = this.kanjiData[this.nextTrainingKanjiIndex];
 		if (kanji.explain)
 			kanji.explain = kanji.explain.replace(new RegExp('\r\n', 'g'), "<br \\>").replace(new RegExp('\n', 'g'), "<br \\>");
 		//remove index from list available training kanjis
@@ -310,19 +303,6 @@ export class TrainKanjiComponent implements OnInit {
 			alert(this.inputKanji + ' is not exist in database');  //TODO: create modal popup for this message
 		}
 		else {
-			this.trained++;
-			this.processNewKanji();
-		}
-	}
-
-	/**
-	 * handle action to compare inputed value with the training kanji automatically
-	 */
-	private compareInputAutomatically() {
-		//find index number of input kanji
-		let isTheSame: boolean = this.common.compareInputKanjiWithTraining(this.inputKanji, this.trainingKanji, this.selectedTestMode);
-		//compare the input kanji with the training kanji
-		if (isTheSame) {
 			this.trained++;
 			this.processNewKanji();
 		}

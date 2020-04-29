@@ -3,6 +3,7 @@ import { Word } from 'src/app/interface/word';
 import { WordEnum } from 'src/app/configuration/enums';
 import { Kanji } from '../interface/kanji';
 import { Words } from '../class/words';
+import { Kanjis } from '../class/kanjis';
 
 @Injectable()
 export class CommonService {
@@ -89,7 +90,7 @@ export class CommonService {
      * @param kanjiList list of training kanji
      * @param type type of training
      */
-    checkInputKanjiExisted(inputValue: string, kanjiList: Kanji[], type: WordEnum): boolean {
+    checkInputKanjiExisted(inputValue: string, kanjiList: Kanjis[], type: WordEnum): boolean {
         let result: boolean = false;
         let property: string = '';
         switch (type) {
@@ -116,7 +117,7 @@ export class CommonService {
      * @param trainingKanji the selected training kanji
      * @param type type of training
      */
-    compareInputKanjiWithTraining(inputValue: string, trainingKanji: Kanji, type: WordEnum): boolean {
+    compareInputKanjiWithTraining(inputValue: string, trainingKanji: Kanjis, type: WordEnum): boolean {
         let result: boolean = false;
         let property: string = '';
         switch (type) {
