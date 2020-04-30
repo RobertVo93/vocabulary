@@ -37,6 +37,7 @@ import { AlertComponent } from './share-component/alert/alert.component';
 import { WordComponent } from './component/data-management/word/word.component';
 import { TrainWordComponent } from './component/training/train-word/train-word.component';
 import { KanjiComponent } from './component/data-management/kanji/kanji.component';
+import { ImagesComponent } from './component/data-management/images/images.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { KanjiComponent } from './component/data-management/kanji/kanji.componen
     AlertComponent,
     WordComponent,
     TrainWordComponent,
-    KanjiComponent
+    KanjiComponent,
+    ImagesComponent
   ],
   imports: [
     BrowserModule,

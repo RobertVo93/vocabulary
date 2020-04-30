@@ -41,7 +41,10 @@ export class Config {
         exampleMeaning: 'exampleMeaning',
         kanjiExplain: 'kanjiExplain',
         tags: 'tags',
-        dataSource: 'dataSource'
+        dataSource: 'dataSource',
+        fileName: 'fileName',
+        contentType: 'contentType',
+        uploadDate: 'uploadDate'
     }
 
     viewColumnsDef = {
@@ -78,7 +81,10 @@ export class Config {
         exampleMeaning: 31,
         kanjiExplain: 32,
         tags: 33,
-        dataSource: 34
+        dataSource: 34,
+        fileName: 35,
+        contentType: 36,
+        uploadDate: 37
 
     }
 
@@ -163,6 +169,7 @@ export class Config {
         words: `${environment.serverURL}/api/words`,
         kanjis: `${environment.serverURL}/api/kanjis`,
         upload: `${environment.serverURL}/api/upload`,
+        images: `${environment.serverURL}/api/images`,
         serverAPI: `${environment.serverURL}/api`,
         server: `${environment.serverURL}`
     }

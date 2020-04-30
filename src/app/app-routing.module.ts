@@ -14,6 +14,7 @@ import { AuthGuard } from './services/authentication/auth.guard';
 import { WordComponent } from './component/data-management/word/word.component';
 import { TrainWordComponent } from './component/training/train-word/train-word.component';
 import { KanjiComponent } from './component/data-management/kanji/kanji.component';
+import { ImagesComponent } from './component/data-management/images/images.component';
 
 
 const routes: Routes = [
@@ -30,6 +31,7 @@ const routes: Routes = [
   {canActivate: [AuthGuard], path: 'management/datasource', component: DataSourcesComponent},
   {canActivate: [AuthGuard], path: 'management/role', component: RoleComponent},
   {canActivate: [AuthGuard], path: 'management/language', component: LanguageComponent},
+  {canActivate: [AuthGuard], path: 'management/image', component: ImagesComponent},
 
   // otherwise redirect to home
   { path: '**', redirectTo: '' }
