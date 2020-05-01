@@ -10,7 +10,7 @@
 </div>
 
 <div class="leftBody" align="center">
-    <div class="training-word" *ngIf='trainingWord'>
+    <div class="pt5" *ngIf='trainingWord'>
         <div *ngIf='selectedTestMode == wordEnum.word;'>
             <label class='fs40'>{{trainingWord.meaning}}</label>
         </div>
@@ -18,8 +18,9 @@
             <label class='fs40'>{{trainingWord.word}}</label>
         </div>
         <div *ngIf='selectedTestMode == wordEnum.image;'>
-            <img [attr.title]="trainingWord.meaning" src="assets/images/{{nextTrainingWord.pronun | lowercase}}.jpg" hidden="true" class="details-image" />
-            <img [attr.title]="trainingWord.meaning" src="assets/images/{{trainingWord.pronun | lowercase}}.jpg" class="details-image" />
+            <img height="100" [attr.title]="trainingWord.meaning" class="details-image" src="{{serverImagesURL}}/{{trainingWord.pronun | lowercase}}.jpg" />
+            <!-- <img [attr.title]="trainingWord.meaning" src="assets/images/{{nextTrainingWord.pronun | lowercase}}.jpg" hidden="true" class="details-image" /> -->
+            <!-- <img [attr.title]="trainingWord.meaning" src="assets/images/{{trainingWord.pronun | lowercase}}.jpg" class="details-image" /> -->
         </div>
         <div *ngIf='selectedTestMode == wordEnum.kanji;'>
             <label class='fs40'>{{trainingWord.kanji}}</label>
@@ -50,7 +51,8 @@
                 {{previousTrainingWord.exampleMeaning}}
             </div>
         </div>
-        <img [attr.title]="trainingWord.meaning" src="assets/images/{{previousTrainingWord.pronun | lowercase}}.jpg" class="details-image row" />
+        <img height="100" [attr.title]="previousTrainingWord.meaning" class="details-image row" src="{{serverImagesURL}}/{{previousTrainingWord.pronun | lowercase}}.jpg" />
+        <!-- <img [attr.title]="trainingWord.meaning"  src="assets/images/{{previousTrainingWord.pronun | lowercase}}.jpg" class="details-image row" /> -->
         <button mat-button (click)="onShowMore();">{{showHideButtonName}}</button>
         <div class="kanji-explain" [hidden]="!isShowMore">
             <div [innerHTML]="previousTrainingWord.kanjiExplain"></div>

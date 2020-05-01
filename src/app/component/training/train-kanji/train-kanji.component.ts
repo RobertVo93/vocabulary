@@ -13,6 +13,7 @@ import { KanjiService } from '../../data-management/kanji/kanji.service';
 	styleUrls: ['./train-kanji.component.css']
 })
 export class TrainKanjiComponent implements OnInit {
+	serverImagesURL:string = '';				//url for image resources
 	//binding variables
 	selectedTestMode: number = WordEnum.word; //get training mode, selected by user
 	selectedRanges: number[];                 //get training ranges selected by user
@@ -49,6 +50,7 @@ export class TrainKanjiComponent implements OnInit {
 	constructor(private common: CommonService, private config: Config, private kanjiService: KanjiService) { }
 
 	ngOnInit() {
+		this.serverImagesURL = this.config.apiServiceURL.images;
 		this.kanjiLevels = this.getListOfKanjiLevel(); //get all dataset
 		this.selectedKanjiLevel = this.kanjiLevels[0].value;
 		this.testModes = this.getAllTestMode(); //get test mode

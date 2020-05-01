@@ -44,7 +44,8 @@ export class Config {
         dataSource: 'dataSource',
         fileName: 'fileName',
         contentType: 'contentType',
-        uploadDate: 'uploadDate'
+        uploadDate: 'uploadDate',
+        image: 'image'
     }
 
     viewColumnsDef = {
@@ -84,7 +85,8 @@ export class Config {
         dataSource: 34,
         fileName: 35,
         contentType: 36,
-        uploadDate: 37
+        uploadDate: 37,
+        image: 38
 
     }
 

@@ -14,6 +14,7 @@ import { CommonDialogComponent } from 'src/app/share-component/common-dialog/com
 	styleUrls: ['./images.component.css']
 })
 export class ImagesComponent implements OnInit {
+	serverImagesURL: string = '';		//url for image resources
 	actions: Option[];					//list of action for selected rows
 	viewColumns: Option[];              //list of column could be viewed
 	selectedViewColumn: number[] = [];  //list of selected column to be view
@@ -29,6 +30,7 @@ export class ImagesComponent implements OnInit {
 		public service: ImagesService, public dialog: MatDialog) { }
 
 	ngOnInit() {
+		this.serverImagesURL = this.config.apiServiceURL.images;
 		this.selectedViewColumn = [
 			this.config.viewColumnsDef.select
 			, this.config.viewColumnsDef.id
@@ -124,6 +126,7 @@ export class ImagesComponent implements OnInit {
 			{ value: this.config.viewColumnsDef.fileName, viewValue: this.config.viewColumns.fileName },
 			{ value: this.config.viewColumnsDef.uploadDate, viewValue: this.config.viewColumns.uploadDate },
 			{ value: this.config.viewColumnsDef.contentType, viewValue: this.config.viewColumns.contentType },
+			{ value: this.config.viewColumnsDef.image, viewValue: this.config.viewColumns.image },
 			{ value: this.config.viewColumnsDef.createdDate, viewValue: this.config.viewColumns.createdDate },
 			{ value: this.config.viewColumnsDef.createdBy, viewValue: this.config.viewColumns.createdBy },
 			{ value: this.config.viewColumnsDef.updatedDate, viewValue: this.config.viewColumns.updatedDate },
@@ -153,6 +156,9 @@ export class ImagesComponent implements OnInit {
 					break;
 				case this.config.viewColumnsDef.contentType:
 					colDef.push(this.config.viewColumns.contentType);
+					break;
+				case this.config.viewColumnsDef.image:
+					colDef.push(this.config.viewColumns.image);
 					break;
 				case this.config.viewColumnsDef.createdDate:
 					colDef.push(this.config.viewColumns.createdDate);

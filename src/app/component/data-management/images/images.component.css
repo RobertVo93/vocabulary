@@ -15,8 +15,14 @@
     background: #fff;
 }
 
+.mat-header-cell {
+    padding-left: 20px;
+}
+
 .mat-cell {
     text-align: left;
+    margin-left: 3px;
+    margin-right: 2px;
 }
 
 .mat-column-select {
@@ -36,11 +42,6 @@
 .mat-column-updatedDate {
     flex: 0 0 120px !important;
 }
-
-
-/* .mat-column-name {
-    flex: 0 0 350px !important;
-} */
 
 input {
     font-size: 12px;

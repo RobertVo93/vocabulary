@@ -13,6 +13,7 @@ import { DataSourcesService } from '../../data-management/data-sources/data-sour
 	styleUrls: ['./train-word.component.css']
 })
 export class TrainWordComponent implements OnInit {
+	serverImagesURL: string = '';		//url for image resources
 	trainedNO: number = 0;
 	totalTraining: number = 0;
 	testModes: Option[];   //list of test mode
@@ -48,6 +49,7 @@ export class TrainWordComponent implements OnInit {
 		private wordService: WordService, private dataSourceService: DataSourcesService) { }
 
 	ngOnInit() {
+		this.serverImagesURL = this.config.apiServiceURL.images;
 		let promises = [
 			this.getListOfDataset(),
 			this.getAllWordsDB()

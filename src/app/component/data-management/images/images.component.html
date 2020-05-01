@@ -51,7 +51,7 @@
         <ng-container matColumnDef="fileName">
             <mat-header-cell *matHeaderCellDef mat-sort-header> File's Name </mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <input type="text" class="form-control" [(ngModel)]='element.filename' />
+                <input type="text" readonly class="form-control" [(ngModel)]='element.filename' />
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
@@ -70,6 +70,15 @@
             <mat-header-cell *matHeaderCellDef> Content Type </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <input type="text" readonly class="form-control" [(ngModel)]='element.contentType' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- image Column -->
+        <ng-container matColumnDef="image">
+            <mat-header-cell *matHeaderCellDef> Image </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <img height="100" [attr.title]="element.filename" class="details-image row" src="{{serverImagesURL}}/{{element.filename}}" />
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
