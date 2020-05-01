@@ -31,6 +31,15 @@ export class CommonApiService {
 	}
 
 	/**
+	 * post new data to the provide url without http options
+	 * @param data the record need to post
+	 * @param url url
+	 */
+	postWithoutOptions<T>(data: T, url: string): Observable<T> {
+		return this.http.post<T>(url, data);
+	}
+
+	/**
 	 * delete record
 	 * @param data data could be id {number} or record {have a field named id}
 	 * @param url url

@@ -34,7 +34,7 @@ export class ImagesService {
 	 * @param data data's data
 	 */
 	createData<T>(data: T){
-		return this.apiService.post(data, this.serverURL);
+		return this.apiService.postWithoutOptions(data, this.serverURL);
 	}
 
 	/**

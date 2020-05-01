@@ -351,7 +351,25 @@ export class ImagesComponent implements OnInit {
 			}
 		});
 	}
+
+	/**TODO: upload multiple images => uncomment the below code and in html */
+	// images;
+	// multipleImages = [];
+	// selectMultipleImage(event) {
+	// 	if (event.target.files.length > 0) {
+	// 		this.multipleImages = event.target.files;
+	// 	}
+	// }
+
+	// onMultipleSubmit() {
+	// 	const formData = new FormData();
+	// 	for (let img of this.multipleImages) {
+	// 		formData.append('files', img);
+	// 	}
+
+	// 	this.service.createData(formData).subscribe(
+	// 		(res) => console.log(res),
+	// 		(err) => console.log(err)
+	// 	);
+	// }
 }
-
-
-
