@@ -48,30 +48,36 @@ export class DynamicFormQuestionComponent {
 		this.imgService.createData(formData).subscribe(
 			(res) => {
 				var response = new ResponseData(res);
-				scope.question.value = response.returnObj;
-				this.dialog.open(CommonDialogComponent, {
-					width: '300px',
-					data: {
-						title: this.config.commonMessage.notification
-						, message: this.config.commonMessage.createSuccessfull
-						, action: {
-							ok: true
+				if(response.success){
+					scope.question.value = response.returnObj;
+					this.dialog.open(CommonDialogComponent, {
+						width: '300px',
+						data: {
+							title: this.config.commonMessage.notification
+							, message: this.config.commonMessage.createSuccessfull
+							, action: {
+								ok: true
+							}
 						}
-					}
-				});
-				console.log(res);
+					});
+					console.log(res);
+				}
+				else {
+					this.dialog.open(CommonDialogComponent, {
+						width: '300px',
+						data: {
+							title: this.config.commonMessage.alert
+							, message: this.config.commonMessage.createError
+							, action: {
+								ok: true
+							}
+						}
+					});
+				}
+				
 			},
 			(err) => {
-				this.dialog.open(CommonDialogComponent, {
-					width: '300px',
-					data: {
-						title: this.config.commonMessage.alert
-						, message: this.config.commonMessage.createError
-						, action: {
-							ok: true
-						}
-					}
-				});
+				
 				console.log(err)
 			}
 		);

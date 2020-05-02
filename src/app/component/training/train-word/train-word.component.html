@@ -18,7 +18,7 @@
             <label class='fs40'>{{trainingWord.word}}</label>
         </div>
         <div *ngIf='selectedTestMode == wordEnum.image;'>
-            <img height="100" [attr.title]="trainingWord.meaning" class="details-image" src="{{serverImagesURL}}/{{trainingWord.pronun | lowercase}}.jpg" />
+            <img height="100" [attr.title]="trainingWord.meaning" class="details-image" src="{{serverImagesURL}}/{{trainingWord.filename}}" />
             <!-- <img [attr.title]="trainingWord.meaning" src="assets/images/{{nextTrainingWord.pronun | lowercase}}.jpg" hidden="true" class="details-image" /> -->
             <!-- <img [attr.title]="trainingWord.meaning" src="assets/images/{{trainingWord.pronun | lowercase}}.jpg" class="details-image" /> -->
         </div>
@@ -51,7 +51,7 @@
                 {{previousTrainingWord.exampleMeaning}}
             </div>
         </div>
-        <img height="100" [attr.title]="previousTrainingWord.meaning" class="details-image row" src="{{serverImagesURL}}/{{previousTrainingWord.pronun | lowercase}}.jpg" />
+        <img height="100" [attr.title]="previousTrainingWord.meaning" class="details-image row" src="{{serverImagesURL}}/{{previousTrainingWord.filename}}" />
         <!-- <img [attr.title]="trainingWord.meaning"  src="assets/images/{{previousTrainingWord.pronun | lowercase}}.jpg" class="details-image row" /> -->
         <button mat-button (click)="onShowMore();">{{showHideButtonName}}</button>
         <div class="kanji-explain" [hidden]="!isShowMore">

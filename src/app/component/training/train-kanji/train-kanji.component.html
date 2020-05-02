@@ -15,9 +15,9 @@
     <div class="training-kanji" *ngIf='trainingKanji'>
 
         <div *ngIf='selectedTestMode == wordEnum.word;'>
-            <!-- <img height="100" [attr.title]="trainingKanji.word" class="details-image" src="{{serverImagesURL}}/{{trainingKanji.fullName}}" /> -->
-            <img height="100" [attr.title]="nextTrainingKanji.word" src="assets/kanji images/{{nextTrainingKanji.fullName}}" hidden="true" class="details-image" />
-            <img height="100" [attr.title]="trainingKanji.word" src="assets/kanji images/{{trainingKanji.fullName}}" class="details-image" />
+            <img height="100" [attr.title]="trainingKanji.word" class="details-image" src="{{serverImagesURL}}/{{trainingKanji.filename}}" />
+            <!-- <img height="100" [attr.title]="nextTrainingKanji.word" src="assets/kanji images/{{nextTrainingKanji.fullName}}" hidden="true" class="details-image" />
+            <img height="100" [attr.title]="trainingKanji.word" src="assets/kanji images/{{trainingKanji.fullName}}" class="details-image" /> -->
         </div>
         <div *ngIf='selectedTestMode == wordEnum.kanji;'>
             <label class='fs20'>{{trainingKanji.word}} - {{trainingKanji.fullMeaning}}</label>
@@ -54,7 +54,7 @@
     <label>Trained / Total: {{trained}} / {{total}} </label> <br />
     <div class="displayArea" *ngIf='previousTrainingKanji'>
         <!-- <img height="100" [attr.title]="previousTrainingKanji.fullName" class="details-image" src="{{serverImagesURL}}/{{previousTrainingKanji.fullName}}" /> -->
-        <img height="100" [attr.title]="previousTrainingKanji.fullName" src="assets/kanji images/{{previousTrainingKanji.fullName}}" class="details-image row" />
+        <img height="100" [attr.title]="previousTrainingKanji.fullName" src="{{serverImagesURL}}/{{previousTrainingKanji.filename}}" class="details-image row" />
         <div *ngIf="previousTrainingKanji.explain" align="left" class="pl10">
             <div [innerHTML]="previousTrainingKanji.explain"></div>
             <label class="fs20">remember method: <span class="red">{{previousTrainingKanji.remember}}</span></label>

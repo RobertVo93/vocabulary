@@ -14,6 +14,7 @@ import { Kanjis } from 'src/app/class/kanjis';
 	styleUrls: ['./kanji.component.css']
 })
 export class KanjiComponent implements OnInit {
+	serverImagesURL: string = '';		//url for image resources
 	kanjiLevels: Option[];				//list of kanji level from n0-n5
 	actions: Option[];					//list of action for selected rows
 	viewColumns: Option[];              //list of column could be viewed
@@ -30,6 +31,7 @@ export class KanjiComponent implements OnInit {
 		public service: KanjiService, public dialog: MatDialog) { }
 
 	ngOnInit() {
+		this.serverImagesURL = this.config.apiServiceURL.images;
 		this.kanjiLevels = this.getListOfKanjiLevel();
 		this.selectedViewColumn = [
 			this.config.viewColumnsDef.select
@@ -157,6 +159,7 @@ export class KanjiComponent implements OnInit {
 			{ value: this.config.viewColumnsDef.remember, viewValue: this.config.viewColumns.remember },
 			{ value: this.config.viewColumnsDef.explain, viewValue: this.config.viewColumns.explain },
 			{ value: this.config.viewColumnsDef.fullName, viewValue: this.config.viewColumns.fullName },
+			{ value: this.config.viewColumnsDef.image, viewValue: this.config.viewColumns.image },
 			{ value: this.config.viewColumnsDef.createdDate, viewValue: this.config.viewColumns.createdDate },
 			{ value: this.config.viewColumnsDef.createdBy, viewValue: this.config.viewColumns.createdBy },
 			{ value: this.config.viewColumnsDef.updatedDate, viewValue: this.config.viewColumns.updatedDate },
@@ -198,6 +201,9 @@ export class KanjiComponent implements OnInit {
 					break;
 				case this.config.viewColumnsDef.JLPTLevel:
 					colDef.push(this.config.viewColumns.JLPTLevel);
+					break;
+				case this.config.viewColumnsDef.image:
+					colDef.push(this.config.viewColumns.image);
 					break;
 				case this.config.viewColumnsDef.createdDate:
 					colDef.push(this.config.viewColumns.createdDate);

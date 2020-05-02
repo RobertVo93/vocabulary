@@ -1,12 +1,10 @@
+import { of } from 'rxjs';
 import { QuestionBase } from './question-base';
 import { TextboxQuestion } from './question-textbox';
-import { of } from 'rxjs';
-import { Config } from '../configuration/config';
 import { DropdownQuestion } from './question-dropdown';
-import { LanguageService } from '../component/data-management/language/language.service';
+import { FileQuestion } from './question-file';
+import { Config } from '../configuration/config';
 import { Option } from '../interface/option';
-import { DataSourcesService } from '../component/data-management/data-sources/data-sources.service';
-import { TagsService } from '../component/data-management/tag-management/tags.service';
 
 export class Kanjis {
     private config: Config;
@@ -20,6 +18,7 @@ export class Kanjis {
         this.remember = (obj != null && obj.remember != null)? obj.remember : null;
         this.explain = (obj != null && obj.explain != null)? obj.explain : null;
         this.JLPTLevel = (obj != null && obj.JLPTLevel != null)? obj.JLPTLevel : null;
+        this.filename = (obj != null && obj.filename != null)? obj.filename : null;
         
         this.createdBy = (obj != null && obj.createdBy != null)? obj.createdBy : null;
         this.createdDate = (obj != null && obj.createdDate != null)? obj.createdDate : null;
@@ -34,6 +33,7 @@ export class Kanjis {
     remember: string;
     explain: string;
     JLPTLevel: number;
+    filename: string;
     
     createdBy: string;
     createdDate: Date;
@@ -130,6 +130,20 @@ export class Kanjis {
             options: options,
             multiple: false,
             order: 70
+        }));
+
+        //set up meaning question
+        validators = {};
+        validators[this.config.formValidators.require]= {
+            value: true,
+            error_message: 'Image is required.'
+        };
+        questions.push(new FileQuestion({
+            key: 'filename',
+            label: 'Image',
+            value: '',
+            validators: validators,
+            order: 80
         }));
 
         return of(questions.sort((a, b) => a.order - b.order));

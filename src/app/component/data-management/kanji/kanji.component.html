@@ -125,6 +125,15 @@
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
+        <!-- image Column -->
+        <ng-container matColumnDef="image">
+            <mat-header-cell *matHeaderCellDef> Image </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <img height="100" [attr.title]="element.filename" class="details-image row" src="{{serverImagesURL}}/{{element.filename}}" />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
         <!-- Created Date Column -->
         <ng-container matColumnDef="createdDate">
             <mat-header-cell *matHeaderCellDef> Created Date </mat-header-cell>
