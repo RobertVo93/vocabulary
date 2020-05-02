@@ -1,28 +1,31 @@
-<label style="font-weight:bold; font-size:40px; color: blue">Convert excel file to word objects</label>
-<div class="form-group input-group w500">
-    <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+<div class="table-container container">
+    <label style="font-weight:bold; font-size:40px; color: blue">Convert excel file to word objects</label>
+    <div class="form-group input-group w500">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+        </div>
+        <div class="custom-file">
+            <input type="file" (change)="onFileChange($event)" multiple="false" class="custom-file-input cursor-pointer"
+                id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+            <label class="custom-file-label" for="inputGroupFile01">{{selectedFileName}}</label>
+        </div>
     </div>
-    <div class="custom-file">
-        <input type="file" (change)="onFileChange($event)" multiple="false" class="custom-file-input cursor-pointer" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-        <label class="custom-file-label" for="inputGroupFile01">{{selectedFileName}}</label>
+    <div>
+        <input class="custom-file-name-textbox border-right-none" type="text" [(ngModel)]='fileName' />
+        <button class="custom-button" (click)="export()">Download!</button>
     </div>
-</div>
-<div>
-    <input class="custom-file-name-textbox border-right-none" type="text" [(ngModel)]='fileName' />
-    <button class="custom-button" (click)="export()">Download!</button>
-</div>
-<button class="custom-button" (click)="onImportDB()">Import to Database</button>
-<div class="mt15">
-    <button class="custom-button" mat-button (click)="showResult = !showResult">
-        <label class="cursor-pointer" [hidden]='showResult'>Show excel</label>
-        <label class="cursor-pointer" [hidden]='!showResult'>Hide excel</label>
-    </button>
-    <table class="sjs-table button-border" [hidden]="!showResult">
-        <tr *ngFor="let row of datas" class="button-border">
-            <td *ngFor="let val of row" class="button-border">
-                {{val}}
-            </td>
-        </tr>
-    </table>
+    <button class="custom-button" (click)="onImportDB()">Import to Database</button>
+    <div class="mt15">
+        <button class="custom-button" mat-button (click)="showResult = !showResult">
+            <label class="cursor-pointer" [hidden]='showResult'>Show excel</label>
+            <label class="cursor-pointer" [hidden]='!showResult'>Hide excel</label>
+        </button>
+        <table class="sjs-table button-border" [hidden]="!showResult">
+            <tr *ngFor="let row of datas" class="button-border">
+                <td *ngFor="let val of row" class="button-border">
+                    {{val}}
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>

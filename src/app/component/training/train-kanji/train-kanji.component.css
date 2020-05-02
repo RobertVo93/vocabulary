@@ -1,3 +1,10 @@
+.train-container {
+    position: relative;
+    min-height: 100vh;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
 .leftBody {
     float: left;
     width: 49%;

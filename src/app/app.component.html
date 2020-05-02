@@ -1,43 +1,237 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light" *ngIf="currentUser">
-    <a class="navbar-brand" routerLink=""><img src="assets/logo/icon.png" /> <label class="headerLabel" i18n='@@learningNewWordsApp'>Learning app</label><br /></a>
-    <button class="navbar-toggler" type="button" (click)="toggleNavbar()" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+<section class="menu cid-qTkzRZLJNu" once="menu" id="menu1-0" *ngIf="currentUser">
+    <nav
+        class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+        <div class="menu-logo">
+            <div class="navbar-brand">
+                <span class="navbar-logo">
+                    <a href="">
+                        <img src="assets/design/homepage/images/mbr-184x175.png" alt="Mobirise" title=""
+                            style="height: 3.8rem;">
+                    </a>
+                </span>
+                <span class="navbar-caption-wrap"><a class="navbar-caption text-white display-4" href="">
+                        <p>
+                            Learning app</p>
+                    </a></span>
+            </div>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
+                <li class="nav-item">
+                    <a class="nav-link link text-white display-4" href="">
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link text-white display-4" href="">
+                        <span class="mbri-home mbr-iconfont mbr-iconfont-btn"></span>
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link link text-white dropdown-toggle display-4" data-toggle="dropdown-submenu"
+                        aria-expanded="false">
+                        <span class="mbri-edit mbr-iconfont mbr-iconfont-btn"></span>
+                        Training
+                    </a>
+                    <div class="dropdown-menu">
+                        <a routerLinkActive="active" routerLink="train/word" class="text-white dropdown-item display-4"
+                            aria-expanded="true">
+                            <span class="socicon socicon-wikipedia mbr-iconfont mbr-iconfont-btn"></span>
+                            Word
+                        </a>
+                        <a routerLinkActive="active" routerLink="train/kanji" class="text-white dropdown-item display-4"
+                            aria-expanded="false">
+                            <span class="socicon socicon-kobo mbr-iconfont mbr-iconfont-btn"></span>
+                            Kanji
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link link text-white dropdown-toggle display-4" data-toggle="dropdown-submenu"
+                        aria-expanded="false">
+                        <span class="mbri-to-local-drive mbr-iconfont mbr-iconfont-btn"></span>
+                        Import
+                    </a>
+                    <div class="dropdown-menu">
+                        <a routerLinkActive="active" routerLink="import/word"
+                            class="text-white dropdown-item display-4">
+                            <span class="mbri-upload mbr-iconfont mbr-iconfont-btn"></span>
+                            Word
+                        </a>
+                        <a routerLinkActive="active" routerLink="import/kanji"
+                            class="text-white dropdown-item display-4" aria-expanded="false">
+                            <span class="mbri-upload mbr-iconfont mbr-iconfont-btn"></span>
+                            Kanji
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link link text-white dropdown-toggle display-4" data-toggle="dropdown-submenu"
+                        aria-expanded="true">
+                        <span class="mbri-setting3 mbr-iconfont mbr-iconfont-btn"></span>
+                        Data Management
+                    </a>
+                    <div class="dropdown-menu">
+                        <a routerLinkActive="active" routerLink="management/word"
+                            class="text-white dropdown-item display-4">
+                            <span class="socicon socicon-wikipedia mbr-iconfont mbr-iconfont-btn"></span>
+                            Word
+                        </a>
+                        <a routerLinkActive="active" routerLink="management/kanji"
+                            class="text-white dropdown-item display-4" aria-expanded="false">
+                            <span class="socicon socicon-kobo mbr-iconfont mbr-iconfont-btn"></span>
+                            Kanji
+                        </a>
+                        <a routerLinkActive="active" routerLink="management/tag"
+                            class="text-white dropdown-item display-4" aria-expanded="false">
+                            <span class="mobi-mbri mobi-mbri-pin mbr-iconfont mbr-iconfont-btn"></span>
+                            Tags
+                        </a>
+                        <a routerLinkActive="active" routerLink="management/user"
+                            class="text-white dropdown-item display-4" aria-expanded="false">
+                            <span class="mobi-mbri mobi-mbri-users mbr-iconfont mbr-iconfont-btn"></span>
+                            Users
+                        </a>
+                        <a routerLinkActive="active" routerLink="management/datasource"
+                            class="text-white dropdown-item display-4" aria-expanded="false">
+                            <span class="mobi-mbri mobi-mbri-database mbr-iconfont mbr-iconfont-btn"></span>
+                            Data Sources
+                        </a>
+                        <a routerLinkActive="active" routerLink="management/role"
+                            class="text-white dropdown-item display-4" aria-expanded="true">
+                            <span class="mobi-mbri mobi-mbri-edit mbr-iconfont mbr-iconfont-btn"></span>
+                            Roles
+                        </a>
+                        <a routerLinkActive="active" routerLink="management/language"
+                            class="text-white dropdown-item display-4" aria-expanded="false">
+                            <span class="socicon socicon-lanyrd mbr-iconfont mbr-iconfont-btn"></span>
+                            Languages
+                        </a>
+                        <a routerLinkActive="active" routerLink="management/image"
+                            class="text-white dropdown-item display-4" aria-expanded="true">
+                            <span class="mbri-image-gallery mbr-iconfont mbr-iconfont-btn"></span>
+                            Images
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link text-white display-4">
+                        <span class="mbri-search mbr-iconfont mbr-iconfont-btn"></span>
+                        About us
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link text-white display-4">
+                        <span class="mbri-user mbr-iconfont mbr-iconfont-btn"></span>
+                        Logout
+                    </a>
+                </li>
+            </ul>
 
-    <div class="collapse navbar-collapse" [ngClass]="{ 'show': navbarOpen }">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link cursor-pointer" [matMenuTriggerFor]="menu1">Training</a>
-                <mat-menu #menu1="matMenu">
-                    <a class="nav-link" routerLinkActive="active" routerLink="train/word" mat-menu-item>Word</a>
-                    <a class="nav-link" routerLinkActive="active" routerLink="train/kanji" mat-menu-item>Kanji</a>
-                </mat-menu>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link cursor-pointer" [matMenuTriggerFor]="menu2">Import</a>
-                <mat-menu #menu2="matMenu">
-                    <a class="nav-link" routerLinkActive="active" routerLink="import/word" mat-menu-item>Word</a>
-                    <a class="nav-link" routerLinkActive="active" routerLink="import/kanji" mat-menu-item>Kanji</a>
-                </mat-menu>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link cursor-pointer" [matMenuTriggerFor]="menu3">Data Management</a>
-                <mat-menu #menu3="matMenu">
-                    <a class="nav-link" routerLinkActive="active" routerLink="management/word" mat-menu-item>Word</a>
-                    <a class="nav-link" routerLinkActive="active" routerLink="management/kanji" mat-menu-item>Kanji</a>
-                    <a class="nav-link" routerLinkActive="active" routerLink="management/tag" mat-menu-item>Tags</a>
-                    <a class="nav-link" routerLinkActive="active" routerLink="management/user" mat-menu-item>Users</a>
-                    <a class="nav-link" routerLinkActive="active" routerLink="management/datasource" mat-menu-item>Data Sources</a>
-                    <a class="nav-link" routerLinkActive="active" routerLink="management/role" mat-menu-item>Roles</a>
-                    <a class="nav-link" routerLinkActive="active" routerLink="management/language" mat-menu-item>Languages</a>
-                    <a class="nav-link" routerLinkActive="active" routerLink="management/image" mat-menu-item>Images</a>
-                </mat-menu>
-            </li>
-        </ul>
-        <a class="nav-item nav-link cursor-pointer" (click)="signOut()">Logout</a>
-    </div>
-</nav>
+        </div>
+    </nav>
+</section>
+
 <div class="container">
     <app-alert></app-alert>
     <router-outlet></router-outlet>
 </div>
+
+<section class="cid-qTkAaeaxX5" id="footer1-2">
+    <div class="container">
+        <div class="media-container-row content text-white">
+            <div class="col-12 col-md-3">
+                <div class="media-wrap">
+                    <a href="https://mobirise.com/">
+                        <img src="assets/design/homepage/images/mbr-192x183.png" alt="Mobirise" title="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+                <h5 class="pb-3">
+                    Address
+                </h5>
+                <p class="mbr-text">
+                    36 Bo Bao Tan Thang, Ho Chi Minh City, Viet Nam</p>
+            </div>
+            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+                <h5 class="pb-3">
+                    Contacts
+                </h5>
+                <p class="mbr-text">
+                    Email: vohoangankl93@gmail.com
+                    <br>Phone: +84 (0) 33 870 5850&nbsp;<br>Fax:&nbsp;+84 (0) 33 870 5850</p>
+            </div>
+            <div class="col-12 col-md-3 mbr-fonts-style display-7">
+                <h5 class="pb-3">
+                    Links
+                </h5>
+                <p class="mbr-text">
+                    <a class="text-primary" href="https://mobirise.com/">Website builder</a>
+                    <br><a class="text-primary" href="https://mobirise.com/mobirise-free-win.zip">Download for
+                        Windows</a>
+                    <br><a class="text-primary" href="https://mobirise.com/mobirise-free-mac.zip">Download for
+                        Mac</a>
+                </p>
+            </div>
+        </div>
+        <div class="footer-lower">
+            <div class="media-container-row">
+                <div class="col-sm-12">
+                    <hr>
+                </div>
+            </div>
+            <div class="media-container-row mbr-white">
+                <div class="col-sm-6 copyright">
+                    <p class="mbr-text mbr-fonts-style display-7">
+                        © Copyright 2020 Vocabulary - All Rights Reserved
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <div class="social-list align-right">
+                        <div class="soc-item">
+                            <a href="https://twitter.com/mobirise" target="_blank">
+                                <span class="socicon-twitter socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div>
+                        <div class="soc-item">
+                            <a href="https://www.facebook.com/pages/Mobirise/1616226671953247" target="_blank">
+                                <span class="socicon-facebook socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div>
+                        <div class="soc-item">
+                            <a href="https://www.youtube.com/c/mobirise" target="_blank">
+                                <span class="socicon-youtube socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div>
+                        <div class="soc-item">
+                            <a href="https://instagram.com/mobirise" target="_blank">
+                                <span class="socicon-instagram socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div>
+                        <div class="soc-item">
+                            <a href="https://plus.google.com/u/0/+Mobirise" target="_blank">
+                                <span class="socicon-googleplus socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div>
+                        <div class="soc-item">
+                            <a href="https://www.behance.net/Mobirise" target="_blank">
+                                <span class="socicon-behance socicon mbr-iconfont mbr-iconfont-social"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

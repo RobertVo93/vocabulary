@@ -1,11 +1,14 @@
 .container {
+    display: flex;
+    height: 600px;
+}
+
+.login-form {
     background: rgba(2, 60, 117, 0.5);
     border-radius: 5px;
     box-shadow: 0 1.5px 0 0 rgba(0, 0, 0, 0.1);
-    width: 409px;
-    display: flex;
-    flex-direction: column;
-    margin-top: 50px;
+    width: 410px;
+    margin: auto;
 }
 
 .logo {

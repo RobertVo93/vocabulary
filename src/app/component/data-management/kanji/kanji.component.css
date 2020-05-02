@@ -4,6 +4,9 @@ input {
 
 .table-container {
     position: relative;
+    min-height: 80vh;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
 .table-container .mat-table {
