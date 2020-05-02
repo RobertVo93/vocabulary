@@ -148,7 +148,7 @@ export class Config {
         chinaMeaning: 'china'
     }
 
-    kanjiLevels = {
+    kanjiLevelOptions = {
         '-1': '--All--',
         '0': '--None--',
         '1': 'JLPT N1',
@@ -156,6 +156,11 @@ export class Config {
         '3': 'JLPT N3',
         '4': 'JLPT N4',
         '5': 'JLPT N5'
+    }
+
+    defaultDropDownOptions = {
+        '-1': '--All--',
+        '0': '--None--'
     }
 
     cookieKeyName = {

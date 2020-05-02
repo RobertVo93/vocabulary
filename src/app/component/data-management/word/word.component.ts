@@ -17,6 +17,7 @@ import { DataSourcesService } from '../data-sources/data-sources.service';
 	styleUrls: ['./word.component.css']
 })
 export class WordComponent implements OnInit {
+	serverImagesURL: string = '';		//url for image resources
 	selectedDatasource: any;  //selected data set Id
 	languages: Option[];				//list of languages options
 	tags: Option[];						//list of roles options
@@ -38,6 +39,17 @@ export class WordComponent implements OnInit {
 		, private langService: LanguageService, private dataSourceService: DataSourcesService, private tagService: TagsService) { }
 
 	ngOnInit() {
+		this.serverImagesURL = this.config.apiServiceURL.images;
+		let promises = [
+			this.setupAllLanguageOptions(),
+			this.setupAllTagOptions(),
+			this.setupAllDataSourceOptions(),
+			this.getAllData(),
+		];
+		Promise.all(promises).then(() => {
+			this.selectedDatasource = this.dataSources[0].value;
+			this.getWordByDataSourceFilter(this.selectedDatasource);
+		});
 		this.selectedViewColumn = [
 			this.config.viewColumnsDef.select
 			, this.config.viewColumnsDef.id
@@ -56,13 +68,10 @@ export class WordComponent implements OnInit {
 		];
 		this.actions = this.getAllActions();
 		this.types = this.getAllWordTypes();
-		this.setupAllLanguageOptions();
-		this.setupAllTagOptions();
-		this.setupAllDataSourceOptions();
+		
 		this.viewColumns = this.getAllViewMode(); //get all view column
 		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
 		this.selection = new SelectionModel<Words>(true, []);
-		this.getAllData();
 	}
 
 	/**
@@ -139,7 +148,7 @@ export class WordComponent implements OnInit {
 	 */
 	private getWordByDataSourceFilter(source_id: any){
 		let data = this.dataSourceAll.filter((value) =>{
-			return value.dataSource == source_id;
+			return value.dataSource == source_id || source_id == -1;
 		})
 		this.dataSource = new MatTableDataSource<Words>(data);
 		this.dataSource.paginator = this.paginator;
@@ -190,6 +199,7 @@ export class WordComponent implements OnInit {
 			{ value: this.config.viewColumnsDef.language, viewValue: this.config.viewColumns.language },
 			{ value: this.config.viewColumnsDef.dataSource, viewValue: this.config.viewColumns.dataSource },
 			{ value: this.config.viewColumnsDef.tags, viewValue: this.config.viewColumns.tags },
+			{ value: this.config.viewColumnsDef.image, viewValue: this.config.viewColumns.image },
 			{ value: this.config.viewColumnsDef.createdDate, viewValue: this.config.viewColumns.createdDate },
 			{ value: this.config.viewColumnsDef.createdBy, viewValue: this.config.viewColumns.createdBy },
 			{ value: this.config.viewColumnsDef.updatedDate, viewValue: this.config.viewColumns.updatedDate },
@@ -244,6 +254,9 @@ export class WordComponent implements OnInit {
 				case this.config.viewColumnsDef.tags:
 					colDef.push(this.config.viewColumns.tags);
 					break;
+				case this.config.viewColumnsDef.image:
+					colDef.push(this.config.viewColumns.image);
+					break;
 				case this.config.viewColumnsDef.createdDate:
 					colDef.push(this.config.viewColumns.createdDate);
 					break;
@@ -292,6 +305,8 @@ export class WordComponent implements OnInit {
 
 	private async setupAllDataSourceOptions() {
 		let options: Option[] = [];
+		options.push({ value: -1, viewValue: this.config.defaultDropDownOptions['-1'] });	//--All--
+		options.push({ value: 0, viewValue: this.config.defaultDropDownOptions['0'] });		//--None--
 		let dataSources = await this.dataSourceService.getAllData();
 		for (var i = 0; i < dataSources.length; i++) {
 			options.push({ value: dataSources[i]._id, viewValue: dataSources[i].name })

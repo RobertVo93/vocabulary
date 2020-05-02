@@ -114,11 +114,11 @@ export class Kanjis {
         }));
 
         let options:Option[] = [];
-        for(var option in this.config.kanjiLevels){
+        for(var option in this.config.kanjiLevelOptions){
             if(option != '-1'){
                 options.push({
                     value: parseInt(option),
-                    viewValue: this.config.kanjiLevels[option]
+                    viewValue: this.config.kanjiLevelOptions[option]
                 });
             }
         }

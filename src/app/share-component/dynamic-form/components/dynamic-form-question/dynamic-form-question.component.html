@@ -12,6 +12,20 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
+        <div *ngSwitchCase="'file'" class="file-upload">
+            <div class="form-group input-group">
+                <div class="input-group-prepend">
+                    <span *ngIf="question.validators['required']" class="red">* </span>{{question.label}}
+                </div>
+                <div class="custom-file cursor-pointer">
+                    <p *ngIf="!previewSelectedImage" align="center" class="drag-drop-label">drag drop your image here or click in this area</p>
+                    <img *ngIf="previewSelectedImage" class="preview-selected-image" [src]="previewSelectedImage" alt="your image" />
+                    <input type="file" name="images" (change)="onSelectImage($event)" class="cursor-pointer custom-file-name-textbox" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                    <button class="custom-button" type="submit" (click)="onSubmitImage()">Upload</button>
+                    <input matInput [formControlName]="question.key" [(ngModel)]="question.value" [id]="question.key" hidden/>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="errorMessage" *ngIf="errorMessages">
         <ng-container *ngFor="let error of errorMessages[question.key]">

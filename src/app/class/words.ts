@@ -7,6 +7,7 @@ import { LanguageService } from '../component/data-management/language/language.
 import { Option } from '../interface/option';
 import { DataSourcesService } from '../component/data-management/data-sources/data-sources.service';
 import { TagsService } from '../component/data-management/tag-management/tags.service';
+import { FileQuestion } from './question-file';
 
 export class Words {
     private config: Config;
@@ -25,6 +26,8 @@ export class Words {
         this.language = (obj != null && obj.language != null)? obj.language : null;
         this.dataSource = (obj != null && obj.dataSource != null)? obj.dataSource : null;
         this.tags = (obj != null && obj.tags != null)? obj.tags : null;
+        this.filename = (obj != null && obj.filename != null)? obj.filename : null;
+
         this.createdBy = (obj != null && obj.createdBy != null)? obj.createdBy : null;
         this.createdDate = (obj != null && obj.createdDate != null)? obj.createdDate : null;
         this.modifiedBy = (obj != null && obj.modifiedBy != null)? obj.modifiedBy : null;
@@ -43,6 +46,7 @@ export class Words {
     language: any;
     dataSource: any;
     tags: string[];
+    filename: string;
     
     createdBy: string;
     createdDate: Date;
@@ -204,8 +208,22 @@ export class Words {
             label: 'Tags',
             options: options,
             multiple: true,
-            order: 90
-          }));
+            order: 120
+        }));
+
+        //set up meaning question
+        validators = {};
+        validators[this.config.formValidators.require]= {
+            value: true,
+            error_message: 'Image is required.'
+        };
+        questions.push(new FileQuestion({
+            key: 'filename',
+            label: 'Image',
+            value: '',
+            validators: validators,
+            order: 130
+        }));
         return of(questions.sort((a, b) => a.order - b.order));
     }
 }

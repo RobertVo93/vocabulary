@@ -134,10 +134,10 @@ export class KanjiComponent implements OnInit {
 	private getListOfKanjiLevel(): Option[] {
 		//TODO (Next version): update by loading from database
 		let options: Option[] = [];
-		for (var option in this.config.kanjiLevels) {
+		for (var option in this.config.kanjiLevelOptions) {
 			options.push({
 				value: parseInt(option),
-				viewValue: this.config.kanjiLevels[option]
+				viewValue: this.config.kanjiLevelOptions[option]
 			})
 		}
 		return options.sort((a,b) => a.value - b.value);
