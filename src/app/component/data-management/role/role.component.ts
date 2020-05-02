@@ -33,10 +33,6 @@ export class RoleComponent implements OnInit {
 			this.config.viewColumnsDef.select
 			, this.config.viewColumnsDef.id
 			, this.config.viewColumnsDef.name
-			, this.config.viewColumnsDef.createdDate
-			, this.config.viewColumnsDef.createdBy
-			, this.config.viewColumnsDef.updatedDate
-			, this.config.viewColumnsDef.updatedBy
 		];
 		this.actions = this.getAllActions();
 		this.viewColumns = this.getAllViewMode(); //get all view column
