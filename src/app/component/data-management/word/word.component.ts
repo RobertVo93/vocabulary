@@ -55,16 +55,7 @@ export class WordComponent implements OnInit {
 			, this.config.viewColumnsDef.id
 			, this.config.viewColumnsDef.word
 			, this.config.viewColumnsDef.kanji
-			, this.config.viewColumnsDef.type
-			, this.config.viewColumnsDef.pronun
 			, this.config.viewColumnsDef.meaning
-			, this.config.viewColumnsDef.example
-			, this.config.viewColumnsDef.exampleMeaning
-			, this.config.viewColumnsDef.kanjiExplain
-			, this.config.viewColumnsDef.chinaMeaning
-			, this.config.viewColumnsDef.language
-			, this.config.viewColumnsDef.dataSource
-			, this.config.viewColumnsDef.tags
 		];
 		this.actions = this.getAllActions();
 		this.types = this.getAllWordTypes();

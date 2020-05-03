@@ -35,8 +35,6 @@ export class ImagesComponent implements OnInit {
 			this.config.viewColumnsDef.select
 			, this.config.viewColumnsDef.id
 			, this.config.viewColumnsDef.fileName
-			, this.config.viewColumnsDef.uploadDate
-			, this.config.viewColumnsDef.contentType
 		];
 		this.actions = this.getAllActions();
 		this.viewColumns = this.getAllViewMode(); //get all view column

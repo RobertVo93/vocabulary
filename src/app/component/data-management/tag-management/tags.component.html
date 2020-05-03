@@ -1,51 +1,50 @@
 <div class="table-container container">
-    <mat-form-field>
-        <mat-label>Search</mat-label>
-        <input matInput (keyup)="onFilter($event)" placeholder="Ex. nhân">
-    </mat-form-field>
-    <mat-form-field class="float-right">
-        <mat-label>View column list</mat-label>
-        <mat-select [(value)]='selectedViewColumn' multiple (selectionChange)='onViewModeChangeHandler($event)'>
-            <mat-option *ngFor="let mode of viewColumns" [value]="mode.value" [disabled]="mode.value == config.viewColumnsDef.name 
-                    || mode.value == config.viewColumnsDef.select
-                    || mode.value == config.viewColumnsDef.id">
-                {{mode.viewValue}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-
+    <div class="control-panel">
+        <div class="column text-align-left">
+            <mat-form-field class="cell">
+                <mat-label>Search</mat-label>
+                <input matInput (keyup)="onFilter($event)" placeholder="Ex. nhân">
+            </mat-form-field>
+        </div>
+        <div class="column text-align-right">
+            <mat-form-field class="cell">
+                <mat-label>View column list</mat-label>
+                <mat-select [(value)]='selectedViewColumn' multiple (selectionChange)='onViewModeChangeHandler($event)'>
+                    <mat-option *ngFor="let mode of viewColumns" [value]="mode.value" [disabled]="mode.value == config.viewColumnsDef.name 
+                            || mode.value == config.viewColumnsDef.select
+                            || mode.value == config.viewColumnsDef.id">
+                        {{mode.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
     <mat-table matSort [dataSource]="dataSource">
         <!-- selection Column -->
         <ng-container matColumnDef="select">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let row">
-                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                    [checked]="selection.isSelected(row)">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
                 </mat-checkbox>
             </mat-cell>
             <mat-footer-cell *matFooterCellDef>
-                <mat-checkbox (change)="$event ? onMasterToggle() : null"
-                    [checked]="selection.hasValue() && onIsAllSelected()"
-                    [indeterminate]="selection.hasValue() && !onIsAllSelected()">
+                <mat-checkbox (change)="$event ? onMasterToggle() : null" [checked]="selection.hasValue() && onIsAllSelected()" [indeterminate]="selection.hasValue() && !onIsAllSelected()">
                 </mat-checkbox>
             </mat-footer-cell>
         </ng-container>
 
         <!-- id Column -->
         <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef> id </mat-header-cell>
-            <mat-cell *matCellDef="let element">
+            <mat-header-cell class="desktop-only" *matHeaderCellDef> id </mat-header-cell>
+            <mat-cell class="desktop-only" *matCellDef="let element">
                 <input type="text" readonly class="form-control" [(ngModel)]='element._id' />
             </mat-cell>
-            <mat-footer-cell *matFooterCellDef>
+            <mat-footer-cell class="desktop-only" *matFooterCellDef>
                 <mat-form-field class="mat-form-field-action">
                     <mat-label>Actions on selected rows</mat-label>
-                    <mat-select class="mat-select-action" (selectionChange)="onSelectionChange($event)"
-                        [(value)]='selectedAction'>
-                        <mat-option class="mat-option-action" *ngFor="let action of actions" 
-                        [disabled]="(!selection._selected || selection._selected.length == 0) 
-                                && (action.value == config.optionValue.delete || action.value == config.optionValue.update)"
-                        [value]="action.value">
+                    <mat-select class="mat-select-action" (selectionChange)="onSelectionChange($event)" [(value)]='selectedAction'>
+                        <mat-option class="mat-option-action" *ngFor="let action of actions" [disabled]="(!selection._selected || selection._selected.length == 0) 
+                                && (action.value == config.optionValue.delete || action.value == config.optionValue.update)" [value]="action.value">
                             {{action.viewValue}}
                         </mat-option>
                     </mat-select>

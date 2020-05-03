@@ -102,3 +102,9 @@ body {
 .float-left {
     float: left !important;
 }
+
+@media (max-width: 767px) {
+    .desktop-only {
+        display: none;
+    }
+}

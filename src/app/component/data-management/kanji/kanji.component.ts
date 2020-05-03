@@ -38,8 +38,6 @@ export class KanjiComponent implements OnInit {
 			, this.config.viewColumnsDef.id
 			, this.config.viewColumnsDef.word
 			, this.config.viewColumnsDef.meaning
-			, this.config.viewColumnsDef.JLPTLevel
-			, this.config.viewColumnsDef.explain
 		];
 		this.actions = this.getAllActions();
 		this.viewColumns = this.getAllViewMode(); //get all view column

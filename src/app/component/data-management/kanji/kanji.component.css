@@ -32,11 +32,6 @@ input {
     float: right;
 }
 
-.mat-column-word,
-.mat-column-meaning {
-    flex: 0 0 10% !important;
-}
-
 .mat-column-select {
     flex: 0 0 50px !important;
 }
@@ -91,4 +86,34 @@ input {
 
 .mat-header-cell {
     padding-left: 20px;
+}
+
+.control-panel {
+    display: table;
+    width: 100%;
+}
+
+.column .cell {
+    width: 100%;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.text-align-left {
+    text-align: left;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+@media (min-width:768px) {
+    .column {
+        display: table-cell;
+    }
+    .column .cell {
+        width: 200px;
+    }
 }

@@ -39,10 +39,6 @@ export class UserManagementComponent implements OnInit {
 			, this.config.viewColumnsDef.id
 			, this.config.viewColumnsDef.email
 			, this.config.viewColumnsDef.name
-			, this.config.viewColumnsDef.language
-			, this.config.viewColumnsDef.role
-			, this.config.viewColumnsDef.address
-			, this.config.viewColumnsDef.phone
 		];
 		this.actions = this.getAllActions();
 		this.setupAllLanguageOptions();

@@ -1,24 +1,32 @@
 <div class="table-container container">
-    <mat-form-field>
-        <mat-label>Search</mat-label>
-        <input matInput (keyup)="onFilter($event)" placeholder="Ex. nhân">
-    </mat-form-field>
-    <mat-form-field class="pl25percent">
-        <mat-label>Data source</mat-label>
-        <mat-select [(value)]='selectedDatasource' (selectionChange)='onChangeHandler($event)'>
-            <mat-option *ngFor="let option of dataSources" [value]="option.value">
-                {{option.viewValue}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field class="float-right">
-        <mat-label>View column list</mat-label>
-        <mat-select [(value)]='selectedViewColumn' multiple (selectionChange)='onViewModeChangeHandler($event)'>
-            <mat-option *ngFor="let mode of viewColumns" [value]="mode.value" [disabled]="mode.value == config.viewColumnsDef.select || mode.value == config.viewColumnsDef.id">
-                {{mode.viewValue}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+    <div class="control-panel">
+        <div class="column text-align-left">
+            <mat-form-field class="cell">
+                <mat-label>Search</mat-label>
+                <input matInput (keyup)="onFilter($event)" placeholder="Ex. nhân">
+            </mat-form-field>
+        </div>
+        <div class="column text-align-center">
+            <mat-form-field class="cell">
+                <mat-label>Data source</mat-label>
+                <mat-select [(value)]='selectedDatasource' (selectionChange)='onChangeHandler($event)'>
+                    <mat-option *ngFor="let option of dataSources" [value]="option.value">
+                        {{option.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="column text-align-right">
+            <mat-form-field class="cell">
+                <mat-label>View column list</mat-label>
+                <mat-select [(value)]='selectedViewColumn' multiple (selectionChange)='onViewModeChangeHandler($event)'>
+                    <mat-option *ngFor="let mode of viewColumns" [value]="mode.value" [disabled]="mode.value == config.viewColumnsDef.select || mode.value == config.viewColumnsDef.id">
+                        {{mode.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
 
     <mat-table matSort [dataSource]="dataSource">
         <!-- selection Column -->
@@ -36,11 +44,11 @@
 
         <!-- id Column -->
         <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef> id </mat-header-cell>
-            <mat-cell *matCellDef="let element">
+            <mat-header-cell class="desktop-only" *matHeaderCellDef> id </mat-header-cell>
+            <mat-cell class="desktop-only" *matCellDef="let element">
                 <input type="text" readonly class="form-control" [(ngModel)]='element._id' />
             </mat-cell>
-            <mat-footer-cell *matFooterCellDef>
+            <mat-footer-cell class="desktop-only" *matFooterCellDef>
                 <mat-form-field class="mat-form-field-action">
                     <mat-label>Actions on selected rows</mat-label>
                     <mat-select class="mat-select-action" (selectionChange)="onSelectionChange($event)" [(value)]='selectedAction'>

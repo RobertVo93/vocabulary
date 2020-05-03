@@ -47,3 +47,33 @@ input {
 .pl25percent {
     padding-left: 25%;
 }
+
+.control-panel {
+    display: table;
+    width: 100%;
+}
+
+.column .cell {
+    width: 100%;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.text-align-left {
+    text-align: left;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+@media (min-width:768px) {
+    .column {
+        display: table-cell;
+    }
+    .column .cell {
+        width: 200px;
+    }
+}
