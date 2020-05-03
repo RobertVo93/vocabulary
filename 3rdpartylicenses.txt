@@ -97,8 +97,6 @@ THE SOFTWARE.
 
 @angular/material/form-field
 
-@angular/material/menu
-
 @angular/material/paginator
 
 @angular/material/select
