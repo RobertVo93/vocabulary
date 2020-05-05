@@ -4,10 +4,8 @@
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
+
 .leftBody {
-    float: left;
-    width: 49%;
-    min-height: calc(100vh - 150px);
     border: solid 1px blue;
 }
 
@@ -32,8 +30,6 @@
 }
 
 .rightBody {
-    float: right;
-    width: 49%;
     border: solid 1px blue;
     min-height: calc(100vh - 150px);
 }
@@ -83,4 +79,16 @@
 
 .container {
     max-width: 100% !important;
+}
+
+@media (min-width:768px) {
+    .rightBody {
+        float: right;
+        width: 49%;
+    }
+    .leftBody {
+        float: left;
+        width: 49%;
+        min-height: calc(100vh - 150px);
+    }
 }

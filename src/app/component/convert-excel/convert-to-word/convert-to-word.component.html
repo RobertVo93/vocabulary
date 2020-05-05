@@ -1,12 +1,11 @@
 <div class="table-container container">
     <label style="font-weight:bold; font-size:40px; color: blue">Convert excel file to word objects</label>
-    <div class="form-group input-group w500">
+    <div class="form-group input-group">
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
         </div>
         <div class="custom-file">
-            <input type="file" (change)="onFileChange($event)" multiple="false" class="custom-file-input cursor-pointer"
-                id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+            <input type="file" (change)="onFileChange($event)" multiple="false" class="custom-file-input cursor-pointer" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
             <label class="custom-file-label" for="inputGroupFile01">{{selectedFileName}}</label>
         </div>
     </div>

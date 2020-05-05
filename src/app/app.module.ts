@@ -38,6 +38,7 @@ import { WordComponent } from './component/data-management/word/word.component';
 import { TrainWordComponent } from './component/training/train-word/train-word.component';
 import { KanjiComponent } from './component/data-management/kanji/kanji.component';
 import { ImagesComponent } from './component/data-management/images/images.component';
+import { AboutComponent } from './component/about/about.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { ImagesComponent } from './component/data-management/images/images.compo
     WordComponent,
     TrainWordComponent,
     KanjiComponent,
-    ImagesComponent
+    ImagesComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

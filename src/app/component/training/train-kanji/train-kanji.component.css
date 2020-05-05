@@ -6,9 +6,6 @@
 }
 
 .leftBody {
-    float: left;
-    width: 49%;
-    min-height: calc(100vh - 150px);
     border: solid 1px blue;
 }
 
@@ -33,9 +30,6 @@
 }
 
 .rightBody {
-    float: right;
-    width: 49%;
-    min-height: calc(100vh - 150px);
     border: solid 1px blue;
 }
 
@@ -75,4 +69,17 @@
     font-weight: bold;
     font-size: 40px;
     color: blue;
+}
+
+@media (min-width:768px) {
+    .rightBody {
+        float: right;
+        width: 49%;
+        min-height: calc(100vh - 150px);
+    }
+    .leftBody {
+        float: left;
+        width: 49%;
+        min-height: calc(100vh - 150px);
+    }
 }

@@ -16,8 +16,8 @@
         <div class="training-kanji" *ngIf='trainingKanji'>
 
             <div *ngIf='selectedTestMode == wordEnum.word;'>
-                <img height="100" [attr.title]="trainingKanji.word" class="details-image"
-                    src="{{serverImagesURL}}/{{trainingKanji.filename}}" />
+                <img height="100" [attr.title]="nextTrainingKanji.word" class="details-image" hidden="true" src="{{serverImagesURL}}/{{nextTrainingKanji.filename}}" />
+                <img height="100" [attr.title]="trainingKanji.word" class="details-image" src="{{serverImagesURL}}/{{trainingKanji.filename}}" />
                 <!-- <img height="100" [attr.title]="nextTrainingKanji.word" src="assets/kanji images/{{nextTrainingKanji.fullName}}" hidden="true" class="details-image" />
             <img height="100" [attr.title]="trainingKanji.word" src="assets/kanji images/{{trainingKanji.fullName}}" class="details-image" /> -->
             </div>
@@ -27,8 +27,7 @@
         </div>
 
         <mat-form-field class="example-full-width">
-            <textarea matInput [ngClass]='inputColor' id="inputKanjiId" (keyup)='onKeyUpInput($event)'
-                placeholder="Input kanji" [(ngModel)]='inputKanji' i18n-placeholder="@@inputWord"></textarea>
+            <textarea matInput [ngClass]='inputColor' id="inputKanjiId" (keyup)='onKeyUpInput($event)' placeholder="Input kanji" [(ngModel)]='inputKanji' i18n-placeholder="@@inputWord"></textarea>
         </mat-form-field>
         <!-- <mat-checkbox class="ml20" [(ngModel)]="isAutoNext"><label i18n='@@autoNext'>Auto Next</label></mat-checkbox> -->
         <br />
@@ -57,8 +56,7 @@
         <label>Trained / Total: {{trained}} / {{total}} </label> <br />
         <div class="displayArea" *ngIf='previousTrainingKanji'>
             <!-- <img height="100" [attr.title]="previousTrainingKanji.fullName" class="details-image" src="{{serverImagesURL}}/{{previousTrainingKanji.fullName}}" /> -->
-            <img height="100" [attr.title]="previousTrainingKanji.fullName"
-                src="{{serverImagesURL}}/{{previousTrainingKanji.filename}}" class="details-image row" />
+            <img height="100" [attr.title]="previousTrainingKanji.fullName" src="{{serverImagesURL}}/{{previousTrainingKanji.filename}}" class="details-image row" />
             <div *ngIf="previousTrainingKanji.explain" align="left" class="pl10">
                 <div [innerHTML]="previousTrainingKanji.explain"></div>
                 <label class="fs20">remember method: <span class="red">{{previousTrainingKanji.remember}}</span></label>

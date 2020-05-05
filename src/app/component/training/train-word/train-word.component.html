@@ -19,8 +19,8 @@
                 <label class='fs40'>{{trainingWord.word}}</label>
             </div>
             <div *ngIf='selectedTestMode == wordEnum.image;'>
-                <img height="100" [attr.title]="trainingWord.meaning" class="details-image"
-                    src="{{serverImagesURL}}/{{trainingWord.filename}}" />
+                <img height="100" [attr.title]="nextTrainingWord.meaning" hidden="true" class="details-image" src="{{serverImagesURL}}/{{nextTrainingWord.filename}}" />
+                <img height="100" [attr.title]="trainingWord.meaning" class="details-image" src="{{serverImagesURL}}/{{trainingWord.filename}}" />
                 <!-- <img [attr.title]="trainingWord.meaning" src="assets/images/{{nextTrainingWord.pronun | lowercase}}.jpg" hidden="true" class="details-image" /> -->
                 <!-- <img [attr.title]="trainingWord.meaning" src="assets/images/{{trainingWord.pronun | lowercase}}.jpg" class="details-image" /> -->
             </div>
@@ -30,8 +30,7 @@
         </div>
 
         <mat-form-field class="example-full-width">
-            <textarea matInput [ngClass]='inputColor' id="inputWordId" (keyup)='onKeyUpInput($event)'
-                placeholder="Input word" [(ngModel)]='inputWord' i18n-placeholder="@@inputWord"></textarea>
+            <textarea matInput [ngClass]='inputColor' id="inputWordId" (keyup)='onKeyUpInput($event)' placeholder="Input word" [(ngModel)]='inputWord' i18n-placeholder="@@inputWord"></textarea>
         </mat-form-field>
         <br />
         <button class="button-border" mat-button (click)='onMoveNextWord()'>Move next</button>
@@ -54,8 +53,7 @@
                     {{previousTrainingWord.exampleMeaning}}
                 </div>
             </div>
-            <img height="100" [attr.title]="previousTrainingWord.meaning" class="details-image row"
-                src="{{serverImagesURL}}/{{previousTrainingWord.filename}}" />
+            <img height="100" [attr.title]="previousTrainingWord.meaning" class="details-image row" src="{{serverImagesURL}}/{{previousTrainingWord.filename}}" />
             <!-- <img [attr.title]="trainingWord.meaning"  src="assets/images/{{previousTrainingWord.pronun | lowercase}}.jpg" class="details-image row" /> -->
             <button mat-button (click)="onShowMore();">{{showHideButtonName}}</button>
             <div class="kanji-explain" [hidden]="!isShowMore">
@@ -85,8 +83,7 @@
         <mat-form-field>
             <mat-label>Choose view column</mat-label>
             <mat-select [(value)]='selectedViewColumn' multiple (selectionChange)='onViewModeChangeHandler($event)'>
-                <mat-option *ngFor="let mode of viewColumns" [value]="mode.value"
-                    [disabled]="mode.value == config.viewColumnsDef.word || mode.value == config.viewColumnsDef.meaning">
+                <mat-option *ngFor="let mode of viewColumns" [value]="mode.value" [disabled]="mode.value == config.viewColumnsDef.word || mode.value == config.viewColumnsDef.meaning">
                     {{mode.viewValue}}
                 </mat-option>
             </mat-select>
@@ -98,8 +95,7 @@
                 <ng-container matColumnDef="word">
                     <mat-header-cell *matHeaderCellDef i18n="@@word"> Word </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.word}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> <label i18n="@@trained">Trained</label> / <label
-                            i18n="@@total">Total</label> </mat-footer-cell>
+                    <mat-footer-cell *matFooterCellDef> <label i18n="@@trained">Trained</label> / <label i18n="@@total">Total</label> </mat-footer-cell>
                 </ng-container>
 
                 <!-- type Column -->
