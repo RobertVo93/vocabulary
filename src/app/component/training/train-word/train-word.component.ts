@@ -179,7 +179,7 @@ export class TrainWordComponent implements OnInit {
 	 * @param event event parameter
 	 */
 	onRangeChangeHandler(event) {
-		if (this.selectedRanges.length != 0 && this.selectedRanges[0] == 0) {
+		if (((this.selectedRanges.length != 0 && this.numberOfRandomWords == 0) || this.selectedRanges.length == 1) && this.selectedRanges[0] == 0) {
 			//handle case choose 'random'
 			this.selectedRanges = [0];
 			var value = prompt('How many words do you want to practice?');
@@ -189,6 +189,9 @@ export class TrainWordComponent implements OnInit {
 			this.numberOfRandomWords = parseInt(value);
 		}
 		else {
+			if(this.selectedRanges[0] == 0 && this.selectedRanges.length == 2){
+				this.selectedRanges = [this.selectedRanges[1]];
+			}
 			this.numberOfRandomWords = 0;
 		}//get list of training words
 		this.reloadPage();

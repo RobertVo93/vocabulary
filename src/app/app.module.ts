@@ -32,13 +32,13 @@ import { LoginComponent } from './component/home/login/login.component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { HomeComponent } from './component/home/home/home.component';
 import { JwtInterceptor } from './services/authentication/jwt.interceptor';
-import { ErrorInterceptor } from './services/authentication/error.interceptor';
 import { AlertComponent } from './share-component/alert/alert.component';
 import { WordComponent } from './component/data-management/word/word.component';
 import { TrainWordComponent } from './component/training/train-word/train-word.component';
 import { KanjiComponent } from './component/data-management/kanji/kanji.component';
 import { ImagesComponent } from './component/data-management/images/images.component';
 import { AboutComponent } from './component/about/about.component';
+import { LoaderComponent } from './share-component/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +62,8 @@ import { AboutComponent } from './component/about/about.component';
     TrainWordComponent,
     KanjiComponent,
     ImagesComponent,
-    AboutComponent
+    AboutComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -84,8 +85,7 @@ import { AboutComponent } from './component/about/about.component';
     CommonService,
     Config,
     CommonApiService,
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   entryComponents: [
     CommonDialogComponent

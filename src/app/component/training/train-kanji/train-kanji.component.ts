@@ -64,7 +64,7 @@ export class TrainKanjiComponent implements OnInit {
 	 * @param event event parameter
 	 */
 	onRangeChangeHandler(event) {
-		if (this.selectedRanges.length != 0 && this.selectedRanges[0] == 0) {
+		if (((this.selectedRanges.length != 0 && this.numberOfRandomKanji == 0) || this.selectedRanges.length == 1) && this.selectedRanges[0] == 0) {
 			//handle case choose 'random'
 			this.selectedRanges = [0];
 			var value = prompt('How many kanji do you want to practice?');
@@ -74,6 +74,9 @@ export class TrainKanjiComponent implements OnInit {
 			this.numberOfRandomKanji = parseInt(value);
 		}
 		else {
+			if(this.selectedRanges[0] == 0 && this.selectedRanges.length == 2){
+				this.selectedRanges = [this.selectedRanges[1]];
+			}
 			this.numberOfRandomKanji = 0;
 		}//get list of training kanjis
 		this.reloadPage();
