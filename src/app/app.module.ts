@@ -18,13 +18,13 @@ import { ConvertToWordComponent } from './component/convert-excel/convert-to-wor
 import { ConvertToKanjiComponent } from './component/convert-excel/convert-to-kanji/convert-to-kanji.component';
 import { InlineEditComponent } from './share-component/inline-edit/inline-edit.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TagsComponent } from './component/data-management/tag-management/tags.component';
+import { TagsComponent } from './component/data-management/tag/tags.component';
 import { CommonApiService } from './services/common-api.service';
 import { CommonDialogComponent } from './share-component/common-dialog/common-dialog.component';
 import { MatDialogModule } from '@angular/material';
 import { DynamicFormComponent } from './share-component/dynamic-form/components/dynamic-form/dynamic-form.component';
 import { DynamicFormQuestionComponent } from './share-component/dynamic-form/components/dynamic-form-question/dynamic-form-question.component';
-import { UserManagementComponent } from './component/data-management/user-management/user-management.component';
+import { UserManagementComponent } from './component/data-management/user/user-management.component';
 import { DataSourcesComponent } from './component/data-management/data-sources/data-sources.component';
 import { RoleComponent } from './component/data-management/role/role.component';
 import { LanguageComponent } from './component/data-management/language/language.component';
@@ -39,6 +39,7 @@ import { KanjiComponent } from './component/data-management/kanji/kanji.componen
 import { ImagesComponent } from './component/data-management/images/images.component';
 import { AboutComponent } from './component/about/about.component';
 import { LoaderComponent } from './share-component/loader/loader.component';
+import { GrammarComponent } from './component/data-management/grammar/grammar.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { LoaderComponent } from './share-component/loader/loader.component';
     KanjiComponent,
     ImagesComponent,
     AboutComponent,
-    LoaderComponent
+    LoaderComponent,
+    GrammarComponent
   ],
   imports: [
     BrowserModule,

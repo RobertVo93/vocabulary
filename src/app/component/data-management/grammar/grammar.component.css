@@ -1,0 +1,119 @@
+input {
+    font-size: 12px;
+}
+
+.table-container {
+    position: relative;
+    min-height: 80vh;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.table-container .mat-table {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.table-container .mat-table .mat-header-row {
+    position: absolute;
+    top: -50px;
+    left: 0px;
+    right: 18px;
+    background: #fff;
+}
+
+.mat-cell {
+    text-align: left;
+    margin-left: 3px;
+    margin-right: 2px;
+}
+
+.view-column-list {
+    float: right;
+}
+
+.mat-column-select {
+    flex: 0 0 50px !important;
+}
+
+.mat-column-id {
+    flex: 0 0 200px !important;
+}
+
+.mat-column-createdBy,
+.mat-column-updatedBy {
+    flex: 0 0 100px !important;
+}
+
+.mat-column-createdDate,
+.mat-column-updatedDate {
+    flex: 0 0 120px !important;
+}
+
+.mat-column-JLPTLevel {
+    flex: 0 0 90px !important;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.mat-form-field-jlptlevel {
+    width: 85px !important;
+}
+
+.mat-select-jlptlevel {
+    width: 80px !important;
+}
+
+.mat-option-jlptlevel {
+    width: 85x !important;
+}
+
+.mat-select-panel {
+    width: 75px !important;
+}
+
+.explain {
+    padding: .375rem .75rem;
+}
+
+.add-comment {
+    opacity: 0.4;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.mat-header-cell {
+    padding-left: 20px;
+}
+
+.control-panel {
+    display: table;
+    width: 100%;
+}
+
+.column .cell {
+    width: 100%;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.text-align-left {
+    text-align: left;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+@media (min-width:768px) {
+    .column {
+        display: table-cell;
+    }
+    .column .cell {
+        width: 200px;
+    }
+}

@@ -45,7 +45,9 @@ export class Config {
         fileName: 'fileName',
         contentType: 'contentType',
         uploadDate: 'uploadDate',
-        image: 'image'
+        image: 'image',
+        syntax: 'syntax',
+        level: 'level'
     }
 
     viewColumnsDef = {
@@ -86,8 +88,9 @@ export class Config {
         fileName: 35,
         contentType: 36,
         uploadDate: 37,
-        image: 38
-
+        image: 38,
+        syntax: 39,
+        level: 40
     }
 
     optionValue = {
@@ -175,6 +178,7 @@ export class Config {
         languages: `${environment.serverURL}/api/languages`,
         words: `${environment.serverURL}/api/words`,
         kanjis: `${environment.serverURL}/api/kanjis`,
+        grammars: `${environment.serverURL}/api/grammars`,
         upload: `${environment.serverURL}/api/upload`,
         images: `${environment.serverURL}/api/images`,
         serverAPI: `${environment.serverURL}/api`,

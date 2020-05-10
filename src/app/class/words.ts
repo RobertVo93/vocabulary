@@ -6,7 +6,7 @@ import { DropdownQuestion } from './question-dropdown';
 import { LanguageService } from '../component/data-management/language/language.service';
 import { Option } from '../interface/option';
 import { DataSourcesService } from '../component/data-management/data-sources/data-sources.service';
-import { TagsService } from '../component/data-management/tag-management/tags.service';
+import { TagsService } from '../component/data-management/tag/tags.service';
 import { FileQuestion } from './question-file';
 
 export class Words {
