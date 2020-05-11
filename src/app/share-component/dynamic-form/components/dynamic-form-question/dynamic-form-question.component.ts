@@ -38,6 +38,17 @@ export class DynamicFormQuestionComponent {
 	}
 
 	/**
+	* 
+	* @param el 
+	* @param text 
+	*/
+	onUpdate(text) {
+		if (text == null) { return; }
+		// copy and mutate
+		this.question.value = text;
+	  }
+
+	/**
 	 * Submit image
 	 */
 	onSubmitImage() {

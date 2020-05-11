@@ -5,6 +5,7 @@ import { DropdownQuestion } from './question-dropdown';
 import { FileQuestion } from './question-file';
 import { Config } from '../configuration/config';
 import { Option } from '../interface/option';
+import { InlineTextQuestion } from './question-inlineText';
 
 export class Kanjis {
     private config: Config;
@@ -105,11 +106,10 @@ export class Kanjis {
         }));
 
         //set up Name of image question
-        questions.push(new TextboxQuestion({
+        questions.push(new InlineTextQuestion({
             key: 'explain',
             label: 'Explain Kanji',
             value: '',
-            type: this.config.inputTypeDef.text,
             order: 60
         }));
 

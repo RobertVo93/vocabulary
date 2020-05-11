@@ -26,6 +26,17 @@
                 </div>
             </div>
         </div>
+        <div *ngSwitchCase="'inlineText'">
+            <mat-form-field>
+                <mat-label><span *ngIf="question.validators['required']" class="red">* </span> {{question.label}}</mat-label>
+                <div [satPopoverAnchor]="p" (click)="p.open()" class="cursor-pointer">
+                    <textarea matInput [formControlName]="question.key" readonly placeholder="Add an explaination" [(ngModel)]="question.value" [id]="question.key"></textarea>
+                    <sat-popover #p hasBackdrop xAlign="start" yAlign="start" (closed)="onUpdate($event)">
+                        <inline-edit [value]="question.value"></inline-edit>
+                    </sat-popover>
+                </div>
+            </mat-form-field>
+        </div>
     </div>
     <div class="errorMessage" *ngIf="errorMessages">
         <ng-container *ngFor="let error of errorMessages[question.key]">
