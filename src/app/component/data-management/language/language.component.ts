@@ -7,6 +7,7 @@ import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSelect } from 
 import { SelectionModel } from '@angular/cdk/collections';
 import { CommonService } from 'src/app/services/common.service';
 import { CommonDialogComponent } from 'src/app/share-component/common-dialog/common-dialog.component';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
 	selector: 'app-language',
@@ -26,7 +27,7 @@ export class LanguageComponent implements OnInit {
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
 	constructor(public config: Config, public common: CommonService,
-		public service: LanguageService, public dialog: MatDialog) { }
+		public service: LanguageService, public dialog: MatDialog, private alertService: AlertService) { }
 
 	ngOnInit() {
 		this.selectedViewColumn = [
@@ -240,17 +241,7 @@ export class LanguageComponent implements OnInit {
 						});
 					},
 					(err) => {
-						console.log(err);
-						this.dialog.open(CommonDialogComponent, {
-							width: '300px',
-							data: {
-								title: this.config.commonMessage.alert
-								, message: this.config.commonMessage.createError
-								, action: {
-									ok: true
-								}
-							}
-						});
+						this.alertService.error(this.config.commonMessage.createError);
 					}
 				)
 			}
@@ -278,29 +269,10 @@ export class LanguageComponent implements OnInit {
 			if(result != null && result.returnAction == this.config.returnAction.update){
 				this.service.updateData(this.selection._selected).subscribe(
 				(res) => {
-					this.dialog.open(CommonDialogComponent, {
-						width: '300px',
-						data: {
-							title: this.config.commonMessage.notification
-							, message: this.config.commonMessage.updateSuccessfull
-							, action: {
-								ok: true
-							}
-						}
-					});
-				}, 
+					this.alertService.success(this.config.commonMessage.updateSuccessfull);
+				},
 				(err) => {
-					console.log(err.statusText);
-					this.dialog.open(CommonDialogComponent, {
-						width: '300px',
-						data: {
-							title: this.config.commonMessage.alert
-							, message: this.config.commonMessage.updateError
-							, action: {
-								ok: true
-							}
-						}
-					});
+					this.alertService.error(this.config.commonMessage.updateError);
 				})
 			}
 		})
@@ -343,17 +315,7 @@ export class LanguageComponent implements OnInit {
 						});
 					},
 					(err) => {
-						console.log(err);
-						this.dialog.open(CommonDialogComponent, {
-							width: '300px',
-							data: {
-								title: this.config.commonMessage.alert
-								, message: this.config.commonMessage.deleteError
-								, action: {
-									ok: true
-								}
-							}
-						});
+						this.alertService.error(this.config.commonMessage.deleteError);
 					}
 				);
 			}

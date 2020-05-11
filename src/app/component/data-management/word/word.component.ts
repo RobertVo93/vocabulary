@@ -9,7 +9,8 @@ import { CommonDialogComponent } from 'src/app/share-component/common-dialog/com
 import { LanguageService } from '../language/language.service';
 import { Words } from 'src/app/class/words';
 import { TagsService } from '../tag/tags.service';
-import { DataSourcesService } from '../data-sources/data-sources.service';
+import { DataSourcesService } from '../data-sources/data-sources.service';import { AlertService } from 'src/app/services/alert.service';
+
 
 @Component({
 	selector: 'app-word',
@@ -36,7 +37,7 @@ export class WordComponent implements OnInit {
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
 	constructor(public config: Config, public common: CommonService, public service: WordService, public dialog: MatDialog
-		, private langService: LanguageService, private dataSourceService: DataSourcesService, private tagService: TagsService) { }
+		, private langService: LanguageService, private dataSourceService: DataSourcesService, private tagService: TagsService, private alertService: AlertService) { }
 
 	ngOnInit() {
 		this.serverImagesURL = this.config.apiServiceURL.images;
@@ -343,17 +344,7 @@ export class WordComponent implements OnInit {
 						});
 					},
 					(err) => {
-						console.log(err);
-						this.dialog.open(CommonDialogComponent, {
-							width: '300px',
-							data: {
-								title: this.config.commonMessage.alert
-								, message: this.config.commonMessage.createError
-								, action: {
-									ok: true
-								}
-							}
-						});
+						this.alertService.error(this.config.commonMessage.createError);
 					}
 				)
 			}
@@ -380,31 +371,12 @@ export class WordComponent implements OnInit {
 			console.log(result);
 			if (result != null && result.returnAction == this.config.returnAction.update) {
 				this.service.updateData(this.selection._selected).subscribe(
-					(res) => {
-						this.dialog.open(CommonDialogComponent, {
-							width: '300px',
-							data: {
-								title: this.config.commonMessage.notification
-								, message: this.config.commonMessage.updateSuccessfull
-								, action: {
-									ok: true
-								}
-							}
-						});
-					},
-					(err) => {
-						console.log(err.statusText);
-						this.dialog.open(CommonDialogComponent, {
-							width: '300px',
-							data: {
-								title: this.config.commonMessage.alert
-								, message: this.config.commonMessage.updateError
-								, action: {
-									ok: true
-								}
-							}
-						});
-					})
+				(res) => {
+					this.alertService.success(this.config.commonMessage.updateSuccessfull);
+				},
+				(err) => {
+					this.alertService.error(this.config.commonMessage.updateError);
+				})
 			}
 		})
 	}
@@ -446,17 +418,7 @@ export class WordComponent implements OnInit {
 						});
 					},
 					(err) => {
-						console.log(err);
-						this.dialog.open(CommonDialogComponent, {
-							width: '300px',
-							data: {
-								title: this.config.commonMessage.alert
-								, message: this.config.commonMessage.deleteError
-								, action: {
-									ok: true
-								}
-							}
-						});
+						this.alertService.error(this.config.commonMessage.deleteError);
 					}
 				);
 			}

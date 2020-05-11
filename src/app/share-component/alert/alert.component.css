@@ -1,0 +1,6 @@
+.deleteAlert {
+    float: right;
+    cursor: pointer;
+    margin-top: -10px;
+    margin-right: -10px;
+}

@@ -9,6 +9,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { CommonDialogComponent } from 'src/app/share-component/common-dialog/common-dialog.component';
 import { LanguageService } from '../language/language.service';
 import { RoleService } from '../role/role.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
 	selector: 'app-user-management',
@@ -31,7 +32,7 @@ export class UserManagementComponent implements OnInit {
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
 	constructor(public config: Config, public common: CommonService,
 		public service: UserService, public dialog: MatDialog
-		, private langService: LanguageService, private roleService: RoleService) { }
+		, private langService: LanguageService, private roleService: RoleService, private alertService: AlertService) { }
 
 	ngOnInit() {
 		this.selectedViewColumn = [
@@ -271,17 +272,7 @@ export class UserManagementComponent implements OnInit {
 						});
 					},
 					(err) => {
-						console.log(err);
-						this.dialog.open(CommonDialogComponent, {
-							width: '300px',
-							data: {
-								title: this.config.commonMessage.alert
-								, message: this.config.commonMessage.createError
-								, action: {
-									ok: true
-								}
-							}
-						});
+						this.alertService.error(this.config.commonMessage.createError);
 					}
 				)
 			}
@@ -308,31 +299,12 @@ export class UserManagementComponent implements OnInit {
 			console.log(result);
 			if (result != null && result.returnAction == this.config.returnAction.update) {
 				this.service.updateData(this.selection._selected).subscribe(
-					(res) => {
-						this.dialog.open(CommonDialogComponent, {
-							width: '300px',
-							data: {
-								title: this.config.commonMessage.notification
-								, message: this.config.commonMessage.updateSuccessfull
-								, action: {
-									ok: true
-								}
-							}
-						});
-					},
-					(err) => {
-						console.log(err.statusText);
-						this.dialog.open(CommonDialogComponent, {
-							width: '300px',
-							data: {
-								title: this.config.commonMessage.alert
-								, message: this.config.commonMessage.updateError
-								, action: {
-									ok: true
-								}
-							}
-						});
-					})
+				(res) => {
+					this.alertService.success(this.config.commonMessage.updateSuccessfull);
+				},
+				(err) => {
+					this.alertService.error(this.config.commonMessage.updateError);
+				})
 			}
 		})
 	}
@@ -374,17 +346,7 @@ export class UserManagementComponent implements OnInit {
 						});
 					},
 					(err) => {
-						console.log(err);
-						this.dialog.open(CommonDialogComponent, {
-							width: '300px',
-							data: {
-								title: this.config.commonMessage.alert
-								, message: this.config.commonMessage.deleteError
-								, action: {
-									ok: true
-								}
-							}
-						});
+						this.alertService.error(this.config.commonMessage.deleteError);
 					}
 				);
 			}
