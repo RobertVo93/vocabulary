@@ -4,3 +4,22 @@
     margin-top: -10px;
     margin-right: -10px;
 }
+
+#alert-component {
+    position: fixed;
+    top: 60px;
+    width: 100%;
+    z-index: 10000;
+}
+
+.alert-danger {
+    color: #f8f9fa;
+    background-color: #f44336;
+    border-color: #f44336;
+}
+
+.alert-success {
+    color: #f8f9fa;
+    background-color: #28a745;
+    border-color: #28a745;
+}

@@ -39,6 +39,8 @@ export class KanjiComponent implements OnInit {
 			, this.config.viewColumnsDef.id
 			, this.config.viewColumnsDef.word
 			, this.config.viewColumnsDef.meaning
+			, this.config.viewColumnsDef.remember
+			, this.config.viewColumnsDef.explain
 		];
 		this.actions = this.getAllActions();
 		this.viewColumns = this.getAllViewMode(); //get all view column
@@ -154,10 +156,10 @@ export class KanjiComponent implements OnInit {
 			{ value: this.config.viewColumnsDef.word, viewValue: this.config.viewColumns.word },
 			{ value: this.config.viewColumnsDef.meaning, viewValue: this.config.viewColumns.meaning },
 			{ value: this.config.viewColumnsDef.JLPTLevel, viewValue: this.config.viewColumns.JLPTLevel },
-			{ value: this.config.viewColumnsDef.fullMeaning, viewValue: this.config.viewColumns.fullMeaning },
+			// { value: this.config.viewColumnsDef.fullMeaning, viewValue: this.config.viewColumns.fullMeaning },
 			{ value: this.config.viewColumnsDef.remember, viewValue: this.config.viewColumns.remember },
 			{ value: this.config.viewColumnsDef.explain, viewValue: this.config.viewColumns.explain },
-			{ value: this.config.viewColumnsDef.fullName, viewValue: this.config.viewColumns.fullName },
+			// { value: this.config.viewColumnsDef.fullName, viewValue: this.config.viewColumns.fullName },
 			{ value: this.config.viewColumnsDef.image, viewValue: this.config.viewColumns.image },
 			{ value: this.config.viewColumnsDef.createdDate, viewValue: this.config.viewColumns.createdDate },
 			{ value: this.config.viewColumnsDef.createdBy, viewValue: this.config.viewColumns.createdBy },
@@ -186,12 +188,12 @@ export class KanjiComponent implements OnInit {
 				case this.config.viewColumnsDef.meaning:
 					colDef.push(this.config.viewColumns.meaning);
 					break;
-				case this.config.viewColumnsDef.fullMeaning:
-					colDef.push(this.config.viewColumns.fullMeaning);
-					break;
-				case this.config.viewColumnsDef.fullName:
-					colDef.push(this.config.viewColumns.fullName);
-					break;
+				// case this.config.viewColumnsDef.fullMeaning:
+				// 	colDef.push(this.config.viewColumns.fullMeaning);
+				// 	break;
+				// case this.config.viewColumnsDef.fullName:
+				// 	colDef.push(this.config.viewColumns.fullName);
+				// 	break;
 				case this.config.viewColumnsDef.remember:
 					colDef.push(this.config.viewColumns.remember);
 					break;
@@ -237,30 +239,6 @@ export class KanjiComponent implements OnInit {
 				this.pageSizeOptions.push(this.dataSource.data.length);
 			}
 		}
-	}
-
-	/**
-	 * Convert source obj to data
-	 * @param obj source obj
-	 */
-	private convertToData(obj: any): Kanjis {
-		let data = new Kanjis();
-		for (var prop in obj) {
-			data[prop] = obj[prop];
-		}
-		return data;
-	}
-
-	/**
-	 * Convert list source obj to data
-	 * @param obj list source obj
-	 */
-	private convertListData(obj): Kanjis[] {
-		let data = [];
-		for (var i = 0; i < obj.length; i++) {
-			data.push(this.convertToData(obj[i]));
-		}
-		return data;
 	}
 
 	/**

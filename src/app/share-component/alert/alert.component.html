@@ -1,4 +1,4 @@
-<div *ngIf="message" [ngClass]="message.cssClass">
+<div *ngIf="message" [ngClass]="message.cssClass" id="alert-component">
     {{message.text}}
-    <a class="deleteAlert" (click)="message = ''">x</a>
+    <a class="deleteAlert" (click)="message = null">x</a>
 </div>

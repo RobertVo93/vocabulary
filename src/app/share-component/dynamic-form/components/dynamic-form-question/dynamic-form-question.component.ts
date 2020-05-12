@@ -8,6 +8,7 @@ import { ResponseData } from 'src/app/class/responseData';
 import { CommonDialogComponent } from 'src/app/share-component/common-dialog/common-dialog.component';
 import { Config } from 'src/app/configuration/config';
 import { MatDialog } from '@angular/material';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
 	selector: 'app-question',
@@ -21,7 +22,8 @@ export class DynamicFormQuestionComponent {
 	@Input() form: FormGroup;
 	@Input() errorMessages;
 
-	constructor(private config: Config, private dialog: MatDialog, private imgService: ImagesService, private domSanitizer: DomSanitizer) { }
+	constructor(private config: Config, private dialog: MatDialog, 
+		private imgService: ImagesService, private domSanitizer: DomSanitizer, private alertService: AlertService) { }
 	get isValid() { return this.form.controls[this.question.key].valid; }
 
 	/**
@@ -61,35 +63,36 @@ export class DynamicFormQuestionComponent {
 				var response = new ResponseData(res);
 				if(response.success){
 					scope.question.value = response.returnObj;
-					this.dialog.open(CommonDialogComponent, {
-						width: '300px',
-						data: {
-							title: this.config.commonMessage.notification
-							, message: this.config.commonMessage.createSuccessfull
-							, action: {
-								ok: true
-							}
-						}
-					});
-					console.log(res);
+					this.alertService.success(this.config.commonMessage.createSuccessfull);
+					// this.dialog.open(CommonDialogComponent, {
+					// 	width: '300px',
+					// 	data: {
+					// 		title: this.config.commonMessage.notification
+					// 		, message: this.config.commonMessage.createSuccessfull
+					// 		, action: {
+					// 			ok: true
+					// 		}
+					// 	}
+					// });
+					// console.log(res);
 				}
 				else {
-					this.dialog.open(CommonDialogComponent, {
-						width: '300px',
-						data: {
-							title: this.config.commonMessage.alert
-							, message: this.config.commonMessage.createError
-							, action: {
-								ok: true
-							}
-						}
-					});
+					this.alertService.error(this.config.commonMessage.createError);
+					// this.dialog.open(CommonDialogComponent, {
+					// 	width: '300px',
+					// 	data: {
+					// 		title: this.config.commonMessage.alert
+					// 		, message: this.config.commonMessage.createError
+					// 		, action: {
+					// 			ok: true
+					// 		}
+					// 	}
+					// });
 				}
 				
 			},
 			(err) => {
-				
-				console.log(err)
+				this.alertService.error(this.config.commonMessage.createError);
 			}
 		);
 	}

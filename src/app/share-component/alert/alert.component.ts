@@ -26,8 +26,27 @@ export class AlertComponent implements OnInit {
 						message.cssClass = 'alert alert-danger';
 						break;
 				}
-
 				this.message = message;
+				if(this.message != null){
+					var scope = this;
+					setTimeout(() => {
+						var s = document.getElementById('alert-component').style;
+						s.opacity = '1';
+						(
+							function fade(){
+								var opacity = parseFloat(s.opacity) - 0.01;
+								if(opacity < 0.5){
+									scope.message = null;
+									s.opacity = '1';
+								}
+								else {
+									s.opacity = opacity.toString();
+									setTimeout(fade,40);
+								}
+							}
+						)();
+					}, 1000);
+				}
 			});
 	}
 
