@@ -56,7 +56,7 @@ export class Kanjis {
         };
         questions.push(new TextboxQuestion({
             key: 'word',
-            label: 'Word',
+            label: 'China Meaning',
             value: '',
             validators: validators,
             type: this.config.inputTypeDef.text,
@@ -76,24 +76,6 @@ export class Kanjis {
             validators: validators,
             type: this.config.inputTypeDef.text,
             order: 20
-        }));
-
-        //set up full meaning question
-        questions.push(new TextboxQuestion({
-            key: 'fullMeaning',
-            label: 'Full-Mean',
-            value: '',
-            type: this.config.inputTypeDef.text,
-            order: 30
-        }));
-
-        //set up Name of image question
-        questions.push(new TextboxQuestion({
-            key: 'fullName',
-            label: 'Name of image',
-            value: '',
-            type: this.config.inputTypeDef.text,
-            order: 40
         }));
 
         //set up meaning question

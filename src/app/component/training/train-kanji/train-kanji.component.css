@@ -11,7 +11,7 @@
 
 .leftBodyTitle {
     font-weight: bold;
-    font-size: 40px;
+    font-size: 25px;
     color: red;
 }
 
@@ -31,12 +31,6 @@
 
 .rightBody {
     border: solid 1px blue;
-}
-
-.rightBodyTitle {
-    font-weight: bold;
-    font-size: 40px;
-    color: red;
 }
 
 .table-container {
@@ -81,5 +75,8 @@
         float: left;
         width: 49%;
         min-height: calc(100vh - 150px);
+    }
+    .leftBodyTitle {
+        font-size: 40px;
     }
 }
