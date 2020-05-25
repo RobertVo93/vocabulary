@@ -1,0 +1,61 @@
+.train-container {
+    position: relative;
+    min-height: 100vh;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.leftBody {
+    border: solid 1px blue;
+}
+
+.leftBodyTitle {
+    font-weight: bold;
+    font-size: 25px;
+    color: red;
+}
+
+.positionSelection {
+    width: 100px;
+}
+
+.button-border {
+    border: 1px solid;
+}
+
+.grammar {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.text-align-left {
+    text-align: left;
+}
+
+.control-panel {
+    display: table;
+    width: 90%;
+}
+
+.column .cell {
+    width: 100%;
+}
+
+@media (min-width:768px) {
+    .leftBody {
+        min-height: calc(100vh - 150px);
+    }
+    .leftBodyTitle {
+        font-size: 40px;
+    }
+    .column {
+        display: table-cell;
+    }
+    .column .cell {
+        width: 200px;
+    }
+}

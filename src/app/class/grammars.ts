@@ -6,6 +6,7 @@ import { Config } from '../configuration/config';
 import { Option } from '../interface/option';
 import { LanguageService } from '../component/data-management/language/language.service';
 import { TagsService } from '../component/data-management/tag/tags.service';
+import { InlineTextQuestion } from './question-inlineText';
 
 export class Grammars {
     private config: Config;
@@ -51,12 +52,11 @@ export class Grammars {
             value: true,
             error_message: 'Syntax is required.'
         };
-        questions.push(new TextboxQuestion({
+        questions.push(new InlineTextQuestion({
             key: 'syntax',
             label: 'Syntax',
             value: '',
             validators: validators,
-            type: this.config.inputTypeDef.text,
             order: 10
         }));
         
@@ -66,12 +66,11 @@ export class Grammars {
             error_message: 'Explain is required.'
         };
         //set up Explain question
-        questions.push(new TextboxQuestion({
+        questions.push(new InlineTextQuestion({
             key: 'explain',
             label: 'Explain',
             value: '',
             validators: validators,
-            type: this.config.inputTypeDef.text,
             order: 20
         }));
 

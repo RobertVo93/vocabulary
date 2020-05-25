@@ -17,6 +17,7 @@ import { KanjiComponent } from './component/data-management/kanji/kanji.componen
 import { ImagesComponent } from './component/data-management/images/images.component';
 import { AboutComponent } from './component/about/about.component';
 import { GrammarComponent } from './component/data-management/grammar/grammar.component';
+import { TrainGrammarComponent } from './component/training/train-grammar/train-grammar.component';
 
 
 const routes: Routes = [
@@ -26,6 +27,7 @@ const routes: Routes = [
   {canActivate: [AuthGuard], path: 'import/kanji', component: ConvertToKanjiComponent},
   {canActivate: [AuthGuard], path: 'train/word', component: TrainWordComponent},
   {canActivate: [AuthGuard], path: 'train/kanji', component: TrainKanjiComponent},
+  {canActivate: [AuthGuard], path: 'train/grammar', component: TrainGrammarComponent},
   {canActivate: [AuthGuard], path: 'management/kanji', component: KanjiComponent},
   {canActivate: [AuthGuard], path: 'management/word', component: WordComponent},
   {canActivate: [AuthGuard], path: 'management/tag', component: TagsComponent},

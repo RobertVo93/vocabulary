@@ -41,6 +41,7 @@ import { ImagesComponent } from './component/data-management/images/images.compo
 import { AboutComponent } from './component/about/about.component';
 import { LoaderComponent } from './share-component/loader/loader.component';
 import { GrammarComponent } from './component/data-management/grammar/grammar.component';
+import { TrainGrammarComponent } from './component/training/train-grammar/train-grammar.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { GrammarComponent } from './component/data-management/grammar/grammar.co
     ImagesComponent,
     AboutComponent,
     LoaderComponent,
-    GrammarComponent
+    GrammarComponent,
+    TrainGrammarComponent
   ],
   imports: [
     BrowserModule,

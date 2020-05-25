@@ -12,9 +12,9 @@ import { TagsService } from '../tag/tags.service';
 import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
-  selector: 'app-grammar',
-  templateUrl: './grammar.component.html',
-  styleUrls: ['./grammar.component.css']
+	selector: 'app-grammar',
+	templateUrl: './grammar.component.html',
+	styleUrls: ['./grammar.component.css']
 })
 export class GrammarComponent implements OnInit {
 	serverImagesURL: string = '';		//url for image resources
@@ -32,7 +32,7 @@ export class GrammarComponent implements OnInit {
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
 	constructor(public config: Config, public common: CommonService, private langService: LanguageService, private tagService: TagsService,
-    public service: GrammarService, public dialog: MatDialog, private alertService: AlertService) { }
+		public service: GrammarService, public dialog: MatDialog, private alertService: AlertService) { }
 
 	ngOnInit() {
 		this.serverImagesURL = this.config.apiServiceURL.images;
@@ -46,8 +46,8 @@ export class GrammarComponent implements OnInit {
 		this.viewColumns = this.getAllViewMode(); //get all view column
 		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
 		this.selection = new SelectionModel<Grammars>(true, []);
-    this.setupAllLanguageOptions();
-    this.setupAllTagOptions();
+		this.setupAllLanguageOptions();
+		this.setupAllTagOptions();
 		this.getAllData();
 	}
 
@@ -68,18 +68,21 @@ export class GrammarComponent implements OnInit {
 	 */
 	onViewModeChangeHandler(event) {
 		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get display column
-	} 
-	
+	}
+
 	/**
 	* 
 	* @param el 
 	* @param text 
 	*/
-   onUpdate(el: Grammars, text: string) {
-	 if (text == null) { return; }
-	 // copy and mutate
-	 el.explain = text;
-   }
+	onUpdate(el: Grammars, text: string, columnDef: string) {
+		if (text == null) { return; }
+		// copy and mutate
+		if (columnDef == this.config.viewColumns.syntax)
+			el.syntax = text;
+		else
+			el.explain = text;
+	}
 
 	/**
 	 * Handle action selection
@@ -224,7 +227,7 @@ export class GrammarComponent implements OnInit {
 		}
 	}
 
-  private async setupAllLanguageOptions() {
+	private async setupAllLanguageOptions() {
 		let options: Option[] = [];
 		let language = await this.langService.getAllData();
 		for (var i = 0; i < language.length; i++) {
@@ -240,14 +243,14 @@ export class GrammarComponent implements OnInit {
 			options.push({ value: tags[i]._id, viewValue: tags[i].name })
 		}
 		this.tags = options;
-  }
-  
+	}
+
 	/**
 	 * Handle create new record
 	 */
 	private async createNew() {
-    let data = new Grammars();
-    let questions = await data.getQuestions(this.langService, this.tagService);
+		let data = new Grammars();
+		let questions = await data.getQuestions(this.langService, this.tagService);
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
 			width: '500px',
 			data: {
