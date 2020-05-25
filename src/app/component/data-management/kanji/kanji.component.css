@@ -32,7 +32,8 @@ input {
     float: right;
 }
 
-.mat-column-select {
+.mat-column-select,
+.mat-column-kanji {
     flex: 0 0 50px !important;
 }
 

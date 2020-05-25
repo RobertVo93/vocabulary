@@ -40,8 +40,9 @@ export class Words {
     pronun: string;
     meaning: string;
     example: string;
+    exampleTitle: string;
     exampleMeaning: string;
-    kanjiExplain: string;
+    kanjiExplain: any;
     chinaMeaning: string;
     language: any;
     dataSource: any;
@@ -144,8 +145,8 @@ export class Words {
 
         //set up kanjiExplain question
         questions.push(new TextboxQuestion({
-            key: 'kanjiExplain',
-            label: 'Kanji explain',
+            key: 'exampleTitle',
+            label: 'Example Title',
             value: '',
             type: this.config.inputTypeDef.text,
             order: 80

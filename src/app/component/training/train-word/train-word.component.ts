@@ -6,6 +6,8 @@ import { Config } from 'src/app/configuration/config';
 import { WordService } from '../../data-management/word/word.service';
 import { Words } from 'src/app/class/words';
 import { DataSourcesService } from '../../data-management/data-sources/data-sources.service';
+import { KanjiService } from '../../data-management/kanji/kanji.service';
+import { Kanjis } from 'src/app/class/kanjis';
 
 @Component({
 	selector: 'app-train-word',
@@ -23,6 +25,7 @@ export class TrainWordComponent implements OnInit {
 	showHideButtonName: string = "Show more";  //button's name
 	isShowMore: boolean = false;  //flag show kanji explain
 
+	kanjis: Kanjis[];			//all kanjis
 	allWordDataInDB: Words[];	//all word's data in Database
 	allWordData: Words[];  		//all word's data base on selected dataset
 	wordData: Words[];     		//word's data for training
@@ -45,22 +48,23 @@ export class TrainWordComponent implements OnInit {
 	dataSource: Words[];  //data source for rendering table on right hand side
 	dataset: Option[];    //option for dropdownlist 'Dataset'
 	selected: number = 0;  //selected dataset
-	constructor(private common: CommonService, public config: Config, 
+	constructor(private common: CommonService, public config: Config, private kanjiService: KanjiService,
 		private wordService: WordService, private dataSourceService: DataSourcesService) { }
 
 	ngOnInit() {
 		this.serverImagesURL = this.config.apiServiceURL.images;
 		let promises = [
 			this.getListOfDataset(),
-			this.getAllWordsDB()
+			this.getAllWordsDB(),
+			this.getAllKanjis()
 		];
 		Promise.all(promises).then((result)=>{
+			this.updateKanjiExplain();
 			//if we have dataset then
 			if (this.dataset.length != 0) {
 				this.selected = this.dataset[0].value;  //initial the selected is the first one
 				this.updateDataBaseOnSelectedDataset(this.selected);
 			}
-			
 		});
 		this.testModes = this.getAllTestMode(); //get test mode
 		this.viewColumns = this.getAllViewMode(); //get all view column
@@ -84,6 +88,17 @@ export class TrainWordComponent implements OnInit {
 			this.allWordDataInDB = dataConverted;
 		}
 	}
+	
+	/**
+	 * get all kanjis
+	 */
+	private async getAllKanjis(){
+		let dataConverted = await this.kanjiService.getAllData();
+		if(dataConverted){
+			this.kanjis = dataConverted;
+		}
+	}
+
 	/**
 	 * Get all dataset
 	 */
@@ -133,6 +148,36 @@ export class TrainWordComponent implements OnInit {
 			{ value: this.config.viewColumnsDef.title, viewValue: this.config.viewColumns.title }
 
 		];
+	}
+
+	/**
+	 * get kanji detail by kanji_id
+	 */
+	private updateKanjiExplain(){
+		this.allWordDataInDB.forEach(ele => {
+			var kanjiExplain = this.common.clone(ele.kanjiExplain);
+			if(typeof(kanjiExplain) === 'object'){	//array
+				ele.kanjiExplain = '';
+				kanjiExplain.forEach(element => {
+					ele.kanjiExplain += '\r\n' + this.getKanjiDetailById(element);
+				});
+			}
+		});
+	}
+
+	/**
+	 * Get kanj by id
+	 * @param kanjiId kanji _id
+	 */
+	private getKanjiDetailById(kanjiId){
+		let result = '';
+		for(var i = 0; i < this.kanjis.length; i++){
+			if(this.kanjis[i]._id == kanjiId){
+				result = this.kanjis[i].explain;
+				break;
+			}
+		}
+		return result;
 	}
 
 	/**

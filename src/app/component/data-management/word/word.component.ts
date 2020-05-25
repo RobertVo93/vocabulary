@@ -10,6 +10,8 @@ import { LanguageService } from '../language/language.service';
 import { Words } from 'src/app/class/words';
 import { TagsService } from '../tag/tags.service';
 import { DataSourcesService } from '../data-sources/data-sources.service';import { AlertService } from 'src/app/services/alert.service';
+import { Kanjis } from 'src/app/class/kanjis';
+import { KanjiService } from '../kanji/kanji.service';
 
 
 @Component({
@@ -21,8 +23,11 @@ export class WordComponent implements OnInit {
 	serverImagesURL: string = '';		//url for image resources
 	selectedDatasource: any;  //selected data set Id
 	languages: Option[];				//list of languages options
-	tags: Option[];						//list of roles options
+	filteredLanguages: Option[];		//list of filtered languages options
+	tags: Option[];						//list of tags options
+	filteredTags: Option[];				//list of filtered tags options
 	dataSources: Option[];				//list of data sources options
+	filteredDataSources: Option[];		//list of filtered data sources options
 	types: Option[];					//list of word type
 	actions: Option[];					//list of action for selected rows
 	viewColumns: Option[];              //list of column could be viewed
@@ -33,10 +38,11 @@ export class WordComponent implements OnInit {
 	dataSourceAll: Words[];				//all datasource
 	selection;
 	pageSizeOptions: number[];          //list of page size option
+	kanjis: Kanjis[];					//list of all kanji available in system
 
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
-	constructor(public config: Config, public common: CommonService, public service: WordService, public dialog: MatDialog
+	constructor(public config: Config, public common: CommonService, public service: WordService, public dialog: MatDialog, private kanjiService: KanjiService
 		, private langService: LanguageService, private dataSourceService: DataSourcesService, private tagService: TagsService, private alertService: AlertService) { }
 
 	ngOnInit() {
@@ -46,6 +52,7 @@ export class WordComponent implements OnInit {
 			this.setupAllTagOptions(),
 			this.setupAllDataSourceOptions(),
 			this.getAllData(),
+			this.getAllKanjis()
 		];
 		Promise.all(promises).then(() => {
 			this.selectedDatasource = this.dataSources[0].value;
@@ -123,6 +130,11 @@ export class WordComponent implements OnInit {
 		return numSelected === numRows;
 	}
 
+	onUpdateKanji(ele:Words, event){
+		console.log(event);
+		ele.kanjiExplain = this.getKanjiExplain(event);
+	}
+
 	/**
 	 * Selects all rows if they are not all selected; otherwise clear selection.
 	 */
@@ -162,6 +174,9 @@ export class WordComponent implements OnInit {
 		];
 	}
 
+	/**
+	 * setup the type of words
+	 */
 	private getAllWordTypes(): Option[] {
 		let options: Option[] = [];
 		for (var option in this.config.wordType) {
@@ -185,6 +200,7 @@ export class WordComponent implements OnInit {
 			{ value: this.config.viewColumnsDef.pronun, viewValue: this.config.viewColumns.pronun },
 			{ value: this.config.viewColumnsDef.meaning, viewValue: this.config.viewColumns.meaning },
 			{ value: this.config.viewColumnsDef.example, viewValue: this.config.viewColumns.example },
+			{ value: this.config.viewColumnsDef.title, viewValue: this.config.viewColumns.title },
 			{ value: this.config.viewColumnsDef.exampleMeaning, viewValue: this.config.viewColumns.exampleMeaning },
 			{ value: this.config.viewColumnsDef.kanjiExplain, viewValue: this.config.viewColumns.kanjiExplain },
 			{ value: this.config.viewColumnsDef.chinaMeaning, viewValue: this.config.viewColumns.chinaMeaning },
@@ -219,6 +235,9 @@ export class WordComponent implements OnInit {
 				case this.config.viewColumnsDef.kanji:
 					colDef.push(this.config.viewColumns.kanji);
 					break;
+				case this.config.viewColumnsDef.kanjiExplain:
+					colDef.push(this.config.viewColumns.kanjiExplain);
+					break;
 				case this.config.viewColumnsDef.type:
 					colDef.push(this.config.viewColumns.type);
 					break;
@@ -227,6 +246,9 @@ export class WordComponent implements OnInit {
 					break;
 				case this.config.viewColumnsDef.meaning:
 					colDef.push(this.config.viewColumns.meaning);
+					break;
+				case this.config.viewColumnsDef.title:
+					colDef.push(this.config.viewColumns.title);
 					break;
 				case this.config.viewColumnsDef.example:
 					colDef.push(this.config.viewColumns.example);
@@ -277,6 +299,19 @@ export class WordComponent implements OnInit {
 		}
 	}
 
+	/**
+	 * get all kanjis
+	 */
+	private async getAllKanjis(){
+		let dataConverted = await this.kanjiService.getAllData();
+		if(dataConverted){
+			this.kanjis = dataConverted;
+		}
+	}
+
+	/**
+	 * set up the languages
+	 */
 	private async setupAllLanguageOptions() {
 		let options: Option[] = [];
 		let language = await this.langService.getAllData();
@@ -284,8 +319,12 @@ export class WordComponent implements OnInit {
 			options.push({ value: language[i]._id, viewValue: language[i].name })
 		}
 		this.languages = options;
+		this.filteredLanguages = options;
 	}
 
+	/**
+	 * set up the tags
+	 */
 	private async setupAllTagOptions() {
 		let options: Option[] = [];
 		let tags = await this.tagService.getAllData();
@@ -293,8 +332,12 @@ export class WordComponent implements OnInit {
 			options.push({ value: tags[i]._id, viewValue: tags[i].name })
 		}
 		this.tags = options;
+		this.filteredTags = options;
 	}
 
+	/**
+	 * set up the data sources
+	 */
 	private async setupAllDataSourceOptions() {
 		let options: Option[] = [];
 		options.push({ value: -1, viewValue: this.config.defaultDropDownOptions['-1'] });	//--All--
@@ -304,6 +347,7 @@ export class WordComponent implements OnInit {
 			options.push({ value: dataSources[i]._id, viewValue: dataSources[i].name })
 		}
 		this.dataSources = options;
+		this.filteredDataSources = options;
 	}
 
 	/**
@@ -328,6 +372,7 @@ export class WordComponent implements OnInit {
 
 		dialogRef.afterClosed().subscribe(result => {
 			if (result != null && result.returnAction == this.config.returnAction.save) {
+				result.record.kanjiExplain = this.getKanjiExplain(result.record.kanji);
 				this.service.createData([result.record]).subscribe(
 					(res) => {
 						this.dialog.open(CommonDialogComponent, {
@@ -423,6 +468,24 @@ export class WordComponent implements OnInit {
 				);
 			}
 		});
+	}
+
+	private getKanjiExplain(kanjiStr){
+		let kanjiList = [];
+		let result = [];
+		if(kanjiStr == null)
+			return result;
+		for(var i = 0; i < kanjiStr.length; i++){
+			if(this.common.isKanji(kanjiStr[i])){
+				kanjiList = kanjiList.concat(this.kanjis.filter(element => {
+					return element.kanji === kanjiStr[i];
+				}));
+			}
+		}
+		for(var i = 0; i < kanjiList.length; i++){
+			result.push(kanjiList[i]._id);
+		}
+		return result;
 	}
 }
 

@@ -236,4 +236,9 @@ export class CommonService {
     eraseCookie(name: string): void {
         document.cookie = name + '=; Max-Age=-99999999;';
     }
+
+    isKanji(ch): boolean {
+		return (ch >= "\u4e00" && ch <= "\u9faf") ||
+		(ch >= "\u3400" && ch <= "\u4dbf");
+	}
 }

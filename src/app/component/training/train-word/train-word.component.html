@@ -48,7 +48,10 @@
                 <label class="red">{{previousTrainingWord.chinaMeaning}}</label>
             </div>
             <div *ngIf='previousTrainingWord.example != ""'>
-                <strong>Example: {{previousTrainingWord.example}}</strong>
+                <div [title]="previousTrainingWord.exampleTitle">
+                    <strong>Example: {{previousTrainingWord.example}}</strong>
+                </div>
+
                 <div class="red">
                     {{previousTrainingWord.exampleMeaning}}
                 </div>

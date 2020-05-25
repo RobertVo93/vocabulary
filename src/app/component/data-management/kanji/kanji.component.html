@@ -71,6 +71,15 @@
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
+        <!-- Kanji Column -->
+        <ng-container matColumnDef="kanji">
+            <mat-header-cell *matHeaderCellDef> Kanji </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" class="form-control" [(ngModel)]='element.kanji' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
         <!-- full meaning Column -->
         <!-- <ng-container matColumnDef="fullMeaning">
             <mat-header-cell *matHeaderCellDef> Full Meaning </mat-header-cell>
@@ -142,7 +151,7 @@
 
         <!-- Created Date Column -->
         <ng-container matColumnDef="createdDate">
-            <mat-header-cell *matHeaderCellDef> Created Date </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <input type="text" readonly class="form-control" [(ngModel)]='element.createdDate' />
             </mat-cell>
@@ -160,7 +169,7 @@
 
         <!-- Updated Date Column -->
         <ng-container matColumnDef="updatedDate">
-            <mat-header-cell *matHeaderCellDef> Updated Date </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Updated Date </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <input type="text" readonly class="form-control" [(ngModel)]='element.updatedDate' />
             </mat-cell>

@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SatPopoverModule } from '@ncstate/sat-popover';
 import { MatSortModule } from '@angular/material/sort';
 import { FileUploadModule } from 'ng2-file-upload';
+import { MatSelectFilterModule } from 'mat-select-filter';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -80,7 +81,8 @@ import { GrammarComponent } from './component/data-management/grammar/grammar.co
     MatDialogModule,
     ReactiveFormsModule,
     AngularFontAwesomeModule,
-    FileUploadModule
+    FileUploadModule,
+    MatSelectFilterModule
   ],
   providers: [
     PubSubService,

@@ -96,7 +96,7 @@
         <ng-container matColumnDef="kanji">
             <mat-header-cell *matHeaderCellDef> Kanji </mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <input type="text" class="form-control" [(ngModel)]='element.kanji' />
+                <input type="text" class="form-control" (ngModelChange)='onUpdateKanji(element, $event)' [(ngModel)]='element.kanji' />
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
@@ -128,6 +128,15 @@
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
+        <!-- Example Column -->
+        <ng-container matColumnDef="title">
+            <mat-header-cell *matHeaderCellDef> Example Title </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <input type="text" class="form-control" [(ngModel)]='element.exampleTitle' />
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
         <!-- exampleMeaning Column -->
         <ng-container matColumnDef="exampleMeaning">
             <mat-header-cell *matHeaderCellDef> Example meaning </mat-header-cell>
@@ -142,7 +151,8 @@
             <mat-header-cell *matHeaderCellDef> Language </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <mat-select class="pl10" [(value)]='element.language'>
-                    <mat-option *ngFor="let option of languages" [value]="option.value">
+                    <mat-select-filter [array]="languages" [displayMember]="'viewValue'" (filteredReturn)="filteredLanguages = $event"></mat-select-filter>
+                    <mat-option *ngFor="let option of filteredLanguages" [value]="option.value">
                         {{option.viewValue}}
                     </mat-option>
                 </mat-select>
@@ -155,7 +165,8 @@
             <mat-header-cell *matHeaderCellDef> Data Source </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <mat-select class="pl10" [(value)]='element.dataSource'>
-                    <mat-option *ngFor="let option of dataSources" [value]="option.value">
+                    <mat-select-filter [array]="dataSources" [displayMember]="'viewValue'" (filteredReturn)="filteredDataSources = $event"></mat-select-filter>
+                    <mat-option *ngFor="let option of filteredDataSources" [value]="option.value">
                         {{option.viewValue}}
                     </mat-option>
                 </mat-select>
@@ -168,7 +179,8 @@
             <mat-header-cell *matHeaderCellDef> Tags </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <mat-select class="pl10" [(value)]='element.tags' multiple>
-                    <mat-option *ngFor="let option of tags" [value]="option.value">
+                    <mat-select-filter [array]="tags" [displayMember]="'viewValue'" (filteredReturn)="filteredTags = $event"></mat-select-filter>
+                    <mat-option *ngFor="let option of filteredTags" [value]="option.value">
                         {{option.viewValue}}
                     </mat-option>
                 </mat-select>
@@ -187,7 +199,7 @@
 
         <!-- Created Date Column -->
         <ng-container matColumnDef="createdDate">
-            <mat-header-cell *matHeaderCellDef> Created Date </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <input type="text" readonly class="form-control" [(ngModel)]='element.createdDate' />
             </mat-cell>
@@ -205,9 +217,9 @@
 
         <!-- Updated Date Column -->
         <ng-container matColumnDef="updatedDate">
-            <mat-header-cell *matHeaderCellDef> Updated Date </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Updated Date </mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <input type="text" readonly class="form-control" [(ngModel)]='element.updatedDate' />
+                <input type="text" readonly class="form-control" [(ngModel)]='element.modifiedDate' />
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>

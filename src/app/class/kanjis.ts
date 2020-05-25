@@ -31,6 +31,7 @@ export class Kanjis {
     meaning:string;
     fullMeaning: string;
     fullName:string;
+    kanji: string;
     remember: string;
     explain: string;
     JLPTLevel: number;

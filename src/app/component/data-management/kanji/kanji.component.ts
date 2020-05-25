@@ -37,6 +37,7 @@ export class KanjiComponent implements OnInit {
 		this.selectedViewColumn = [
 			this.config.viewColumnsDef.select
 			, this.config.viewColumnsDef.id
+			, this.config.viewColumnsDef.kanji
 			, this.config.viewColumnsDef.word
 			, this.config.viewColumnsDef.meaning
 			, this.config.viewColumnsDef.remember
@@ -155,6 +156,7 @@ export class KanjiComponent implements OnInit {
 			{ value: this.config.viewColumnsDef.id, viewValue: this.config.viewColumns.id },
 			{ value: this.config.viewColumnsDef.word, viewValue: this.config.viewColumns.word },
 			{ value: this.config.viewColumnsDef.meaning, viewValue: this.config.viewColumns.meaning },
+			{ value: this.config.viewColumnsDef.kanji, viewValue: this.config.viewColumns.kanji },
 			{ value: this.config.viewColumnsDef.JLPTLevel, viewValue: this.config.viewColumns.JLPTLevel },
 			// { value: this.config.viewColumnsDef.fullMeaning, viewValue: this.config.viewColumns.fullMeaning },
 			{ value: this.config.viewColumnsDef.remember, viewValue: this.config.viewColumns.remember },
@@ -184,6 +186,9 @@ export class KanjiComponent implements OnInit {
 					break;
 				case this.config.viewColumnsDef.word:
 					colDef.push(this.config.viewColumns.word);
+					break;
+				case this.config.viewColumnsDef.kanji:
+					colDef.push(this.config.viewColumns.kanji);
 					break;
 				case this.config.viewColumnsDef.meaning:
 					colDef.push(this.config.viewColumns.meaning);
