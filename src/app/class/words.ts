@@ -1,13 +1,13 @@
-import { QuestionBase } from './question-base';
-import { TextboxQuestion } from './question-textbox';
+import { QuestionBase } from './questions/question-base';
+import { TextboxQuestion } from './questions/question-textbox';
 import { of } from 'rxjs';
 import { Config } from '../configuration/config';
-import { DropdownQuestion } from './question-dropdown';
+import { DropdownQuestion } from './questions/question-dropdown';
 import { LanguageService } from '../component/data-management/language/language.service';
 import { Option } from '../interface/option';
 import { DataSourcesService } from '../component/data-management/data-sources/data-sources.service';
 import { TagsService } from '../component/data-management/tag/tags.service';
-import { FileQuestion } from './question-file';
+import { FileQuestion } from './questions/question-file';
 
 export class Words {
     private config: Config;

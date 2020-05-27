@@ -37,6 +37,16 @@
                 </div>
             </mat-form-field>
         </div>
+        <div *ngSwitchCase="'ckeditor'">
+            <div class="form-group input-group">
+                <div class="input-group-prepend w100-p">
+                    <span *ngIf="question.validators['required']" class="red">* </span>{{question.label}}
+                </div>
+                <div>
+                    <ckeditor [editor]="Editor" (ready)="onReady($event)" matInput [formControlName]="question.key" [id]="question.key" [(ngModel)]="model.editorData"></ckeditor>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="errorMessage" *ngIf="errorMessages">
         <ng-container *ngFor="let error of errorMessages[question.key]">

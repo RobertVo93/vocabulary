@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogData } from 'src/app/interface/dialogData';
 import { Config } from 'src/app/configuration/config';
 import { Observable } from 'rxjs';
-import { QuestionBase } from '../../class/question-base';
+import { QuestionBase } from '../../class/questions/question-base';
 import { DynamicFormComponent } from '../dynamic-form/components/dynamic-form/dynamic-form.component';
 
 @Component({

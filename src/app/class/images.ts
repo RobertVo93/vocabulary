@@ -1,5 +1,5 @@
-import { QuestionBase } from './question-base';
-import { TextboxQuestion } from './question-textbox';
+import { QuestionBase } from './questions/question-base';
+import { TextboxQuestion } from './questions/question-textbox';
 import { of } from 'rxjs';
 import { Config } from '../configuration/config';
 

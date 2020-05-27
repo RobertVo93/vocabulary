@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { QuestionBase } from '../../../../class/question-base';
+import { QuestionBase } from '../../../../class/questions/question-base';
 import { QuestionControlService } from '../../services/question-control.service';
 
 @Component({

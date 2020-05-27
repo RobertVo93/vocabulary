@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { QuestionBase } from '../../../class/question-base';
+import { QuestionBase } from '../../../class/questions/question-base';
 
 @Injectable()
 export class QuestionControlService {

@@ -1,11 +1,11 @@
 import { of } from 'rxjs';
-import { QuestionBase } from './question-base';
-import { TextboxQuestion } from './question-textbox';
-import { DropdownQuestion } from './question-dropdown';
-import { FileQuestion } from './question-file';
+import { QuestionBase } from './questions/question-base';
+import { TextboxQuestion } from './questions/question-textbox';
+import { DropdownQuestion } from './questions/question-dropdown';
+import { FileQuestion } from './questions/question-file';
 import { Config } from '../configuration/config';
 import { Option } from '../interface/option';
-import { InlineTextQuestion } from './question-inlineText';
+import { InlineTextQuestion } from './questions/question-inlineText';
 
 export class Kanjis {
     private config: Config;

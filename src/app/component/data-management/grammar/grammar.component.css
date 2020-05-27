@@ -76,6 +76,10 @@ input {
     padding: .375rem .75rem;
 }
 
+.explain-cell {
+    max-height: 100px;
+}
+
 .add-comment {
     opacity: 0.4;
 }

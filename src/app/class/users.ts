@@ -1,8 +1,8 @@
-import { QuestionBase } from './question-base';
-import { TextboxQuestion } from './question-textbox';
+import { QuestionBase } from './questions/question-base';
+import { TextboxQuestion } from './questions/question-textbox';
 import { of } from 'rxjs';
 import { Config } from '../configuration/config';
-import { DropdownQuestion } from './question-dropdown';
+import { DropdownQuestion } from './questions/question-dropdown';
 import { LanguageService } from '../component/data-management/language/language.service';
 import { RoleService } from '../component/data-management/role/role.service';
 import { Option } from '../interface/option';

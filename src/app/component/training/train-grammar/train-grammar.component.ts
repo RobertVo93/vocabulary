@@ -47,7 +47,7 @@ export class TrainGrammarComponent implements OnInit {
 		];
 
 		Promise.all(promises).then(() => {
-			this.ranges = this.getAllRange();
+			this.updateGrammarOnSelectedTags(this.selectedTags);
 		});
 	}
 
@@ -123,7 +123,6 @@ export class TrainGrammarComponent implements OnInit {
 		this.tags = options;
 		this.filteredTags = options;
 		this.selectedTags = [this.filteredTags[0].value];
-		this.updateGrammarOnSelectedTags(this.selectedTags);
 	}
 
 	/**

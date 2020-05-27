@@ -7,6 +7,7 @@ import { SatPopoverModule } from '@ncstate/sat-popover';
 import { MatSortModule } from '@angular/material/sort';
 import { FileUploadModule } from 'ng2-file-upload';
 import { MatSelectFilterModule } from 'mat-select-filter';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -84,7 +85,8 @@ import { TrainGrammarComponent } from './component/training/train-grammar/train-
     ReactiveFormsModule,
     AngularFontAwesomeModule,
     FileUploadModule,
-    MatSelectFilterModule
+    MatSelectFilterModule,
+    CKEditorModule
   ],
   providers: [
     PubSubService,

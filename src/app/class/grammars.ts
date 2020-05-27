@@ -1,12 +1,13 @@
 import { of } from 'rxjs';
-import { QuestionBase } from './question-base';
-import { TextboxQuestion } from './question-textbox';
-import { DropdownQuestion } from './question-dropdown';
+import { QuestionBase } from './questions/question-base';
+import { TextboxQuestion } from './questions/question-textbox';
+import { DropdownQuestion } from './questions/question-dropdown';
 import { Config } from '../configuration/config';
 import { Option } from '../interface/option';
 import { LanguageService } from '../component/data-management/language/language.service';
 import { TagsService } from '../component/data-management/tag/tags.service';
-import { InlineTextQuestion } from './question-inlineText';
+import { InlineTextQuestion } from './questions/question-inlineText';
+import { CkeditorQuestion } from './questions/question-ckeditor';
 
 export class Grammars {
     private config: Config;
@@ -66,7 +67,7 @@ export class Grammars {
             error_message: 'Explain is required.'
         };
         //set up Explain question
-        questions.push(new InlineTextQuestion({
+        questions.push(new CkeditorQuestion({
             key: 'explain',
             label: 'Explain',
             value: '',
@@ -119,6 +120,11 @@ export class Grammars {
         }));
 
         //set up tag question
+        validators = {};
+        validators[this.config.formValidators.require]= {
+            value: true,
+            error_message: 'Explain is required.'
+        };
         let allTags = await tagService.getAllData();
         options = [];
         for(var i = 0; i < allTags.length; i++){
@@ -132,6 +138,7 @@ export class Grammars {
             label: 'Tags',
             options: options,
             multiple: true,
+            validators: validators,
             order: 70
         }));
 
