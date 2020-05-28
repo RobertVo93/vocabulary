@@ -12,6 +12,8 @@ import { TagsService } from '../tag/tags.service';
 import { DataSourcesService } from '../data-sources/data-sources.service';import { AlertService } from 'src/app/services/alert.service';
 import { Kanjis } from 'src/app/class/kanjis';
 import { KanjiService } from '../kanji/kanji.service';
+import { UserSetting } from 'src/app/class/userSetting';
+import { UserSettingService } from 'src/app/services/user-setting.service';
 
 
 @Component({
@@ -39,11 +41,13 @@ export class WordComponent implements OnInit {
 	selection;
 	pageSizeOptions: number[];          //list of page size option
 	kanjis: Kanjis[];					//list of all kanji available in system
+	currentUserSetting: UserSetting;
 
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
 	constructor(public config: Config, public common: CommonService, public service: WordService, public dialog: MatDialog, private kanjiService: KanjiService
-		, private langService: LanguageService, private dataSourceService: DataSourcesService, private tagService: TagsService, private alertService: AlertService) { }
+		, private langService: LanguageService, private dataSourceService: DataSourcesService, private tagService: TagsService, private alertService: AlertService
+		, private setting: UserSettingService) { }
 
 	ngOnInit() {
 		this.serverImagesURL = this.config.apiServiceURL.images;
@@ -55,22 +59,28 @@ export class WordComponent implements OnInit {
 			this.getAllKanjis()
 		];
 		Promise.all(promises).then(() => {
+			if (this.currentUserSetting.userSetting
+				&& this.currentUserSetting.userSetting[this.config.userSettingKey.page.wordManagement]
+				&& this.currentUserSetting.userSetting[this.config.userSettingKey.page.wordManagement][this.config.userSettingKey.selectedViewColumn]) {
+				this.selectedViewColumn = this.currentUserSetting.userSetting[this.config.userSettingKey.page.wordManagement][this.config.userSettingKey.selectedViewColumn];
+			}
+			else{
+				this.selectedViewColumn = [
+					this.config.viewColumnsDef.select
+					, this.config.viewColumnsDef.id
+					, this.config.viewColumnsDef.word
+					, this.config.viewColumnsDef.kanji
+					, this.config.viewColumnsDef.meaning
+				];
+			}
 			this.selectedDatasource = this.dataSources[0].value;
 			this.getWordByDataSourceFilter(this.selectedDatasource);
+			this.actions = this.getAllActions();
+			this.types = this.getAllWordTypes();
+			this.viewColumns = this.getAllViewMode(); //get all view column
+			this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
+			this.selection = new SelectionModel<Words>(true, []);
 		});
-		this.selectedViewColumn = [
-			this.config.viewColumnsDef.select
-			, this.config.viewColumnsDef.id
-			, this.config.viewColumnsDef.word
-			, this.config.viewColumnsDef.kanji
-			, this.config.viewColumnsDef.meaning
-		];
-		this.actions = this.getAllActions();
-		this.types = this.getAllWordTypes();
-		
-		this.viewColumns = this.getAllViewMode(); //get all view column
-		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
-		this.selection = new SelectionModel<Words>(true, []);
 	}
 
 	/**
@@ -98,6 +108,8 @@ export class WordComponent implements OnInit {
 	 */
 	onViewModeChangeHandler(event) {
 		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get display column
+		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordManagement, this.config.userSettingKey.selectedViewColumn, this.selectedViewColumn);
+		this.setting.updateData([this.currentUserSetting]).toPromise();
 	}
 
 	/**
@@ -307,6 +319,13 @@ export class WordComponent implements OnInit {
 		if(dataConverted){
 			this.kanjis = dataConverted;
 		}
+	}
+
+	/**
+	 * Get user setting
+	 */
+	private async getUserSetting() {
+		this.currentUserSetting = await this.setting.getUserSetting();
 	}
 
 	/**

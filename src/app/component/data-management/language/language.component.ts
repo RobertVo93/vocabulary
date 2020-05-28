@@ -8,11 +8,13 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { CommonService } from 'src/app/services/common.service';
 import { CommonDialogComponent } from 'src/app/share-component/common-dialog/common-dialog.component';
 import { AlertService } from 'src/app/services/alert.service';
+import { UserSetting } from 'src/app/class/userSetting';
+import { UserSettingService } from 'src/app/services/user-setting.service';
 
 @Component({
 	selector: 'app-language',
-  templateUrl: './language.component.html',
-  styleUrls: ['./language.component.css']
+	templateUrl: './language.component.html',
+	styleUrls: ['./language.component.css']
 })
 export class LanguageComponent implements OnInit {
 	actions: Option[];					//list of action for selected rows
@@ -23,23 +25,36 @@ export class LanguageComponent implements OnInit {
 	dataSource;                         //data source for rendering table
 	selection;
 	pageSizeOptions: number[];          //list of page size option
+	currentUserSetting: UserSetting;
 
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
-	constructor(public config: Config, public common: CommonService,
+	constructor(public config: Config, public common: CommonService, private setting: UserSettingService,
 		public service: LanguageService, public dialog: MatDialog, private alertService: AlertService) { }
 
 	ngOnInit() {
-		this.selectedViewColumn = [
-			this.config.viewColumnsDef.select
-			, this.config.viewColumnsDef.id
-			, this.config.viewColumnsDef.name
+		let promises = [
+			this.getAllData(),
+			this.getUserSetting()
 		];
-		this.actions = this.getAllActions();
-		this.viewColumns = this.getAllViewMode(); //get all view column
-		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
-		this.selection = new SelectionModel<Languages>(true, []);
-		this.getAllData();
+		Promise.all(promises).then(() => {
+			if (this.currentUserSetting.userSetting
+				&& this.currentUserSetting.userSetting[this.config.userSettingKey.page.languageManagement]
+				&& this.currentUserSetting.userSetting[this.config.userSettingKey.page.languageManagement][this.config.userSettingKey.selectedViewColumn]) {
+				this.selectedViewColumn = this.currentUserSetting.userSetting[this.config.userSettingKey.page.languageManagement][this.config.userSettingKey.selectedViewColumn];
+			}
+			else {
+				this.selectedViewColumn = [
+					this.config.viewColumnsDef.select
+					, this.config.viewColumnsDef.id
+					, this.config.viewColumnsDef.name
+				];
+			}
+			this.actions = this.getAllActions();
+			this.viewColumns = this.getAllViewMode(); //get all view column
+			this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
+			this.selection = new SelectionModel<Languages>(true, []);
+		});
 	}
 
 	/**
@@ -59,6 +74,8 @@ export class LanguageComponent implements OnInit {
 	 */
 	onViewModeChangeHandler(event) {
 		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get display column
+		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.languageManagement, this.config.userSettingKey.selectedViewColumn, this.selectedViewColumn);
+		this.setting.updateData([this.currentUserSetting]).toPromise();
 	}
 
 	/**
@@ -169,7 +186,7 @@ export class LanguageComponent implements OnInit {
 	 */
 	private async getAllData() {
 		let dataConverted = await this.service.getAllData();
-		if(dataConverted){
+		if (dataConverted) {
 			this.dataSource = new MatTableDataSource<Languages>(dataConverted);
 			this.dataSource.paginator = this.paginator;
 			this.dataSource.sort = this.sort;
@@ -178,6 +195,13 @@ export class LanguageComponent implements OnInit {
 				this.pageSizeOptions.push(this.dataSource.data.length);
 			}
 		}
+	}
+
+	/**
+	 * Get user setting
+	 */
+	private async getUserSetting() {
+		this.currentUserSetting = await this.setting.getUserSetting();
 	}
 
 	/**
@@ -211,12 +235,12 @@ export class LanguageComponent implements OnInit {
 		let data = new Languages();
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
 			width: '500px',
-			data: { 
+			data: {
 				title: 'Create new language'
-				,message: 'Please fill in the form' 
-				,record: data
-				,questions: data.getQuestions() 
-				,action: {
+				, message: 'Please fill in the form'
+				, record: data
+				, questions: data.getQuestions()
+				, action: {
 					save: true,
 					cancel: true
 				}
@@ -224,7 +248,7 @@ export class LanguageComponent implements OnInit {
 		});
 
 		dialogRef.afterClosed().subscribe(result => {
-			if(result != null && result.returnAction == this.config.returnAction.save){
+			if (result != null && result.returnAction == this.config.returnAction.save) {
 				this.service.createData(result.record).subscribe(
 					(res) => {
 						this.dialog.open(CommonDialogComponent, {
@@ -266,14 +290,14 @@ export class LanguageComponent implements OnInit {
 
 		dialogRef.afterClosed().subscribe(result => {
 			console.log(result);
-			if(result != null && result.returnAction == this.config.returnAction.update){
+			if (result != null && result.returnAction == this.config.returnAction.update) {
 				this.service.updateData(this.selection._selected).subscribe(
-				(res) => {
-					this.alertService.success(this.config.commonMessage.updateSuccessfull);
-				},
-				(err) => {
-					this.alertService.error(this.config.commonMessage.updateError);
-				})
+					(res) => {
+						this.alertService.success(this.config.commonMessage.updateSuccessfull);
+					},
+					(err) => {
+						this.alertService.error(this.config.commonMessage.updateError);
+					})
 			}
 		})
 	}
@@ -284,20 +308,20 @@ export class LanguageComponent implements OnInit {
 	private delete() {
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
 			width: '300px',
-			data: { 
+			data: {
 				title: this.config.commonMessage.confirmation
-				,message: this.config.commonMessage.deleteRecordConfirmation 
-				,record: null 
-				,action: {
+				, message: this.config.commonMessage.deleteRecordConfirmation
+				, record: null
+				, action: {
 					cancel: true,
 					delete: true
-				} 
+				}
 			}
 		});
 
 		dialogRef.afterClosed().subscribe(result => {
 			console.log(result);
-			if(result != null && result.returnAction == this.config.returnAction.delete){
+			if (result != null && result.returnAction == this.config.returnAction.delete) {
 				this.service.deleteBulkData(this.selection._selected).subscribe(
 					(res) => {
 						console.log(res);

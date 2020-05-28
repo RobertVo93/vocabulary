@@ -181,6 +181,7 @@ export class Config {
         grammars: `${environment.serverURL}/api/grammars`,
         upload: `${environment.serverURL}/api/upload`,
         images: `${environment.serverURL}/api/images`,
+        userSettings: `${environment.serverURL}/api/usersettings`,
         serverAPI: `${environment.serverURL}/api`,
         server: `${environment.serverURL}`
     }
@@ -253,5 +254,29 @@ export class Config {
         3: 'adjective',
         4: 'verb',
         5: 'adverd'
+    }
+
+    userSettingKey = {
+        selectedViewColumn: 'selectedViewColumn',
+        page: {
+            dataSourceManagement: 'dataSourceManagement',
+            dataSourceTrain: 'dataSourceTrain',
+            wordManagement: 'wordManagement',
+            wordTrain: 'wordTrain',
+            kanjiManagement: 'kanjiManagement',
+            kanjiTrain: 'kanjiTrain',
+            tagManagement: 'tagManagement',
+            tagTrain: 'tagTrain',
+            userManagement: 'userManagement',
+            userTrain: 'userTrain',
+            roleManagement: 'roleManagement',
+            roleTrain: 'roleTrain',
+            languageManagement: 'languageManagement',
+            languageTrain: 'languageTrain',
+            imageManagement: 'imageManagement',
+            imageTrain: 'imageTrain',
+            grammarManagement: 'grammarManagement',
+            grammarTrain: 'grammarTrain'
+        }
     }
 }

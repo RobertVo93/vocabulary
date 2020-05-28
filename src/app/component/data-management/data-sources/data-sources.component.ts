@@ -8,6 +8,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { CommonService } from 'src/app/services/common.service';
 import { CommonDialogComponent } from 'src/app/share-component/common-dialog/common-dialog.component';
 import { AlertService } from 'src/app/services/alert.service';
+import { UserSetting } from 'src/app/class/userSetting';
+import { UserSettingService } from 'src/app/services/user-setting.service';
 
 @Component({
 	selector: 'app-data-sources',
@@ -23,23 +25,36 @@ export class DataSourcesComponent implements OnInit {
 	dataSource;                         //data source for rendering table
 	selection;
 	pageSizeOptions: number[];          //list of page size option
+	currentUserSetting: UserSetting;
 
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
-	constructor(public config: Config, public common: CommonService,
+	constructor(public config: Config, public common: CommonService, private setting: UserSettingService,
 		public service: DataSourcesService, public dialog: MatDialog, private alertService: AlertService) { }
 
 	ngOnInit() {
-		this.selectedViewColumn = [
-			this.config.viewColumnsDef.select
-			, this.config.viewColumnsDef.id
-			, this.config.viewColumnsDef.name
+		let promises = [
+			this.getAllData(),
+			this.getUserSetting()
 		];
-		this.actions = this.getAllActions();
-		this.viewColumns = this.getAllViewMode(); //get all view column
-		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
-		this.selection = new SelectionModel<DataSources>(true, []);
-		this.getAllData();
+		Promise.all(promises).then(()=>{
+			if(this.currentUserSetting.userSetting 
+				&& this.currentUserSetting.userSetting[this.config.userSettingKey.page.dataSourceManagement] 
+				&& this.currentUserSetting.userSetting[this.config.userSettingKey.page.dataSourceManagement][this.config.userSettingKey.selectedViewColumn]){
+				this.selectedViewColumn = this.currentUserSetting.userSetting[this.config.userSettingKey.page.dataSourceManagement][this.config.userSettingKey.selectedViewColumn];
+			}
+			else {
+				this.selectedViewColumn = [
+					this.config.viewColumnsDef.select
+					, this.config.viewColumnsDef.id
+					, this.config.viewColumnsDef.name
+				];
+			}
+			this.actions = this.getAllActions();
+			this.viewColumns = this.getAllViewMode(); //get all view column
+			this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
+			this.selection = new SelectionModel<DataSources>(true, []);
+		});
 	}
 
 	/**
@@ -59,6 +74,8 @@ export class DataSourcesComponent implements OnInit {
 	 */
 	onViewModeChangeHandler(event) {
 		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get display column
+		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.dataSourceManagement, this.config.userSettingKey.selectedViewColumn, this.selectedViewColumn);
+		this.setting.updateData([this.currentUserSetting]).toPromise();
 	}
 
 	/**
@@ -178,6 +195,10 @@ export class DataSourcesComponent implements OnInit {
 				this.pageSizeOptions.push(this.dataSource.data.length);
 			}
 		}
+	}
+
+	private async getUserSetting() {
+		this.currentUserSetting= await this.setting.getUserSetting();
 	}
 
 	/**

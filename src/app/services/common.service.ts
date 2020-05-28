@@ -4,6 +4,7 @@ import { WordEnum } from 'src/app/configuration/enums';
 import { Kanji } from '../interface/kanji';
 import { Words } from '../class/words';
 import { Kanjis } from '../class/kanjis';
+import { UserSetting } from '../class/userSetting';
 
 @Injectable()
 export class CommonService {
@@ -286,5 +287,16 @@ export class CommonService {
 			result.push(kanjiList[i].explain);
         }
         return result.join('\r\n\r\n');
+    }
+
+    updateUserSetting(setting: UserSetting, page, settingKey, settingValue){
+        if(!setting)
+            setting = new UserSetting();
+        if(!setting.userSetting)
+            setting.userSetting = {};
+        if(!setting.userSetting[page])
+            setting.userSetting[page] = {};
+        setting.userSetting[page][settingKey] = settingValue;
+        return setting;
     }
 }

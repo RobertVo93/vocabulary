@@ -10,6 +10,8 @@ import { CommonDialogComponent } from 'src/app/share-component/common-dialog/com
 import { LanguageService } from '../language/language.service';
 import { RoleService } from '../role/role.service';
 import { AlertService } from 'src/app/services/alert.service';
+import { UserSetting } from 'src/app/class/userSetting';
+import { UserSettingService } from 'src/app/services/user-setting.service';
 
 @Component({
 	selector: 'app-user-management',
@@ -27,27 +29,40 @@ export class UserManagementComponent implements OnInit {
 	dataSource;                         //data source for rendering table
 	selection;
 	pageSizeOptions: number[];          //list of page size option
+	currentUserSetting: UserSetting;
 
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
-	constructor(public config: Config, public common: CommonService,
+	constructor(public config: Config, public common: CommonService, private setting: UserSettingService,
 		public service: UserService, public dialog: MatDialog
 		, private langService: LanguageService, private roleService: RoleService, private alertService: AlertService) { }
 
 	ngOnInit() {
-		this.selectedViewColumn = [
-			this.config.viewColumnsDef.select
-			, this.config.viewColumnsDef.id
-			, this.config.viewColumnsDef.email
-			, this.config.viewColumnsDef.name
+		let promises = [
+			this.getAllData(),
+			this.getUserSetting(),
+			this.setupAllLanguageOptions(),
+			this.setupAllRoleOptions()
 		];
-		this.actions = this.getAllActions();
-		this.setupAllLanguageOptions();
-		this.setupAllRoleOptions();
-		this.viewColumns = this.getAllViewMode(); //get all view column
-		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
-		this.selection = new SelectionModel<Users>(true, []);
-		this.getAllData();
+		Promise.all(promises).then(()=>{
+			if (this.currentUserSetting.userSetting
+				&& this.currentUserSetting.userSetting[this.config.userSettingKey.page.userManagement]
+				&& this.currentUserSetting.userSetting[this.config.userSettingKey.page.userManagement][this.config.userSettingKey.selectedViewColumn]) {
+				this.selectedViewColumn = this.currentUserSetting.userSetting[this.config.userSettingKey.page.userManagement][this.config.userSettingKey.selectedViewColumn];
+			}
+			else{
+				this.selectedViewColumn = [
+					this.config.viewColumnsDef.select
+					, this.config.viewColumnsDef.id
+					, this.config.viewColumnsDef.email
+					, this.config.viewColumnsDef.name
+				];
+			}
+			this.actions = this.getAllActions();
+			this.viewColumns = this.getAllViewMode(); //get all view column
+			this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
+			this.selection = new SelectionModel<Users>(true, []);
+		});
 	}
 
 	/**
@@ -67,6 +82,8 @@ export class UserManagementComponent implements OnInit {
 	 */
 	onViewModeChangeHandler(event) {
 		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get display column
+		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.userManagement, this.config.userSettingKey.selectedViewColumn, this.selectedViewColumn);
+		this.setting.updateData([this.currentUserSetting]).toPromise();
 	}
 
 	/**
@@ -216,6 +233,14 @@ export class UserManagementComponent implements OnInit {
 		}
 	}
 
+	/**
+	 * Get user setting
+	 */
+	private async getUserSetting() {
+		this.currentUserSetting = await this.setting.getUserSetting();
+	}
+
+	
 	private async setupAllLanguageOptions(){
 		let options: Option[] = [];
 		let language = await this.langService.getAllData();
