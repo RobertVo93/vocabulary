@@ -74,28 +74,11 @@
         <!-- explain Column -->
         <ng-container matColumnDef="explain">
             <mat-header-cell *matHeaderCellDef> Explain </mat-header-cell>
-            <mat-cell class="explain-cell" *matCellDef="let element" [satPopoverAnchor]="p" (click)="p.open()">
-                <span class="explain cursor-pointer" *ngIf="element.explain">
-                    {{element.explain}}
-                </span>
-                <span class="add-comment cursor-pointer" *ngIf="!element.explain">
-                    Add an explaination
-                </span>
-
-                <sat-popover #p hasBackdrop xAlign="start" yAlign="start" (closed)="onUpdate(element, $event, 'explain')">
-                    <inline-edit [value]="element.explain"></inline-edit>
-                </sat-popover>
+            <mat-cell class="explain-cell" *matCellDef="let element">
+                <div readonly [innerHTML]="element.explain"></div>
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
-
-        <!-- <ng-container matColumnDef="explain">
-            <mat-header-cell *matHeaderCellDef> Explain </mat-header-cell>
-            <mat-cell *matCellDef="let element">
-                <input type="text" class="form-control" [(ngModel)]='element.explain' />
-            </mat-cell>
-            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-        </ng-container> -->
 
         <!-- example Column -->
         <ng-container matColumnDef="example">

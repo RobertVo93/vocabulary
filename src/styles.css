@@ -111,6 +111,17 @@ body {
     float: left !important;
 }
 
+
+/* z-index*/
+
+.zindex20 {
+    z-index: 20 !important;
+}
+
+.zindex10 {
+    z-index: 10 !important;
+}
+
 @media (max-width: 767px) {
     .desktop-only {
         display: none;
