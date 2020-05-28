@@ -56,7 +56,8 @@ export class WordComponent implements OnInit {
 			this.setupAllTagOptions(),
 			this.setupAllDataSourceOptions(),
 			this.getAllData(),
-			this.getAllKanjis()
+			this.getAllKanjis(),
+			this.getUserSetting()
 		];
 		Promise.all(promises).then(() => {
 			if (this.currentUserSetting.userSetting
