@@ -4,6 +4,10 @@
             <mat-label><span *ngIf="question.validators['required']" class="red">* </span>{{question.label}}</mat-label>
             <input matInput [formControlName]="question.key" [id]="question.key" [type]="question.type" />
         </mat-form-field>
+        <mat-form-field *ngSwitchCase="'textarea'">
+            <mat-label><span *ngIf="question.validators['required']" class="red">* </span> {{question.label}}</mat-label>
+            <textarea matInput [formControlName]="question.key" readonly="{{question.readonly}}" rows="{{question.rows}}" [id]="question.key"></textarea>
+        </mat-form-field>
         <mat-form-field *ngSwitchCase="'dropdown'">
             <mat-label><span *ngIf="question.validators['required']" class="red">* </span> {{question.label}}</mat-label>
             <mat-select [id]="question.key" [multiple]="question.multiple" [formControlName]="question.key">

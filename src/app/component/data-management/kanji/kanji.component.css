@@ -75,6 +75,7 @@ input {
 
 .explain {
     padding: .375rem .75rem;
+    max-height: 100px;
 }
 
 .add-comment {

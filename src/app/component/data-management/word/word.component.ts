@@ -132,7 +132,7 @@ export class WordComponent implements OnInit {
 
 	onUpdateKanji(ele:Words, event){
 		console.log(event);
-		ele.kanjiExplain = this.getKanjiExplain(event);
+		ele.kanjiExplain = this.common.getKanjiIds(event, this.kanjis);
 	}
 
 	/**
@@ -355,7 +355,7 @@ export class WordComponent implements OnInit {
 	 */
 	private async createNew() {
 		let data = new Words();
-		let questions = await data.getQuestions(this.langService, this.dataSourceService, this.tagService);
+		let questions = await data.getQuestions(this.langService, this.dataSourceService, this.tagService, this.common, this.config, this.kanjis);
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
 			width: '800px',
 			data: {
@@ -372,7 +372,7 @@ export class WordComponent implements OnInit {
 
 		dialogRef.afterClosed().subscribe(result => {
 			if (result != null && result.returnAction == this.config.returnAction.save) {
-				result.record.kanjiExplain = this.getKanjiExplain(result.record.kanji);
+				result.record.kanjiExplain = this.common.getKanjiIds(result.record.kanji, this.kanjis);
 				this.service.createData([result.record]).subscribe(
 					(res) => {
 						this.dialog.open(CommonDialogComponent, {
@@ -468,24 +468,6 @@ export class WordComponent implements OnInit {
 				);
 			}
 		});
-	}
-
-	private getKanjiExplain(kanjiStr){
-		let kanjiList = [];
-		let result = [];
-		if(kanjiStr == null)
-			return result;
-		for(var i = 0; i < kanjiStr.length; i++){
-			if(this.common.isKanji(kanjiStr[i])){
-				kanjiList = kanjiList.concat(this.kanjis.filter(element => {
-					return element.kanji === kanjiStr[i];
-				}));
-			}
-		}
-		for(var i = 0; i < kanjiList.length; i++){
-			result.push(kanjiList[i]._id);
-		}
-		return result;
 	}
 }
 

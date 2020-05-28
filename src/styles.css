@@ -122,6 +122,11 @@ body {
     z-index: 10 !important;
 }
 
+textarea:read-only {
+    background-color: #e9ecef;
+    opacity: 1;
+}
+
 @media (max-width: 767px) {
     .desktop-only {
         display: none;

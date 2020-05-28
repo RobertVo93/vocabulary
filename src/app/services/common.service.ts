@@ -240,5 +240,51 @@ export class CommonService {
     isKanji(ch): boolean {
 		return (ch >= "\u4e00" && ch <= "\u9faf") ||
 		(ch >= "\u3400" && ch <= "\u4dbf");
-	}
+    }
+    
+    /**
+     * Get kanjis's ID
+     * @param kanji the input kanji
+     * @param allKanjis all kanji
+     */
+    getKanjiIds(kanji, allKanjis){
+        let kanjiList = [];
+		let result = [];
+		if(kanji == null)
+			return result;
+		for(var i = 0; i < kanji.length; i++){
+			if(this.isKanji(kanji[i])){
+				kanjiList = kanjiList.concat(allKanjis.filter(element => {
+					return element.kanji === kanji[i];
+				}));
+			}
+		}
+		for(var i = 0; i < kanjiList.length; i++){
+			result.push(kanjiList[i]._id);
+		}
+		return result;
+    }
+
+    /**
+     * Get kanjis explain
+     * @param kanji the input kanji
+     * @param allKanjis all kanji
+     */
+    getKanjiExplain(kanji, allKanjis:Kanjis[]){
+        let kanjiList:Kanjis[] = [];
+		let result = [];
+		if(kanji == null)
+			return result;
+		for(var i = 0; i < kanji.length; i++){
+			if(this.isKanji(kanji[i])){
+				kanjiList = kanjiList.concat(allKanjis.filter(element => {
+					return element.kanji === kanji[i];
+				}));
+			}
+		}
+		for(var i = 0; i < kanjiList.length; i++){
+			result.push(kanjiList[i].explain);
+        }
+        return result.join('\r\n\r\n');
+    }
 }
