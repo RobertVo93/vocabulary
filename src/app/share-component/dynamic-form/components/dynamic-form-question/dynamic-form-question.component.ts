@@ -28,8 +28,8 @@ export class DynamicFormQuestionComponent implements OnInit{
 		private imgService: ImagesService, private domSanitizer: DomSanitizer, private alertService: AlertService) {}
 
 	ngOnInit(){
-		if(this.question.controlType == "file"){
-			//bind preview image
+		if(this.question.controlType == "file" && this.question.value){
+			//bind preview image when it has value
 			this.previewSelectedImage = `${this.config.apiServiceURL.images}/${this.question.value}`;
 		}
 		if(this.question.controlType == "dropdown"){
