@@ -5,7 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { QuestionBase } from '../../../../class/questions/question-base';
 import { ImagesService } from 'src/app/component/data-management/images/images.service';
 import { ResponseData } from 'src/app/class/responseData';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as Editor from 'ckeditor/ckeditor';
 import { Config } from 'src/app/configuration/config';
 import { MatDialog } from '@angular/material';
 import { AlertService } from 'src/app/services/alert.service';
@@ -17,7 +17,7 @@ import { UploadAdapterService } from 'src/app/services/upload-adapter-service';
 	styleUrls: ['./dynamic-form-question.component.css']
 })
 export class DynamicFormQuestionComponent{
-	public Editor = ClassicEditor;
+	public Editor = Editor;
 	public model = {
         editorData: ''
 	};
