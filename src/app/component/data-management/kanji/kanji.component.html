@@ -118,14 +118,14 @@
             <mat-header-cell *matHeaderCellDef> Explain Kanji </mat-header-cell>
             <mat-cell *matCellDef="let element" [satPopoverAnchor]="p" (click)="p.open()">
                 <span class="explain cursor-pointer" *ngIf="element.explain">
-                    {{element.explain}}
+                    <div [innerHTML]="element.explain"></div>
                 </span>
                 <span class="add-comment cursor-pointer" *ngIf="!element.explain">
                     Add an explaination
                 </span>
 
-                <sat-popover #p hasBackdrop xAlign="start" yAlign="start" (closed)="onUpdate(element, $event)">
-                    <inline-edit [value]="element.explain"></inline-edit>
+                <sat-popover #p hasBackdrop xAlign="start" yAlign="start">
+                    <inline-edit [value]="element.explain" [readonly]="true"></inline-edit>
                 </sat-popover>
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>

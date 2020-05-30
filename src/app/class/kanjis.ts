@@ -5,7 +5,7 @@ import { DropdownQuestion } from './questions/question-dropdown';
 import { FileQuestion } from './questions/question-file';
 import { Config } from '../configuration/config';
 import { Option } from '../interface/option';
-import { InlineTextQuestion } from './questions/question-inlineText';
+import { CkeditorQuestion } from './questions/question-ckeditor';
 
 export class Kanjis {
     private config: Config;
@@ -89,7 +89,7 @@ export class Kanjis {
         }));
 
         //set up Name of image question
-        questions.push(new InlineTextQuestion({
+        questions.push(new CkeditorQuestion({
             key: 'explain',
             label: 'Explain Kanji',
             value: '',

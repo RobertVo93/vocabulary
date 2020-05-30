@@ -276,7 +276,6 @@ export class KanjiComponent implements OnInit {
 	private createNew() {
 		let data = new Kanjis();
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
-			width: '500px',
 			data: {
 				title: 'Create new Kanji'
 				, message: 'Please fill in the form'
