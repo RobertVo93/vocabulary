@@ -6,6 +6,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { Users } from 'src/app/class/users';
 import { JwtResponse } from '../../interface/jwt-response';
 import { Config } from '../../configuration/config';
+import { Router } from '@angular/router';
 
 @Injectable({
 	providedIn: 'root'
@@ -15,7 +16,7 @@ export class AuthService {
 	private currentUserSubject: BehaviorSubject<JwtResponse>;
     public currentUser: Observable<JwtResponse>;
 
-	constructor(private httpClient: HttpClient, private config: Config) {
+	constructor(private httpClient: HttpClient, private router: Router,private config: Config) {
 		this.AUTH_SERVER = this.config.apiServiceURL.serverAPI;
 		this.currentUserSubject = new BehaviorSubject<JwtResponse>(JSON.parse(localStorage.getItem('CURRENT_USER')));
         this.currentUser = this.currentUserSubject.asObservable();
@@ -51,8 +52,11 @@ export class AuthService {
 	}
 
 	signOut() {
-		localStorage.removeItem("CURRENT_USER");
-        this.currentUserSubject.next(null);
+		return this.httpClient.get(`${this.AUTH_SERVER}/logout`).subscribe(()=>{
+            localStorage.removeItem("CURRENT_USER");
+            this.currentUserSubject.next(null);
+            this.router.navigate(['/login']);
+        });;
 	}
 
 }

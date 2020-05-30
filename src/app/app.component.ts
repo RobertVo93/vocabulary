@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { JwtResponse } from './interface/jwt-response';
 import { AuthService } from './services/authentication/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-root',
@@ -13,16 +12,12 @@ export class AppComponent {
 	navbarOpen = false;
 	title = 'vocabulary';
 
-    constructor(
-        private router: Router,
-        private authenticationService: AuthService
-    ) {
+    constructor(private authenticationService: AuthService) {
         this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
     }
 
     signOut() {
         this.authenticationService.signOut();
-        this.router.navigate(['/login']);
     }
 	toggleNavbar() {
 		this.navbarOpen = !this.navbarOpen;
