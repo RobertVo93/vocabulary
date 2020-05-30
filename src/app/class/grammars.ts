@@ -56,7 +56,7 @@ export class Grammars {
         questions.push(new InlineTextQuestion({
             key: 'syntax',
             label: 'Syntax',
-            value: '',
+            value: this.syntax,
             validators: validators,
             order: 10
         }));
@@ -70,7 +70,7 @@ export class Grammars {
         questions.push(new CkeditorQuestion({
             key: 'explain',
             label: 'Explain',
-            value: '',
+            value: this.explain,
             validators: validators,
             order: 20
         }));
@@ -79,7 +79,7 @@ export class Grammars {
         questions.push(new TextboxQuestion({
             key: 'example',
             label: 'Example',
-            value: '',
+            value: this.example,
             type: this.config.inputTypeDef.text,
             order: 30
         }));
@@ -88,7 +88,7 @@ export class Grammars {
         questions.push(new TextboxQuestion({
             key: 'exampleMeaning',
             label: 'Example Meaning',
-            value: '',
+            value: this.exampleMeaning,
             type: this.config.inputTypeDef.text,
             order: 40
         }));
@@ -97,7 +97,7 @@ export class Grammars {
         questions.push(new TextboxQuestion({
             key: 'level',
             label: 'Level',
-            value: '',
+            value: this.level,
             type: this.config.inputTypeDef.text,
             order: 50
         }));
@@ -116,6 +116,7 @@ export class Grammars {
             label: 'Language',
             options: options,
             multiple: false,
+            value: this.language,
             order: 60
         }));
 
@@ -139,6 +140,7 @@ export class Grammars {
             options: options,
             multiple: true,
             validators: validators,
+            value: this.tags,
             order: 70
         }));
 

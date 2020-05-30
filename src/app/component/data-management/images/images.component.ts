@@ -95,6 +95,9 @@ export class ImagesComponent implements OnInit {
 			case this.config.optionValue.createNew:
 				this.createNew();
 				break;
+			case this.config.optionValue.edit:
+				this.editRecord();
+				break;
 			case this.config.optionValue.update:
 				this.update();
 				break;
@@ -129,11 +132,20 @@ export class ImagesComponent implements OnInit {
 	}
 
 	/**
+	 * detect option is disable or not
+	 * @param action action's option
+	 */
+	onDisableAction(action){
+		return this.common.getActionOptionDisabled(action, this.selection._selected);
+	}
+
+	/**
 	 * Get all form action [create, update, delete]
 	 */
 	private getAllActions(): Option[] {
 		return [
 			{ value: this.config.optionValue.createNew, viewValue: this.config.optionViewValue.createNew },
+			{ value: this.config.optionValue.edit, viewValue: this.config.optionViewValue.edit },
 			{ value: this.config.optionValue.update, viewValue: this.config.optionViewValue.update },
 			{ value: this.config.optionValue.delete, viewValue: this.config.optionViewValue.delete }
 		];
@@ -265,6 +277,39 @@ export class ImagesComponent implements OnInit {
 						this.alertService.error(this.config.commonMessage.createError);
 					}
 				)
+			}
+		});
+	}
+
+	/**
+	 * Handle edit record
+	 */
+	private async editRecord(){
+		let data = new Images(this.selection._selected[0]);
+		const dialogRef = this.dialog.open(CommonDialogComponent, {
+			width: '500px',
+			data: { 
+				title: 'Edit image'
+				,message: 'Please fill in the form' 
+				,record: data
+				,questions: data.getQuestions()
+				,action: {
+					save: true,
+					cancel: true
+				}
+			}
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if(result != null && result.returnAction == this.config.returnAction.save){
+				this.service.updateData([result.record]).subscribe(
+					(res) => {
+						this.alertService.success(this.config.commonMessage.updateSuccessfull);
+						location.reload();
+					},
+					(err) => {
+						this.alertService.error(this.config.commonMessage.updateError);
+					});
 			}
 		});
 	}

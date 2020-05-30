@@ -5,8 +5,16 @@ import { Config } from '../configuration/config';
 
 export class DataSources {
     private config: Config;
-    constructor(){
+    constructor(obj?){
         this.config = new Config();
+        if(obj){
+            this._id = obj._id;
+            this.name = obj.name;
+            this.createdBy = obj.createdBy;
+            this.createdDate = obj.createdDate;
+            this.modifiedBy = obj.modifiedBy;
+            this.modifiedDate = obj.modifiedDate;
+        }
     }
     _id: any;
     name: string;
@@ -29,7 +37,7 @@ export class DataSources {
         questions.push(new TextboxQuestion({
             key: 'name',
             label: 'Name',
-            value: '',
+            value: this.name,
             validators: validatorsName,
             type: this.config.inputTypeDef.text,
             order: 1

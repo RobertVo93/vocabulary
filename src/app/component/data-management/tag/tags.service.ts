@@ -41,7 +41,7 @@ export class TagsService {
 	 * Update the existed tag
 	 * @param tag tag's data
 	 */
-	updateTag(tag: Tags[]){
+	updateData(tag: Tags[]){
 		return this.apiService.update(tag, this.serverURL);
 	}
 

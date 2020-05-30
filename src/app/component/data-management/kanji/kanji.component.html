@@ -44,8 +44,7 @@
                 <mat-form-field class="mat-form-field-action">
                     <mat-label>Actions on selected rows</mat-label>
                     <mat-select class="mat-select-action" (selectionChange)="onSelectionChange($event)" [(value)]='selectedAction'>
-                        <mat-option class="mat-option-action" *ngFor="let action of actions" [disabled]="(!selection._selected || selection._selected.length == 0) 
-                                && (action.value == config.optionValue.delete || action.value == config.optionValue.update)" [value]="action.value">
+                        <mat-option class="mat-option-action" *ngFor="let action of actions" [disabled]="onDisableAction(action)" [value]="action.value">
                             {{action.viewValue}}
                         </mat-option>
                     </mat-select>

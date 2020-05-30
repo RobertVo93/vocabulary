@@ -25,7 +25,7 @@ export class Words {
         this.pronun = (obj != null && obj.pronun != null) ? obj.pronun : null;
         this.meaning = (obj != null && obj.meaning != null) ? obj.meaning : null;
         this.example = (obj != null && obj.example != null) ? obj.example : null;
-        this.exampleMeaning = (obj != null && obj.title != null) ? obj.title : null;
+        this.exampleMeaning = (obj != null && obj.exampleMeaning != null) ? obj.exampleMeaning : null;
         this.kanjiExplain = (obj != null && obj.kanjiExplain != null) ? obj.kanjiExplain : null;
         this.chinaMeaning = (obj != null && obj.chinaMeaning != null) ? obj.chinaMeaning : null;
         this.language = (obj != null && obj.language != null) ? obj.language : null;
@@ -90,7 +90,7 @@ export class Words {
         questions.push(new TextboxQuestion({
             key: 'word',
             label: 'Word',
-            value: '',
+            value: this.word,
             validators: validators,
             type: this.config.inputTypeDef.text,
             order: 10
@@ -100,7 +100,7 @@ export class Words {
         questions.push(new TextboxQuestion({
             key: 'kanji',
             label: 'Kanji',
-            value: '',
+            value: this.kanji,
             type: this.config.inputTypeDef.text,
             order: 20,
             changeHandlerCallbackFunction: this.callbackKanjiUpdate.bind(this)
@@ -110,7 +110,7 @@ export class Words {
         questions.push(new TextAreaQuestion({
             key: 'explainKanjiTemp',
             label: 'Explain Kanji',
-            value: '',
+            value: this.common.getKanjiExplain(this.kanji, this.allKanjis),
             rows: 10,
             order: 25,
             readonly: true
@@ -129,6 +129,7 @@ export class Words {
             label: 'type',
             options: options,
             multiple: false,
+            value: this.type,
             order: 30
         }));
 
@@ -136,7 +137,7 @@ export class Words {
         questions.push(new TextboxQuestion({
             key: 'pronun',
             label: 'Pronunciation',
-            value: '',
+            value: this.pronun,
             type: this.config.inputTypeDef.text,
             order: 40
         }));
@@ -150,7 +151,7 @@ export class Words {
         questions.push(new TextboxQuestion({
             key: 'meaning',
             label: 'Meaning',
-            value: '',
+            value: this.meaning,
             validators: validators,
             type: this.config.inputTypeDef.text,
             order: 50
@@ -160,7 +161,7 @@ export class Words {
         questions.push(new TextboxQuestion({
             key: 'example',
             label: 'Example',
-            value: '',
+            value: this.example,
             type: this.config.inputTypeDef.text,
             order: 60
         }));
@@ -169,7 +170,7 @@ export class Words {
         questions.push(new TextboxQuestion({
             key: 'exampleMeaning',
             label: 'Example meaning',
-            value: '',
+            value: this.exampleMeaning,
             type: this.config.inputTypeDef.text,
             order: 70
         }));
@@ -178,7 +179,7 @@ export class Words {
         questions.push(new TextboxQuestion({
             key: 'exampleTitle',
             label: 'Example Title',
-            value: '',
+            value: this.exampleTitle,
             type: this.config.inputTypeDef.text,
             order: 80
         }));
@@ -187,7 +188,7 @@ export class Words {
         questions.push(new TextboxQuestion({
             key: 'chinaMeaning',
             label: 'China Meaning',
-            value: '',
+            value: this.chinaMeaning,
             type: this.config.inputTypeDef.text,
             order: 90
         }));
@@ -206,6 +207,7 @@ export class Words {
             label: 'Language',
             options: options,
             multiple: false,
+            value: this.language,
             order: 100
         }));
 
@@ -223,6 +225,7 @@ export class Words {
             label: 'Data Source',
             options: options,
             multiple: false,
+            value: this.dataSource,
             order: 110
         }));
 
@@ -240,6 +243,7 @@ export class Words {
             label: 'Tags',
             options: options,
             multiple: true,
+            value: this.tags,
             order: 120
         }));
 
@@ -252,7 +256,7 @@ export class Words {
         questions.push(new FileQuestion({
             key: 'filename',
             label: 'Image',
-            value: '',
+            value: this.filename,
             validators: validators,
             order: 130
         }));

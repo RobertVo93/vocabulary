@@ -5,8 +5,22 @@ import { Config } from '../configuration/config';
 
 export class Images {
     private config: Config;
-    constructor(){
+    constructor(obj?){
         this.config = new Config();
+        if(obj){
+            this._id = obj._id;
+            this.filename = obj.filename;
+            this.uploadDate = obj.uploadDate;
+            this.md5 = obj.md5;
+            this.contentType = obj.contentType;
+            this.length = obj.length;
+            this.chunkSize = obj.chunkSize;
+
+            this.createdBy = obj.createdBy;
+            this.createdDate = obj.createdDate;
+            this.modifiedBy = obj.modifiedBy;
+            this.modifiedDate = obj.modifiedDate;
+        }
     }
     _id: any;
     filename: string;
@@ -35,7 +49,7 @@ export class Images {
         questions.push(new TextboxQuestion({
             key: 'filename',
             label: 'File\'s Name',
-            value: '',
+            value: this.filename,
             validators: validators,
             type: this.config.inputTypeDef.text,
             order: 1

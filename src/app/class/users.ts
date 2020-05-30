@@ -9,8 +9,25 @@ import { Option } from '../interface/option';
 
 export class Users {
     private config: Config;
-    constructor(){
+    constructor(obj?){
         this.config = new Config();
+        if(obj){
+            this._id = obj._id;
+            this.email = obj.email;
+            this.password = obj.password;
+            this.firstName = obj.firstName;
+            this.lastName = obj.lastName;
+            this.language = obj.language;
+            this.address = obj.address;
+            this.phone = obj.phone;
+            this.roles = obj.roles;
+
+
+            this.createdBy = obj.createdBy;
+            this.createdDate = obj.createdDate;
+            this.modifiedBy = obj.modifiedBy;
+            this.modifiedDate = obj.modifiedDate;
+        }
     }
     _id: any;
     get name() {
@@ -48,7 +65,7 @@ export class Users {
         questions.push(new TextboxQuestion({
             key: 'email',
             label: 'Email',
-            value: '',
+            value: this.email,
             validators: validators,
             type: this.config.inputTypeDef.email,
             order: 10
@@ -71,7 +88,7 @@ export class Users {
         questions.push(new TextboxQuestion({
             key: 'password',
             label: 'Password',
-            value: '',
+            value: this.password,
             validators: validators,
             type: this.config.inputTypeDef.password,
             order: 20
@@ -101,7 +118,7 @@ export class Users {
         questions.push(new TextboxQuestion({
             key: 'firstName',
             label: 'First Name',
-            value: '',
+            value: this.firstName,
             validators: validators,
             type: this.config.inputTypeDef.text,
             order: 40
@@ -116,7 +133,7 @@ export class Users {
         questions.push(new TextboxQuestion({
             key: 'lastName',
             label: 'Last Name',
-            value: '',
+            value: this.lastName,
             validators: validators,
             type: this.config.inputTypeDef.text,
             order: 50
@@ -136,6 +153,7 @@ export class Users {
             label: 'Language',
             options: options,
             multiple: false,
+            value: this.language,
             order: 60
         }));
         
@@ -143,7 +161,7 @@ export class Users {
         questions.push(new TextboxQuestion({
             key: 'address',
             label: 'Address',
-            value: '',
+            value: this.address,
             type: this.config.inputTypeDef.text,
             order: 70
         }));
@@ -152,7 +170,7 @@ export class Users {
         questions.push(new TextboxQuestion({
             key: 'phone',
             label: 'Phone',
-            value: '',
+            value: this.phone,
             type: this.config.inputTypeDef.tel,
             order: 80
         }));
@@ -177,6 +195,7 @@ export class Users {
             options: options,
             multiple: true,
             validators: validators,
+            value: this.roles,
             order: 90
           }));
         return of(questions.sort((a, b) => a.order - b.order));

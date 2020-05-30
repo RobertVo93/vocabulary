@@ -96,13 +96,15 @@ export class Config {
     optionValue = {
         createNew: 1,
         delete: 2,
-        update: 3
+        update: 3,
+        edit: 4
     }
 
     optionViewValue = {
         createNew: 'Create New',
         delete: 'Delete',
-        update: 'Update'
+        update: 'Update',
+        edit: 'Edit'
     }
 
     pubSubKey = {

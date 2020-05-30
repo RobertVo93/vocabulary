@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { QuestionBase } from '../../../../class/questions/question-base';
 import { ImagesService } from 'src/app/component/data-management/images/images.service';
-import { ResponseData } from 'src/app/class/responseData';
+import { ResponseData } from 'src/app/class/common/responseData';
 import * as Editor from 'ckeditor/ckeditor';
 import { Config } from 'src/app/configuration/config';
 import { MatDialog } from '@angular/material';
@@ -16,11 +16,8 @@ import { UploadAdapterService } from 'src/app/services/upload-adapter-service';
 	templateUrl: './dynamic-form-question.component.html',
 	styleUrls: ['./dynamic-form-question.component.css']
 })
-export class DynamicFormQuestionComponent{
+export class DynamicFormQuestionComponent implements OnInit{
 	public Editor = Editor;
-	public model = {
-        editorData: ''
-	};
 	previewSelectedImage;
 	images;
 	@Input() question: QuestionBase<string>;
@@ -30,6 +27,16 @@ export class DynamicFormQuestionComponent{
 	constructor(private config: Config, private dialog: MatDialog,
 		private imgService: ImagesService, private domSanitizer: DomSanitizer, private alertService: AlertService) {}
 
+	ngOnInit(){
+		if(this.question.controlType == "file"){
+			//bind preview image
+			this.previewSelectedImage = `${this.config.apiServiceURL.images}/${this.question.value}`;
+		}
+		if(this.question.controlType == "dropdown"){
+			//in case of question.value == 0 then the dropdown list did not work well
+			this.form.get(this.question.key).setValue(this.question.value);
+		}
+	}
 	get isValid() { return this.form.controls[this.question.key].valid; }
 
 	/**

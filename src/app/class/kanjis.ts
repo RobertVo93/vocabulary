@@ -16,6 +16,7 @@ export class Kanjis {
         this.meaning = (obj != null && obj.meaning != null)? obj.meaning : null;
         this.fullMeaning = (obj != null && obj.fullMeaning != null)? obj.fullMeaning : null;
         this.fullName = (obj != null && obj.fullName != null)? obj.fullName : null;
+        this.kanji = (obj != null && obj.kanji != null) ? obj.kanji : null;
         this.remember = (obj != null && obj.remember != null)? obj.remember : null;
         this.explain = (obj != null && obj.explain != null)? obj.explain : null;
         this.JLPTLevel = (obj != null && obj.JLPTLevel != null)? obj.JLPTLevel : null;
@@ -58,7 +59,7 @@ export class Kanjis {
         questions.push(new TextboxQuestion({
             key: 'word',
             label: 'China Meaning',
-            value: '',
+            value: this.word,
             validators: validators,
             type: this.config.inputTypeDef.text,
             order: 10
@@ -73,7 +74,7 @@ export class Kanjis {
         questions.push(new TextboxQuestion({
             key: 'meaning',
             label: 'Meaning',
-            value: '',
+            value: this.meaning,
             validators: validators,
             type: this.config.inputTypeDef.text,
             order: 20
@@ -83,7 +84,7 @@ export class Kanjis {
         questions.push(new TextboxQuestion({
             key: 'remember',
             label: 'Remember method',
-            value: '',
+            value: this.remember,
             type: this.config.inputTypeDef.text,
             order: 50
         }));
@@ -92,7 +93,7 @@ export class Kanjis {
         questions.push(new CkeditorQuestion({
             key: 'explain',
             label: 'Explain Kanji',
-            value: '',
+            value: this.explain,
             order: 60
         }));
 
@@ -111,6 +112,7 @@ export class Kanjis {
             key: 'JLPTLevel',
             label: 'JLPT Level',
             options: options,
+            value: this.JLPTLevel,
             multiple: false,
             order: 70
         }));
@@ -124,7 +126,7 @@ export class Kanjis {
         questions.push(new FileQuestion({
             key: 'filename',
             label: 'Image',
-            value: '',
+            value: this.filename,
             validators: validators,
             order: 80
         }));

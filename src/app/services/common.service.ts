@@ -319,4 +319,32 @@ export class CommonService {
         }
         return result;
     }
+
+    /**
+     * check the action is disable or not
+     * @param action action: create, edit, update, delete
+     * @param selected list of selected record
+     */
+    getActionOptionDisabled(action, selected): boolean{
+        let result = true;
+		switch(action.value){
+			case this.config.optionValue.createNew:
+				result = false;
+				break;
+			case this.config.optionValue.edit:
+				if(selected && selected.length == 1){
+					result = false;
+				}
+				break;
+			case this.config.optionValue.update:
+			case this.config.optionValue.delete:
+				if(selected && selected.length != 0){
+					result = false;
+				}
+				break;
+			default:
+				break;
+		}
+		return result;
+    }
 }
