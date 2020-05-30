@@ -258,6 +258,8 @@ export class Config {
 
     userSettingKey = {
         selectedViewColumn: 'selectedViewColumn',
+        selectedDatasource: 'selectedDatasource',
+        searchWord: 'searchWord',
         page: {
             dataSourceManagement: 'dataSourceManagement',
             dataSourceTrain: 'dataSourceTrain',

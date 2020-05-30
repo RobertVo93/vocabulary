@@ -9,7 +9,7 @@ import { CommonDialogComponent } from 'src/app/share-component/common-dialog/com
 import { LanguageService } from '../language/language.service';
 import { Words } from 'src/app/class/words';
 import { TagsService } from '../tag/tags.service';
-import { DataSourcesService } from '../data-sources/data-sources.service';import { AlertService } from 'src/app/services/alert.service';
+import { DataSourcesService } from '../data-sources/data-sources.service'; import { AlertService } from 'src/app/services/alert.service';
 import { Kanjis } from 'src/app/class/kanjis';
 import { KanjiService } from '../kanji/kanji.service';
 import { UserSetting } from 'src/app/class/userSetting';
@@ -23,7 +23,8 @@ import { UserSettingService } from 'src/app/services/user-setting.service';
 })
 export class WordComponent implements OnInit {
 	serverImagesURL: string = '';		//url for image resources
-	selectedDatasource: any;  //selected data set Id
+	searchWord: string = '';			//search keyword
+	selectedDatasource: any;  			//selected data set Id
 	languages: Option[];				//list of languages options
 	filteredLanguages: Option[];		//list of filtered languages options
 	tags: Option[];						//list of tags options
@@ -60,27 +61,33 @@ export class WordComponent implements OnInit {
 			this.getUserSetting()
 		];
 		Promise.all(promises).then(() => {
-			if (this.currentUserSetting.userSetting
-				&& this.currentUserSetting.userSetting[this.config.userSettingKey.page.wordManagement]
-				&& this.currentUserSetting.userSetting[this.config.userSettingKey.page.wordManagement][this.config.userSettingKey.selectedViewColumn]) {
-				this.selectedViewColumn = this.currentUserSetting.userSetting[this.config.userSettingKey.page.wordManagement][this.config.userSettingKey.selectedViewColumn];
-			}
-			else{
-				this.selectedViewColumn = [
+			//get user setting
+			let userSetting = this.common.getUserSettingForPage(this.currentUserSetting, this.config.userSettingKey.page.wordManagement);
+			this.selectedViewColumn = userSetting.selectedViewColumn
+				? userSetting.selectedViewColumn :
+				[
 					this.config.viewColumnsDef.select
 					, this.config.viewColumnsDef.id
 					, this.config.viewColumnsDef.word
 					, this.config.viewColumnsDef.kanji
 					, this.config.viewColumnsDef.meaning
 				];
-			}
-			this.selectedDatasource = this.dataSources[0].value;
+			this.selectedDatasource = userSetting.selectedDatasource
+				? userSetting.selectedDatasource : this.dataSources[0].value;
+			this.searchWord = userSetting.searchWord;
+
 			this.getWordByDataSourceFilter(this.selectedDatasource);
 			this.actions = this.getAllActions();
 			this.types = this.getAllWordTypes();
 			this.viewColumns = this.getAllViewMode(); //get all view column
 			this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
 			this.selection = new SelectionModel<Words>(true, []);
+
+			//fire search keyword
+			if (this.searchWord) {
+				var e = new KeyboardEvent("keyup", { code: "Enter" });
+				document.getElementById("searchWord").dispatchEvent(e);
+			}
 		});
 	}
 
@@ -90,6 +97,8 @@ export class WordComponent implements OnInit {
    */
 	onChangeHandler(event) {
 		this.getWordByDataSourceFilter(this.selectedDatasource);
+		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordManagement, this.config.userSettingKey.selectedDatasource, this.selectedDatasource);
+		this.setting.updateData([this.currentUserSetting]).toPromise();
 	}
 
 	/**
@@ -97,9 +106,10 @@ export class WordComponent implements OnInit {
 	 * @param event 
 	 */
 	onFilter(event: any) {
-		if (event.which == 13) {
-			const filterValue = (event.target as HTMLInputElement).value;
-			this.dataSource.filter = filterValue.trim().toLowerCase();
+		if ((event.which == 13 || event.code == "Enter") && this.searchWord != null) {
+			this.dataSource.filter = this.searchWord.trim().toLowerCase();
+			this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordManagement, this.config.userSettingKey.searchWord, this.searchWord);
+			this.setting.updateData([this.currentUserSetting]).toPromise();
 		}
 	}
 
@@ -143,7 +153,7 @@ export class WordComponent implements OnInit {
 		return numSelected === numRows;
 	}
 
-	onUpdateKanji(ele:Words, event){
+	onUpdateKanji(ele: Words, event) {
 		console.log(event);
 		ele.kanjiExplain = this.common.getKanjiIds(event, this.kanjis);
 	}
@@ -163,8 +173,8 @@ export class WordComponent implements OnInit {
 	 * Get all words by selected data source
 	 * @param source_id data source _id
 	 */
-	private getWordByDataSourceFilter(source_id: any){
-		let data = this.dataSourceAll.filter((value) =>{
+	private getWordByDataSourceFilter(source_id: any) {
+		let data = this.dataSourceAll.filter((value) => {
 			return value.dataSource == source_id || source_id == -1;
 		})
 		this.dataSource = new MatTableDataSource<Words>(data);
@@ -315,9 +325,9 @@ export class WordComponent implements OnInit {
 	/**
 	 * get all kanjis
 	 */
-	private async getAllKanjis(){
+	private async getAllKanjis() {
 		let dataConverted = await this.kanjiService.getAllData();
-		if(dataConverted){
+		if (dataConverted) {
 			this.kanjis = dataConverted;
 		}
 	}
@@ -436,12 +446,12 @@ export class WordComponent implements OnInit {
 			console.log(result);
 			if (result != null && result.returnAction == this.config.returnAction.update) {
 				this.service.updateData(this.selection._selected).subscribe(
-				(res) => {
-					this.alertService.success(this.config.commonMessage.updateSuccessfull);
-				},
-				(err) => {
-					this.alertService.error(this.config.commonMessage.updateError);
-				})
+					(res) => {
+						this.alertService.success(this.config.commonMessage.updateSuccessfull);
+					},
+					(err) => {
+						this.alertService.error(this.config.commonMessage.updateError);
+					})
 			}
 		})
 	}

@@ -5,10 +5,12 @@ import { Kanji } from '../interface/kanji';
 import { Words } from '../class/words';
 import { Kanjis } from '../class/kanjis';
 import { UserSetting } from '../class/userSetting';
+import { PageConfiguration } from '../class/common/pageConfiguration';
+import { Config } from '../configuration/config';
 
 @Injectable()
 export class CommonService {
-    constructor() { }
+    constructor(private config: Config) { }
 
     /**
      * get a random number in given range
@@ -239,31 +241,31 @@ export class CommonService {
     }
 
     isKanji(ch): boolean {
-		return (ch >= "\u4e00" && ch <= "\u9faf") ||
-		(ch >= "\u3400" && ch <= "\u4dbf");
+        return (ch >= "\u4e00" && ch <= "\u9faf") ||
+            (ch >= "\u3400" && ch <= "\u4dbf");
     }
-    
+
     /**
      * Get kanjis's ID
      * @param kanji the input kanji
      * @param allKanjis all kanji
      */
-    getKanjiIds(kanji, allKanjis){
+    getKanjiIds(kanji, allKanjis) {
         let kanjiList = [];
-		let result = [];
-		if(kanji == null)
-			return result;
-		for(var i = 0; i < kanji.length; i++){
-			if(this.isKanji(kanji[i])){
-				kanjiList = kanjiList.concat(allKanjis.filter(element => {
-					return element.kanji === kanji[i];
-				}));
-			}
-		}
-		for(var i = 0; i < kanjiList.length; i++){
-			result.push(kanjiList[i]._id);
-		}
-		return result;
+        let result = [];
+        if (kanji == null)
+            return result;
+        for (var i = 0; i < kanji.length; i++) {
+            if (this.isKanji(kanji[i])) {
+                kanjiList = kanjiList.concat(allKanjis.filter(element => {
+                    return element.kanji === kanji[i];
+                }));
+            }
+        }
+        for (var i = 0; i < kanjiList.length; i++) {
+            result.push(kanjiList[i]._id);
+        }
+        return result;
     }
 
     /**
@@ -271,32 +273,47 @@ export class CommonService {
      * @param kanji the input kanji
      * @param allKanjis all kanji
      */
-    getKanjiExplain(kanji, allKanjis:Kanjis[]){
-        let kanjiList:Kanjis[] = [];
-		let result = [];
-		if(kanji == null)
-			return result;
-		for(var i = 0; i < kanji.length; i++){
-			if(this.isKanji(kanji[i])){
-				kanjiList = kanjiList.concat(allKanjis.filter(element => {
-					return element.kanji === kanji[i];
-				}));
-			}
-		}
-		for(var i = 0; i < kanjiList.length; i++){
-			result.push(kanjiList[i].explain);
+    getKanjiExplain(kanji, allKanjis: Kanjis[]) {
+        let kanjiList: Kanjis[] = [];
+        let result = [];
+        if (kanji == null)
+            return result;
+        for (var i = 0; i < kanji.length; i++) {
+            if (this.isKanji(kanji[i])) {
+                kanjiList = kanjiList.concat(allKanjis.filter(element => {
+                    return element.kanji === kanji[i];
+                }));
+            }
+        }
+        for (var i = 0; i < kanjiList.length; i++) {
+            result.push(kanjiList[i].explain);
         }
         return result.join('\r\n\r\n');
     }
 
-    updateUserSetting(setting: UserSetting, page, settingKey, settingValue){
-        if(!setting)
+    updateUserSetting(setting: UserSetting, page, settingKey, settingValue) {
+        if (!setting)
             setting = new UserSetting();
-        if(!setting.userSetting)
+        if (!setting.userSetting)
             setting.userSetting = {};
-        if(!setting.userSetting[page])
+        if (!setting.userSetting[page])
             setting.userSetting[page] = {};
         setting.userSetting[page][settingKey] = settingValue;
         return setting;
+    }
+
+    /**
+     * get user setting for selected page
+     * @param setting user setting
+     * @param page the page
+     */
+    getUserSettingForPage(setting: UserSetting, page: string): PageConfiguration {
+        let result = new PageConfiguration();
+        if (setting.userSetting && setting.userSetting[page]){
+            result.selectedViewColumn = setting.userSetting[page][this.config.userSettingKey.selectedViewColumn];
+            result.selectedDatasource = setting.userSetting[page][this.config.userSettingKey.selectedDatasource];
+            result.searchWord = setting.userSetting[page][this.config.userSettingKey.searchWord];
+        }
+        return result;
     }
 }

@@ -3,7 +3,7 @@
         <div class="column text-align-left">
             <mat-form-field class="cell">
                 <mat-label>Search</mat-label>
-                <input matInput (keyup)="onFilter($event)" placeholder="Ex. nhân">
+                <input matInput id="searchWord" [(ngModel)]="searchWord" (keyup)="onFilter($event)" placeholder="Ex. nhân">
             </mat-form-field>
         </div>
         <div class="column text-align-right">

@@ -17,6 +17,7 @@ import { UserSettingService } from 'src/app/services/user-setting.service';
 	styleUrls: ['./kanji.component.css']
 })
 export class KanjiComponent implements OnInit {
+	searchWord: string = '';			//search keyword
 	serverImagesURL: string = '';		//url for image resources
 	kanjiLevels: Option[];				//list of kanji level from n0-n5
 	actions: Option[];					//list of action for selected rows
@@ -41,13 +42,11 @@ export class KanjiComponent implements OnInit {
 			this.getUserSetting()
 		];
 		Promise.all(promises).then(()=> {
-			if(this.currentUserSetting.userSetting 
-				&& this.currentUserSetting.userSetting[this.config.userSettingKey.page.kanjiManagement] 
-				&& this.currentUserSetting.userSetting[this.config.userSettingKey.page.kanjiManagement][this.config.userSettingKey.selectedViewColumn]){
-				this.selectedViewColumn = this.currentUserSetting.userSetting[this.config.userSettingKey.page.kanjiManagement][this.config.userSettingKey.selectedViewColumn];
-			}
-			else{
-				this.selectedViewColumn = [
+			//get user setting
+			let userSetting = this.common.getUserSettingForPage(this.currentUserSetting, this.config.userSettingKey.page.kanjiManagement);
+			this.selectedViewColumn = userSetting.selectedViewColumn
+				? userSetting.selectedViewColumn :
+				[
 					this.config.viewColumnsDef.select
 					, this.config.viewColumnsDef.id
 					, this.config.viewColumnsDef.kanji
@@ -56,12 +55,19 @@ export class KanjiComponent implements OnInit {
 					, this.config.viewColumnsDef.remember
 					, this.config.viewColumnsDef.explain
 				];
-			}
+			this.searchWord = userSetting.searchWord;
+
 			this.kanjiLevels = this.getListOfKanjiLevel();
 			this.actions = this.getAllActions();
 			this.viewColumns = this.getAllViewMode(); //get all view column
 			this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
 			this.selection = new SelectionModel<Kanjis>(true, []);
+
+			//fire search keyword
+			if (this.searchWord) {
+				var e = new KeyboardEvent("keyup", { code: "Enter" });
+				document.getElementById("searchWord").dispatchEvent(e);
+			}
 		});
 	}
 
@@ -70,9 +76,10 @@ export class KanjiComponent implements OnInit {
 	 * @param event 
 	 */
 	onFilter(event: any) {
-		if (event.which == 13) {
-			const filterValue = (event.target as HTMLInputElement).value;
-			this.dataSource.filter = filterValue.trim().toLowerCase();
+		if ((event.which == 13 || event.code == "Enter") && this.searchWord != null) {
+			this.dataSource.filter = this.searchWord.trim().toLowerCase();
+			this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiManagement, this.config.userSettingKey.searchWord, this.searchWord);
+			this.setting.updateData([this.currentUserSetting]).toPromise();
 		}
 	}
 
