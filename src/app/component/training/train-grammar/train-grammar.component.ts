@@ -7,6 +7,8 @@ import { Grammars } from 'src/app/class/grammars';
 import { GrammarService } from '../../data-management/grammar/grammar.service';
 import { TagsService } from '../../data-management/tag/tags.service';
 import { Tags } from 'src/app/class/tags';
+import { UserSetting } from 'src/app/class/userSetting';
+import { UserSettingService } from 'src/app/services/user-setting.service';
 
 
 @Component({
@@ -36,18 +38,26 @@ export class TrainGrammarComponent implements OnInit {
 	//setting variables
 	listIndexGrammar: number[] = [];  //list available index of Grammar that haven't trained yet
 	ranges: Option[];               //all ranges test
+	currentUserSetting: UserSetting;
 
-	constructor(private common: CommonService, private config: Config, 
+	constructor(private common: CommonService, private config: Config, private setting: UserSettingService, 
 		private Grammarservice: GrammarService, private tagService: TagsService) { }
 
 	ngOnInit() {
 		let promises = [
 			this.getAllGrammar(),
-			this.setupAllTagOptions()
+			this.setupAllTagOptions(),
+			this.getUserSetting()
 		];
 
 		Promise.all(promises).then(() => {
-			this.updateGrammarOnSelectedTags(this.selectedTags);
+			//get user setting
+			let userSetting = this.common.getUserSettingForPage(this.currentUserSetting, this.config.userSettingKey.page.grammarTrain);
+			this.selectedTags = userSetting.selectedTags
+				? userSetting.selectedTags
+				: this.selectedTags = [this.filteredTags[0].value];;
+
+			this.updateGrammarOnSelectedTags(this.selectedTags, userSetting.selectedPartitions);
 		});
 	}
 
@@ -70,6 +80,8 @@ export class TrainGrammarComponent implements OnInit {
 				this.selectedRanges = [this.selectedRanges[1]];
 			}
 			this.numberOfRandomGrammar = 0;
+			this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.grammarTrain, this.config.userSettingKey.selectedPartitions, this.selectedRanges);
+			this.setting.updateData([this.currentUserSetting]).toPromise();
 		}//get list of training Grammars
 		this.reloadPage();
 	}
@@ -79,6 +91,8 @@ export class TrainGrammarComponent implements OnInit {
 	 * @param event event parameter
 	 */
 	onTagChangeHandler(event) {
+		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.grammarTrain, this.config.userSettingKey.selectedTags, this.selectedTags);
+		this.setting.updateData([this.currentUserSetting]).toPromise();
 		this.updateGrammarOnSelectedTags(this.selectedTags);
 	}
 
@@ -94,9 +108,9 @@ export class TrainGrammarComponent implements OnInit {
 	 * Trigger update data
 	 * @param selectedDataset target dataset Id
 	 */
-	private updateGrammarOnSelectedTags(selectedTags): any {
+	private updateGrammarOnSelectedTags(selectedTags, selectedPartitions?): any {
 		this.allGrammarData = this.getTrainingGrammarBySelectedTags(selectedTags);
-		this.ranges = this.getAllRange();
+		this.ranges = this.getAllRange(selectedPartitions);
 	}
 	
 	/**
@@ -112,6 +126,13 @@ export class TrainGrammarComponent implements OnInit {
 	}
 
 	/**
+	 * Get user setting
+	 */
+	private async getUserSetting() {
+		this.currentUserSetting = await this.setting.getUserSetting();
+	}
+
+	/**
 	 * set up the tags
 	 */
 	private async setupAllTagOptions() {
@@ -122,13 +143,12 @@ export class TrainGrammarComponent implements OnInit {
 		}
 		this.tags = options;
 		this.filteredTags = options;
-		this.selectedTags = [this.filteredTags[0].value];
 	}
 
 	/**
 	 * get all parts base on the number of Grammars in data source
 	 */
-	private getAllRange(): Option[] {
+	private getAllRange(selectedPartitions?): Option[] {
 		let maxPosition = Math.ceil(this.allGrammarData.length / 20); //get how many parts available in this data source
 		//create option for dropdown list
 		let positions: Option[] = [];
@@ -136,7 +156,11 @@ export class TrainGrammarComponent implements OnInit {
 		for (let i = 1; i <= maxPosition; i++) {
 			positions.push({ value: i, viewValue: i.toString() })
 		}
-		this.selectedRanges = [positions.length - 1];  //initial the last part for training
+		this.selectedRanges = selectedPartitions
+				? selectedPartitions
+				: [positions.length - 1];
+		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.grammarTrain, this.config.userSettingKey.selectedPartitions, this.selectedRanges);
+		this.setting.updateData([this.currentUserSetting]).toPromise();
 		this.reloadPage();
 		return positions;
 	}

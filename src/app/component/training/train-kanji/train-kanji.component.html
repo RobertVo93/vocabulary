@@ -36,7 +36,7 @@
         <!-- <label class="chooseMode" i18n="@@chooseMode">Choose mode</label>: -->
         <mat-form-field>
             <mat-label>Training Mode</mat-label>
-            <mat-select [(value)]='selectedTestMode'>
+            <mat-select [(value)]='selectedTestMode' (selectionChange)="onTrainingModeChangeHandler($event)">
                 <mat-option *ngFor="let mode of testModes" [value]="mode.value">
                     {{mode.viewValue}}
                 </mat-option>

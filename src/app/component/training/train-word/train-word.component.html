@@ -1,8 +1,8 @@
 <div class="train-container container">
     <div class="headerComponent" align="center">
         <mat-form-field>
-            <mat-label>Dataset</mat-label>
-            <mat-select [(value)]='selected' (selectionChange)='onChangeHandler($event)'>
+            <mat-label>Data sources</mat-label>
+            <mat-select [(value)]='selectedDataSource' (selectionChange)='onChangeHandler($event)'>
                 <mat-option *ngFor="let data of dataset" [value]="data.value">
                     {{data.viewValue}}
                 </mat-option>
@@ -66,7 +66,7 @@
 
         <mat-form-field>
             <mat-label>Training Mode</mat-label>
-            <mat-select [(value)]='selectedTestMode'>
+            <mat-select [(value)]='selectedTestMode' (selectionChange)="onTrainingModeChangeHandler($event)">
                 <mat-option *ngFor="let mode of testModes" [value]="mode.value">
                     {{mode.viewValue}}
                 </mat-option>

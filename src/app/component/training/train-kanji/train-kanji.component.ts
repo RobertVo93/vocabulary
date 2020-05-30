@@ -5,6 +5,8 @@ import { WordEnum } from 'src/app/configuration/enums';
 import { CommonService } from 'src/app/services/common.service';
 import { Kanjis } from 'src/app/class/kanjis';
 import { KanjiService } from '../../data-management/kanji/kanji.service';
+import { UserSetting } from 'src/app/class/userSetting';
+import { UserSettingService } from 'src/app/services/user-setting.service';
 
 
 @Component({
@@ -15,7 +17,7 @@ import { KanjiService } from '../../data-management/kanji/kanji.service';
 export class TrainKanjiComponent implements OnInit {
 	serverImagesURL:string = '';				//url for image resources
 	//binding variables
-	selectedTestMode: number = WordEnum.word; //get training mode, selected by user
+	selectedTestMode: number; //get training mode, selected by user
 	selectedRanges: number[];                 //get training ranges selected by user
 	inputKanji: string = '';                  //current training kanji input by user
 	numberOfRandomKanji: number = 0;          //set number of random Kanji input by user
@@ -41,21 +43,33 @@ export class TrainKanjiComponent implements OnInit {
 	testModes: Option[];            //list of test mode
 	ranges: Option[];               //all ranges test
 	kanjiLevels: Option[];    //option for dropdownlist 'level'
+	currentUserSetting: UserSetting;
 
 	//flag
 	isAutoNext: boolean = false; //auto next kanji flag
 	isLastKanji: boolean = false; //flag check last training kanji
 
 	wordEnum = WordEnum;
-	constructor(private common: CommonService, private config: Config, private kanjiService: KanjiService) { }
+	constructor(private common: CommonService, private config: Config, private kanjiService: KanjiService, private setting: UserSettingService) { }
 
 	ngOnInit() {
 		this.serverImagesURL = this.config.apiServiceURL.images;
-		this.kanjiLevels = this.getListOfKanjiLevel(); //get all dataset
-		this.selectedKanjiLevel = this.kanjiLevels[0].value;
-		this.testModes = this.getAllTestMode(); //get test mode
-		this.getAllKanji().then((value) => {
-			this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel);
+		let promises = [
+			this.getAllKanji(),
+			this.getUserSetting()
+		];
+		Promise.all(promises).then(()=>{
+			this.kanjiLevels = this.getListOfKanjiLevel(); //get all dataset
+			//get user setting
+			let userSetting = this.common.getUserSettingForPage(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain);
+			this.selectedKanjiLevel = userSetting.selectedDatasource
+				? parseInt(userSetting.selectedDatasource)
+				: this.kanjiLevels[0].value;
+			this.selectedTestMode = userSetting.selectedTrainingMode
+				? userSetting.selectedTrainingMode : WordEnum.word;
+
+			this.testModes = this.getAllTestMode(); //get test mode
+			this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel, userSetting.selectedPartitions);
 		});
 	}
 
@@ -78,6 +92,8 @@ export class TrainKanjiComponent implements OnInit {
 				this.selectedRanges = [this.selectedRanges[1]];
 			}
 			this.numberOfRandomKanji = 0;
+			this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.selectedPartitions, this.selectedRanges);
+			this.setting.updateData([this.currentUserSetting]).toPromise();
 		}//get list of training kanjis
 		this.reloadPage();
 	}
@@ -110,14 +126,25 @@ export class TrainKanjiComponent implements OnInit {
 	 * @param event event parameter
 	 */
 	onChangeHandler(event) {
+		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.selectedDatasource, this.selectedKanjiLevel);
+		this.setting.updateData([this.currentUserSetting]).toPromise();
 		this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel);
 	}
 
-	private updateDataBaseOnSelectedKanjiLevel(selected) {
+	/**
+	 * Handle event change dropdown list training mode
+	 * @param event event parameter
+	 */
+	onTrainingModeChangeHandler(event){
+		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.selectedTrainingMode, this.selectedTestMode);
+		this.setting.updateData([this.currentUserSetting]).toPromise();
+	}
+
+	private updateDataBaseOnSelectedKanjiLevel(selected, selectedPartitions?) {
 		this.allKanjiData = this.common.clone(this.originalData.filter(function (val, index) {
 			return val.JLPTLevel == selected || selected == -1;	//-1 is all
 		}));
-		this.ranges = this.getAllRange();
+		this.ranges = this.getAllRange(selectedPartitions);
 	}
 	/**
 	 * Get all dataset
@@ -148,7 +175,7 @@ export class TrainKanjiComponent implements OnInit {
 	/**
 	 * get all parts base on the number of kanjis in data source
 	 */
-	private getAllRange(): Option[] {
+	private getAllRange(selectedPartitions?): Option[] {
 		let maxPosition = Math.ceil(this.allKanjiData.length / 20); //get how many parts available in this data source
 		//create option for dropdown list
 		let positions: Option[] = [];
@@ -156,9 +183,20 @@ export class TrainKanjiComponent implements OnInit {
 		for (let i = 1; i <= maxPosition; i++) {
 			positions.push({ value: i, viewValue: i.toString() })
 		}
-		this.selectedRanges = [positions.length - 1];  //initial the last part for training
+		this.selectedRanges = selectedPartitions
+				? selectedPartitions
+				: [positions.length - 1];
+		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.selectedPartitions, this.selectedRanges);
+		this.setting.updateData([this.currentUserSetting]).toPromise();
 		this.reloadPage();
 		return positions;
+	}
+
+	/**
+	 * Get user setting
+	 */
+	private async getUserSetting() {
+		this.currentUserSetting = await this.setting.getUserSetting();
 	}
 
 	/**

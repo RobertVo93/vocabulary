@@ -313,6 +313,9 @@ export class CommonService {
             result.selectedViewColumn = setting.userSetting[page][this.config.userSettingKey.selectedViewColumn];
             result.selectedDatasource = setting.userSetting[page][this.config.userSettingKey.selectedDatasource];
             result.searchWord = setting.userSetting[page][this.config.userSettingKey.searchWord];
+            result.selectedPartitions = setting.userSetting[page][this.config.userSettingKey.selectedPartitions];
+            result.selectedTrainingMode = setting.userSetting[page][this.config.userSettingKey.selectedTrainingMode];
+            result.selectedTags = setting.userSetting[page][this.config.userSettingKey.selectedTags];
         }
         return result;
     }

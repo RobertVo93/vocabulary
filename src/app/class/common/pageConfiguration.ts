@@ -3,4 +3,7 @@ export class PageConfiguration {
     selectedViewColumn: number[];
     selectedDatasource: string;
     searchWord: string;
+    selectedPartitions: number[];
+    selectedTrainingMode: number;
+    selectedTags: number[];
 }

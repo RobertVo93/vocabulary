@@ -260,6 +260,9 @@ export class Config {
         selectedViewColumn: 'selectedViewColumn',
         selectedDatasource: 'selectedDatasource',
         searchWord: 'searchWord',
+        selectedPartitions: 'partitions',
+        selectedTrainingMode: 'trainingMode',
+        selectedTags: 'selectedTags',
         page: {
             dataSourceManagement: 'dataSourceManagement',
             dataSourceTrain: 'dataSourceTrain',

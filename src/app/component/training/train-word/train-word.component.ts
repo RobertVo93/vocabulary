@@ -8,6 +8,8 @@ import { Words } from 'src/app/class/words';
 import { DataSourcesService } from '../../data-management/data-sources/data-sources.service';
 import { KanjiService } from '../../data-management/kanji/kanji.service';
 import { Kanjis } from 'src/app/class/kanjis';
+import { UserSetting } from 'src/app/class/userSetting';
+import { UserSettingService } from 'src/app/services/user-setting.service';
 
 @Component({
 	selector: 'app-train-word',
@@ -19,7 +21,7 @@ export class TrainWordComponent implements OnInit {
 	trainedNO: number = 0;
 	totalTraining: number = 0;
 	testModes: Option[];   //list of test mode
-	selectedTestMode: number = WordEnum.word; //selected test mode
+	selectedTestMode: number; //selected test mode
 	ranges: Option[];      //list of test part (20 words for 1 part)
 	selectedRanges: number[];  //selected parts
 	showHideButtonName: string = "Show more";  //button's name
@@ -43,32 +45,57 @@ export class TrainWordComponent implements OnInit {
 
 	wordEnum = WordEnum;  //use for checking condition in html page
 	viewColumns: Option[];  //list of column could be viewed
-	selectedViewColumn: number[] = [this.config.viewColumnsDef.word, this.config.viewColumnsDef.meaning]; //list of selected column to be view (init with word's column)
+	selectedViewColumn: number[]; //list of selected column to be view (init with word's column)
 	displayedColumns: string[]; //list of displaying column in the screen
 	dataSource: Words[];  //data source for rendering table on right hand side
 	dataset: Option[];    //option for dropdownlist 'Dataset'
-	selected: number = 0;  //selected dataset
+	selectedDataSource: any;  //selected dataset
+	currentUserSetting: UserSetting;
+	
 	constructor(private common: CommonService, public config: Config, private kanjiService: KanjiService,
-		private wordService: WordService, private dataSourceService: DataSourcesService) { }
+		private wordService: WordService, private dataSourceService: DataSourcesService, private setting: UserSettingService) { }
 
 	ngOnInit() {
 		this.serverImagesURL = this.config.apiServiceURL.images;
 		let promises = [
 			this.getListOfDataset(),
 			this.getAllWordsDB(),
-			this.getAllKanjis()
+			this.getAllKanjis(),
+			this.getUserSetting()
 		];
 		Promise.all(promises).then((result)=>{
+			//get user setting
+			let userSetting = this.common.getUserSettingForPage(this.currentUserSetting, this.config.userSettingKey.page.wordTrain);
+			this.selectedViewColumn = userSetting.selectedViewColumn
+				? userSetting.selectedViewColumn :
+				[
+					this.config.viewColumnsDef.word
+					, this.config.viewColumnsDef.meaning
+				];
+			this.selectedDataSource = userSetting.selectedDatasource
+				? userSetting.selectedDatasource 
+				: (this.dataset.length != 0)
+					? this.dataset[0].value
+					: 0;
+			this.selectedTestMode = userSetting.selectedTrainingMode
+				? userSetting.selectedTrainingMode : WordEnum.word;
+
 			this.updateKanjiExplain();
-			//if we have dataset then
-			if (this.dataset.length != 0) {
-				this.selected = this.dataset[0].value;  //initial the selected is the first one
-				this.updateDataBaseOnSelectedDataset(this.selected);
-			}
+			this.allWordData = this.getWordDataWithDatasetId(this.selectedDataSource);
+			this.ranges = this.getAllRange(userSetting.selectedPartitions);
+			this.testModes = this.getAllTestMode(); //get test mode
+			this.viewColumns = this.getAllViewMode(); //get all view column
+			this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
 		});
-		this.testModes = this.getAllTestMode(); //get test mode
-		this.viewColumns = this.getAllViewMode(); //get all view column
-		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
+	}
+
+	/**
+	 * Handle event change dropdown list training mode
+	 * @param event event parameter
+	 */
+	onTrainingModeChangeHandler(event){
+		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedTrainingMode, this.selectedTestMode);
+		this.setting.updateData([this.currentUserSetting]).toPromise();
 	}
 
 	/**
@@ -76,7 +103,9 @@ export class TrainWordComponent implements OnInit {
 	 * @param event event parameter
 	 */
 	onChangeHandler(event) {
-		this.updateDataBaseOnSelectedDataset(this.selected);
+		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedDatasource, this.selectedDataSource);
+		this.setting.updateData([this.currentUserSetting]).toPromise();
+		this.updateDataBaseOnSelectedDataset(this.selectedDataSource);
 	}
 
 	/**
@@ -97,6 +126,13 @@ export class TrainWordComponent implements OnInit {
 		if(dataConverted){
 			this.kanjis = dataConverted;
 		}
+	}
+
+	/**
+	 * Get user setting
+	 */
+	private async getUserSetting() {
+		this.currentUserSetting = await this.setting.getUserSetting();
 	}
 
 	/**
@@ -131,6 +167,8 @@ export class TrainWordComponent implements OnInit {
 	 */
 	onViewModeChangeHandler(event) {
 		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get display column
+		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedViewColumn, this.selectedViewColumn);
+		this.setting.updateData([this.currentUserSetting]).toPromise();
 	}
 
 	/**
@@ -238,6 +276,8 @@ export class TrainWordComponent implements OnInit {
 				this.selectedRanges = [this.selectedRanges[1]];
 			}
 			this.numberOfRandomWords = 0;
+			this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedPartitions, this.selectedRanges);
+			this.setting.updateData([this.currentUserSetting]).toPromise();
 		}//get list of training words
 		this.reloadPage();
 	}
@@ -289,7 +329,7 @@ export class TrainWordComponent implements OnInit {
 	/**
 	 * get all parts base on the number of words in data source
 	 */
-	getAllRange(): Option[] {
+	getAllRange(selectedPartitions?): Option[] {
 		let maxPosition = Math.ceil(this.allWordData.length / 20); //get how many parts available in this data source
 		//create option for dropdown list
 		let positions: Option[] = [];
@@ -297,7 +337,11 @@ export class TrainWordComponent implements OnInit {
 		for (let i = 1; i <= maxPosition; i++) {
 			positions.push({ value: i, viewValue: i.toString() })
 		}
-		this.selectedRanges = [positions.length - 1];  //initial the last part for training
+		this.selectedRanges = selectedPartitions
+				? selectedPartitions
+				: [positions.length - 1];
+		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedPartitions, this.selectedRanges);
+		this.setting.updateData([this.currentUserSetting]).toPromise();
 		this.reloadPage();
 		return positions;
 	}
