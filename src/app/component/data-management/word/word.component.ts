@@ -445,7 +445,6 @@ export class WordComponent implements OnInit {
 		let data = new Words(this.selection._selected[0]);
 		let questions = await data.getQuestions(this.langService, this.dataSourceService, this.tagService, this.common, this.config, this.kanjis);
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
-			width: '500px',
 			data: { 
 				title: 'Edit word'
 				,message: 'Please fill in the form' 

@@ -332,7 +332,6 @@ export class KanjiComponent implements OnInit {
 	private editRecord(){
 		let data = new Kanjis(this.selection._selected[0]);
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
-			width: '500px',
 			data: { 
 				title: 'Edit kanji'
 				,message: 'Please fill in the form' 

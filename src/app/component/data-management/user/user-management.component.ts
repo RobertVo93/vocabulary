@@ -285,7 +285,6 @@ export class UserManagementComponent implements OnInit {
 		let data = new Users();
 		let questions = await data.getQuestions(this.langService, this.roleService);
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
-			width: '500px',
 			data: {
 				title: 'Create new user'
 				, message: 'Please fill in the form'
@@ -330,7 +329,6 @@ export class UserManagementComponent implements OnInit {
 		let data = new Users(this.selection._selected[0]);
 		let questions = await data.getQuestions(this.langService, this.roleService);
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
-			width: '500px',
 			data: { 
 				title: 'Edit user'
 				,message: 'Please fill in the form' 

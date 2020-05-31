@@ -336,7 +336,6 @@ export class GrammarComponent implements OnInit {
 		let data = new Grammars(this.selection._selected[0]);
 		let questions = await data.getQuestions(this.langService, this.tagService);
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
-			width: '500px',
 			data: { 
 				title: 'Edit grammar'
 				,message: 'Please fill in the form' 
