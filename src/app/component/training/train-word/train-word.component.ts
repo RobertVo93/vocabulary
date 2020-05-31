@@ -104,8 +104,9 @@ export class TrainWordComponent implements OnInit {
 	 */
 	onChangeHandler(event) {
 		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedDatasource, this.selectedDataSource);
-		this.setting.updateData([this.currentUserSetting]).toPromise();
-		this.updateDataBaseOnSelectedDataset(this.selectedDataSource);
+		this.setting.updateData([this.currentUserSetting]).subscribe(()=> {
+			this.updateDataBaseOnSelectedDataset(this.selectedDataSource);
+		});
 	}
 
 	/**
@@ -435,8 +436,10 @@ export class TrainWordComponent implements OnInit {
 		//random new word
 		if (this.isLastWord) {
 			this.isLastWord = false;
-			alert("Finish work. Stop typing");
-			this.refreshPage();
+			if(this.trainingWord){
+				alert("Finish work. Stop typing");
+				this.refreshPage();
+			}
 			return;
 		}
 

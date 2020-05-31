@@ -92,8 +92,10 @@ export class TrainGrammarComponent implements OnInit {
 	 */
 	onTagChangeHandler(event) {
 		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.grammarTrain, this.config.userSettingKey.selectedTags, this.selectedTags);
-		this.setting.updateData([this.currentUserSetting]).toPromise();
-		this.updateGrammarOnSelectedTags(this.selectedTags);
+		this.setting.updateData([this.currentUserSetting]).subscribe(()=> {
+			this.updateGrammarOnSelectedTags(this.selectedTags);
+		});
+		
 	}
 
 	/**
@@ -239,7 +241,7 @@ export class TrainGrammarComponent implements OnInit {
 		if (this.selectedRanges.length == 0 || this.allGrammarData.length == 0)
 			return;
 		//random new Grammar
-		if (this.listIndexGrammar.length == 0) {
+		if (this.listIndexGrammar.length == 0 && this.trainingGrammar) {
 			alert("Finish work. Stop typing");
 			this.refreshPage();
 			return;

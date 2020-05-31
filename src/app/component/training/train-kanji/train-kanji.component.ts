@@ -127,8 +127,9 @@ export class TrainKanjiComponent implements OnInit {
 	 */
 	onChangeHandler(event) {
 		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.selectedDatasource, this.selectedKanjiLevel);
-		this.setting.updateData([this.currentUserSetting]).toPromise();
-		this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel);
+		this.setting.updateData([this.currentUserSetting]).subscribe(()=> {
+			this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel);
+		});
 	}
 
 	/**
@@ -279,8 +280,10 @@ export class TrainKanjiComponent implements OnInit {
 		//random new kanji
 		if (this.isLastKanji) {
 			this.isLastKanji = false;
-			alert("Finish work. Stop typing");
-			this.refreshPage();
+			if(this.trainingKanji){
+				alert("Finish work. Stop typing");
+				this.refreshPage();
+			}
 			return;
 		}
 		this.previousTrainingKanji = this.common.clone(this.trainingKanji);
