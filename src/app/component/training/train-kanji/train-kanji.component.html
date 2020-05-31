@@ -60,7 +60,7 @@
             <!-- <img height="100" [attr.title]="previousTrainingKanji.fullName" class="details-image" src="{{serverImagesURL}}/{{previousTrainingKanji.fullName}}" /> -->
             <img height="100" [attr.title]="previousTrainingKanji.fullName" src="{{serverImagesURL}}/{{previousTrainingKanji.filename}}" class="details-image row" />
             <div *ngIf="previousTrainingKanji.explain" align="left" class="pl10">
-                <div [innerHTML]="previousTrainingKanji.explain"></div>
+                <div class="ck-editor__main" [innerHTML]="previousTrainingKanji.explain"></div>
                 <label class="fs20">remember method: <span class="red">{{previousTrainingKanji.remember}}</span></label>
             </div>
             <div *ngIf="!previousTrainingKanji.explain" align="left" class="pl10">

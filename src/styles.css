@@ -127,6 +127,10 @@ textarea:read-only {
     opacity: 1;
 }
 
+.ck-editor__main p {
+    margin-bottom: 0rem !important;
+}
+
 @media (max-width: 767px) {
     .desktop-only {
         display: none;
