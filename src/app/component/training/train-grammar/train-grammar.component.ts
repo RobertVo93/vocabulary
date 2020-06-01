@@ -107,6 +107,13 @@ export class TrainGrammarComponent implements OnInit {
 	}
 
 	/**
+	 * Handle reset trained number
+	 */
+	onResetTrainedNumber(){
+		this.Grammarservice.resetTraniedNumber().toPromise();
+	}
+
+	/**
 	 * Trigger update data
 	 * @param selectedDataset target dataset Id
 	 */
@@ -218,6 +225,7 @@ export class TrainGrammarComponent implements OnInit {
 		//store all index that will be trained.
 		for (let i = 0; i < this.grammarData.length; i++) {
 			this.listIndexGrammar.push(i);
+			this.grammarData[i].trainedNumber += 1;
 		}
 		this.trained = 0;
 		this.total = this.grammarData.length;
@@ -226,7 +234,9 @@ export class TrainGrammarComponent implements OnInit {
 
 	private getGrammarDataByRandomNumber(number) {
 		var result = [];
-		var cloneAllGrammar = this.common.clone(this.allGrammarData);
+		var cloneAllGrammar = this.common.clone(this.allGrammarData.filter((val) => {
+			return val.trainedNumber == 0;
+		}));
 		for (var i = 0; i < number; i++) {
 			var randomIndex = this.common.random(cloneAllGrammar.length);
 			result = result.concat(cloneAllGrammar.splice(randomIndex, 1));
@@ -243,6 +253,7 @@ export class TrainGrammarComponent implements OnInit {
 		//random new Grammar
 		if (this.listIndexGrammar.length == 0 && this.trainingGrammar) {
 			alert("Finish work. Stop typing");
+			this.Grammarservice.updateData(this.grammarData).toPromise();
 			this.refreshPage();
 			return;
 		}

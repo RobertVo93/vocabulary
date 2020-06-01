@@ -1,13 +1,21 @@
 <div class="train-container container">
-    <div class="headerComponent" align="center">
-        <mat-form-field>
-            <mat-label>Data sources</mat-label>
-            <mat-select [(value)]='selectedDataSource' (selectionChange)='onChangeHandler($event)'>
-                <mat-option *ngFor="let data of dataset" [value]="data.value">
-                    {{data.viewValue}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+    <div class="control-panel">
+        <div class="column text-align-left">
+            <button class="cell" (click)='onResetTrainedNumber()'>Reset trained number</button>
+        </div>
+        <div class="column text-align-center">
+            <mat-form-field class="cell">
+                <mat-label>Data sources</mat-label>
+                <mat-select [(value)]='selectedDataSource' (selectionChange)='onChangeHandler($event)'>
+                    <mat-option *ngFor="let data of dataset" [value]="data.value">
+                        {{data.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="column text-align-right">
+            <div class="cell"></div>
+        </div>
     </div>
 
     <div class="leftBody" align="center">

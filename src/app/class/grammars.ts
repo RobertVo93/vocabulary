@@ -22,6 +22,7 @@ export class Grammars {
         this.level = (obj != null && obj.level != null) ? obj.level : null;
         this.language = (obj != null && obj.language != null) ? obj.language : null;
         this.tags = (obj != null && obj.tags != null) ? obj.tags : null;
+        this.trainedNumber = (obj != null && obj.trainedNumber != null) ? obj.trainedNumber : 0;
 
         this.createdBy = (obj != null && obj.createdBy != null) ? obj.createdBy : null;
         this.createdDate = (obj != null && obj.createdDate != null) ? obj.createdDate : null;
@@ -36,6 +37,7 @@ export class Grammars {
     level:string;
     language: string;
     tags: string[];
+    trainedNumber: number;
     
     createdBy: string;
     createdDate: Date;

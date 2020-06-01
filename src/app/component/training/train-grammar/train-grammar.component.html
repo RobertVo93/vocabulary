@@ -1,48 +1,49 @@
 <div class="train-container container">
-    <div class="leftBody">
-        <div class="header" align="center">
-            <label class="leftBodyTitle">Grammar </label> <br />
-            <div class="control-panel">
-                <div class="column text-align-left">
-                    <mat-form-field class="cell">
-                        <mat-label>Tags</mat-label>
-                        <mat-select class="pl10" [(value)]='selectedTags' multiple (selectionChange)='onTagChangeHandler($event)'>
-                            <mat-select-filter [array]="tags" [displayMember]="'viewValue'" (filteredReturn)="filteredTags = $event"></mat-select-filter>
-                            <mat-option *ngFor="let option of filteredTags" [value]="option.value">
-                                {{option.viewValue}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="column text-align-right">
-                    <mat-form-field class="cell">
-                        <mat-label>Partitions</mat-label>
-                        <mat-select [(value)]='selectedRanges' multiple (selectionChange)='onRangeChangeHandler($event)'>
-                            <mat-option *ngFor="let range of ranges" [value]="range.value">
-                                {{range.viewValue}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
+    <div class="header" align="center">
+        <label class="leftBodyTitle">Grammar </label> <br />
+        <div class="control-panel">
+            <div class="column text-align-left">
+                <button class="cell" (click)='onResetTrainedNumber()'>Reset trained number</button>
+            </div>
+            <div class="column text-align-center">
+                <mat-form-field class="cell">
+                    <mat-label>Tags</mat-label>
+                    <mat-select class="pl10" [(value)]='selectedTags' multiple (selectionChange)='onTagChangeHandler($event)'>
+                        <mat-select-filter [array]="tags" [displayMember]="'viewValue'" (filteredReturn)="filteredTags = $event"></mat-select-filter>
+                        <mat-option *ngFor="let option of filteredTags" [value]="option.value">
+                            {{option.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="column text-align-right">
+                <mat-form-field class="cell">
+                    <mat-label>Partitions</mat-label>
+                    <mat-select [(value)]='selectedRanges' multiple (selectionChange)='onRangeChangeHandler($event)'>
+                        <mat-option *ngFor="let range of ranges" [value]="range.value">
+                            {{range.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
         </div>
+    </div>
 
-        <div class="training-grammar" *ngIf='trainingGrammar'>
-            <div align="left" class="grammar">
-                <button class="button-border" mat-button (click)='onMoveNextGrammar()' title="Move Next">>>></button>
-                <label class="ml20">Trained / Total: {{trained}} / {{total}} </label><br />
-                <div class="fs20"> <strong>Grammar:</strong></div>
-                <div class='fs20 ml10' [innerHTML]="trainingGrammar.syntax"></div>
-                <div class="fs20"> <strong>Explain:</strong></div>
-                <div class="ml10" class="ck-editor__main" [innerHTML]="trainingGrammar.explain"></div>
-                <div class="fs20"> <strong>Example:</strong></div>
-                <div class="ml10">
-                    <div>
-                        <strong>{{trainingGrammar.example}}</strong>
-                    </div>
-                    <div class="red">
-                        {{trainingGrammar.exampleMeaning}}
-                    </div>
+    <div class="training-grammar" *ngIf='trainingGrammar'>
+        <div align="left" class="grammar">
+            <button class="button-border" mat-button (click)='onMoveNextGrammar()' title="Move Next">>>></button>
+            <label class="ml20">Trained / Total: {{trained}} / {{total}} </label><br />
+            <div class="fs20"> <strong>Grammar:</strong></div>
+            <div class='fs20 ml10' [innerHTML]="trainingGrammar.syntax"></div>
+            <div class="fs20"> <strong>Explain:</strong></div>
+            <div class="ml10" class="ck-editor__main" [innerHTML]="trainingGrammar.explain"></div>
+            <div class="fs20"> <strong>Example:</strong></div>
+            <div class="ml10">
+                <div>
+                    <strong>{{trainingGrammar.example}}</strong>
+                </div>
+                <div class="red">
+                    {{trainingGrammar.exampleMeaning}}
                 </div>
             </div>
         </div>

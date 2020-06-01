@@ -131,6 +131,10 @@ textarea:read-only {
     margin-bottom: 0rem !important;
 }
 
+.ck-editor__main img {
+    max-width: 100%;
+}
+
 @media (max-width: 767px) {
     .desktop-only {
         display: none;

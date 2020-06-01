@@ -21,6 +21,7 @@ export class Kanjis {
         this.explain = (obj != null && obj.explain != null)? obj.explain : null;
         this.JLPTLevel = (obj != null && obj.JLPTLevel != null)? obj.JLPTLevel : null;
         this.filename = (obj != null && obj.filename != null)? obj.filename : null;
+        this.trainedNumber = (obj != null && obj.trainedNumber != null)? obj.trainedNumber : 0;
         
         this.createdBy = (obj != null && obj.createdBy != null)? obj.createdBy : null;
         this.createdDate = (obj != null && obj.createdDate != null)? obj.createdDate : null;
@@ -37,6 +38,7 @@ export class Kanjis {
     explain: string;
     JLPTLevel: number;
     filename: string;
+    trainedNumber: number;
     
     createdBy: string;
     createdDate: Date;

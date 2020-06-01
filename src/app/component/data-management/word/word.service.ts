@@ -30,6 +30,14 @@ export class WordService {
 	}
 
 	/**
+	 * reset all trained number
+	 */
+	resetTraniedNumber(){
+		const url = `${this.serverURL}/${this.config.apiServiceURL.resetTrainedNumber}`;
+		return this.apiService.post([], url);
+	}
+
+	/**
 	 * Create new data
 	 * @param data data's data
 	 */

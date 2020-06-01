@@ -23,9 +23,23 @@
     border: 1px solid;
 }
 
+.training-grammar {
+    border: 1px solid blue;
+    padding-top: 10px;
+}
+
 .grammar {
     margin-left: 20px;
     margin-right: 20px;
+}
+
+.control-panel {
+    display: table;
+    width: 100%;
+}
+
+.column .cell {
+    width: 100%;
 }
 
 .text-align-right {
@@ -36,13 +50,8 @@
     text-align: left;
 }
 
-.control-panel {
-    display: table;
-    width: 90%;
-}
-
-.column .cell {
-    width: 100%;
+.text-align-center {
+    text-align: center;
 }
 
 @media (min-width:768px) {

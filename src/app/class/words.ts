@@ -32,6 +32,7 @@ export class Words {
         this.dataSource = (obj != null && obj.dataSource != null) ? obj.dataSource : null;
         this.tags = (obj != null && obj.tags != null) ? obj.tags : null;
         this.filename = (obj != null && obj.filename != null) ? obj.filename : null;
+        this.trainedNumber = (obj != null && obj.trainedNumber != null) ? obj.trainedNumber : 0;
 
         this.createdBy = (obj != null && obj.createdBy != null) ? obj.createdBy : null;
         this.createdDate = (obj != null && obj.createdDate != null) ? obj.createdDate : null;
@@ -53,6 +54,7 @@ export class Words {
     dataSource: any;
     tags: string[];
     filename: string;
+    trainedNumber: number;
 
     createdBy: string;
     createdDate: Date;

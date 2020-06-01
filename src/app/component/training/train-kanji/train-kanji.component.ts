@@ -141,6 +141,13 @@ export class TrainKanjiComponent implements OnInit {
 		this.setting.updateData([this.currentUserSetting]).toPromise();
 	}
 
+	/**
+	 * Handle reset trained number
+	 */
+	onResetTrainedNumber(){
+		this.kanjiService.resetTraniedNumber().toPromise();
+	}
+
 	private updateDataBaseOnSelectedKanjiLevel(selected, selectedPartitions?) {
 		this.allKanjiData = this.common.clone(this.originalData.filter(function (val, index) {
 			return val.JLPTLevel == selected || selected == -1;	//-1 is all
@@ -251,6 +258,7 @@ export class TrainKanjiComponent implements OnInit {
 		//store all index that will be trained.
 		for (let i = 0; i < this.kanjiData.length; i++) {
 			this.listIndexKanji.push(i);
+			this.kanjiData[i].trainedNumber += 1;
 		}
 		this.trained = 0;
 		this.total = this.kanjiData.length;
@@ -259,7 +267,9 @@ export class TrainKanjiComponent implements OnInit {
 
 	private getKanjiDataByRandomNumber(number) {
 		var result = [];
-		var cloneAllKanji = this.common.clone(this.allKanjiData);
+		var cloneAllKanji = this.common.clone(this.allKanjiData.filter((val) => {
+			return val.trainedNumber == 0;
+		}));
 		for (var i = 0; i < number; i++) {
 			var randomIndex = this.common.random(cloneAllKanji.length);
 			result = result.concat(cloneAllKanji.splice(randomIndex, 1));
@@ -282,6 +292,7 @@ export class TrainKanjiComponent implements OnInit {
 			this.isLastKanji = false;
 			if(this.trainingKanji){
 				alert("Finish work. Stop typing");
+				this.kanjiService.updateData(this.kanjiData).toPromise();
 				this.refreshPage();
 			}
 			return;

@@ -54,15 +54,25 @@
     text-align: left;
 }
 
-.headerComponent {
-    align-content: center;
-    margin-bottom: -15px;
+.control-panel {
+    display: table;
+    width: 100%;
 }
 
-.headerLabel {
-    font-weight: bold;
-    font-size: 40px;
-    color: blue;
+.column .cell {
+    width: 100%;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.text-align-left {
+    text-align: left;
+}
+
+.text-align-center {
+    text-align: center;
 }
 
 @media (min-width:768px) {
@@ -78,5 +88,11 @@
     }
     .leftBodyTitle {
         font-size: 40px;
+    }
+    .column {
+        display: table-cell;
+    }
+    .column .cell {
+        width: 200px;
     }
 }

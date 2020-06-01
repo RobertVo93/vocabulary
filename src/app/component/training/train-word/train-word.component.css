@@ -81,6 +81,27 @@
     max-width: 100% !important;
 }
 
+.control-panel {
+    display: table;
+    width: 100%;
+}
+
+.column .cell {
+    width: 100%;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.text-align-left {
+    text-align: left;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
 @media (min-width:768px) {
     .rightBody {
         float: right;
@@ -90,5 +111,11 @@
         float: left;
         width: 49%;
         min-height: calc(100vh - 150px);
+    }
+    .column {
+        display: table-cell;
+    }
+    .column .cell {
+        width: 200px;
     }
 }

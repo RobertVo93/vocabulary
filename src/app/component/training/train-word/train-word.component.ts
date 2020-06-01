@@ -110,6 +110,13 @@ export class TrainWordComponent implements OnInit {
 	}
 
 	/**
+	 * Handle reset trained number
+	 */
+	onResetTrainedNumber(){
+		this.wordService.resetTraniedNumber().toPromise();
+	}
+
+	/**
 	 * Get all word in db
 	 */
 	async getAllWordsDB(){
@@ -379,6 +386,7 @@ export class TrainWordComponent implements OnInit {
 		//store all index that will be trained.
 		for (let i = 0; i < this.wordData.length; i++) {
 			this.listIndexWord.push(i);
+			this.wordData[i].trainedNumber += 1;
 		}
 		this.totalTraining = this.wordData.length;
 		this.processNewWord();  //process the first element for testing
@@ -398,7 +406,9 @@ export class TrainWordComponent implements OnInit {
 
 	private getWordDataByRandomNumber(number) {
 		var result = [];
-		var cloneAllWords = this.common.clone(this.allWordData);
+		var cloneAllWords = this.common.clone(this.allWordData.filter((val) => {
+			return val.trainedNumber == 0;
+		}));
 		for (var i = 0; i < number; i++) {
 			var randomIndex = this.common.random(cloneAllWords.length);
 			result = result.concat(cloneAllWords.splice(randomIndex, 1));
@@ -438,6 +448,7 @@ export class TrainWordComponent implements OnInit {
 			this.isLastWord = false;
 			if(this.trainingWord){
 				alert("Finish work. Stop typing");
+				this.wordService.updateData(this.wordData).toPromise();
 				this.refreshPage();
 			}
 			return;
