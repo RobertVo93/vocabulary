@@ -459,6 +459,7 @@ export class WordComponent implements OnInit {
 
 		dialogRef.afterClosed().subscribe(result => {
 			if(result != null && result.returnAction == this.config.returnAction.save){
+				result.record.kanjiExplain = this.common.getKanjiIds(result.record.kanji, this.kanjis);
 				this.service.updateData([result.record]).subscribe(
 					(res) => {
 						this.alertService.success(this.config.commonMessage.updateSuccessfull);

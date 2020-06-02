@@ -28,6 +28,7 @@ export class KanjiComponent implements OnInit {
 	dataSource;                         //data source for rendering table
 	selection;
 	pageSizeOptions: number[];          //list of page size option
+	allOriginalKanji: Kanjis[];					//all original kanji
 	currentUserSetting: UserSetting;
 	
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -266,6 +267,7 @@ export class KanjiComponent implements OnInit {
 	private async getAllData() {
 		let dataConverted = await this.service.getAllData();
 		if (dataConverted) {
+			this.allOriginalKanji = dataConverted;
 			this.dataSource = new MatTableDataSource<Kanjis>(dataConverted);
 			this.dataSource.paginator = this.paginator;
 			this.dataSource.sort = this.sort;
@@ -293,7 +295,7 @@ export class KanjiComponent implements OnInit {
 				title: 'Create new Kanji'
 				, message: 'Please fill in the form'
 				, record: data
-				, questions: data.getQuestions()
+				, questions: data.getQuestions(this.common, this.config, this.allOriginalKanji)
 				, action: {
 					save: true,
 					cancel: true
@@ -336,7 +338,7 @@ export class KanjiComponent implements OnInit {
 				title: 'Edit kanji'
 				,message: 'Please fill in the form' 
 				,record: data
-				,questions: data.getQuestions() 
+				,questions: data.getQuestions(this.common, this.config, this.allOriginalKanji) 
 				,action: {
 					save: true,
 					cancel: true

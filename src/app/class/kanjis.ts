@@ -6,11 +6,14 @@ import { FileQuestion } from './questions/question-file';
 import { Config } from '../configuration/config';
 import { Option } from '../interface/option';
 import { CkeditorQuestion } from './questions/question-ckeditor';
+import { CallbackReturn } from '../interface/callbackReturn';
+import { CommonService } from '../services/common.service';
 
 export class Kanjis {
     private config: Config;
+    private common: CommonService;
+    private allKanjis: Kanjis[];
     constructor(obj?){
-        this.config = new Config();
         this._id = (obj != null && obj._id != null)? obj._id : null;
         this.word = (obj != null && obj.word != null)? obj.word : null;
         this.meaning = (obj != null && obj.meaning != null)? obj.meaning : null;
@@ -48,9 +51,32 @@ export class Kanjis {
     order: number;
 
     /**
+     * Update KanjiExplain when add kanji
+     */
+    private callbackKanjiUpdate(): CallbackReturn {
+        let kanji = arguments[0];
+        if(!kanji)
+            return;
+        let result:CallbackReturn;
+        for(var i = 0; i < kanji.length; i++){
+            if(this.common.isKanji(kanji[i])){
+                result = {
+                    targetField: 'kanji',
+                    value: kanji[i]
+                };
+                break;
+            }
+        }
+        return result;
+    }
+    
+    /**
      * each attribute need add to question => load form
      */
-    public getQuestions(){
+    public getQuestions(common: CommonService, config: Config, allKanjis: Kanjis[]){
+        this.common = common;
+        this.config = config;
+        this.allKanjis = allKanjis;
         let questions: QuestionBase<string>[] = [];
         //set up word question
         let validators = {};
@@ -96,7 +122,18 @@ export class Kanjis {
             key: 'explain',
             label: 'Explain Kanji',
             value: this.explain,
-            order: 60
+            order: 60,
+            changeHandlerCallbackFunction: this.callbackKanjiUpdate.bind(this)
+        }));
+
+        //set up Kanji explain question
+        questions.push(new TextboxQuestion({
+            key: 'kanji',
+            label: 'Kanji',
+            value: this.common.getKanjiExplain(this.kanji, this.allKanjis),
+            rows: 10,
+            order: 65,
+            readonly: true
         }));
 
         let options:Option[] = [];

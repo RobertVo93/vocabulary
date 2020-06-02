@@ -8,6 +8,11 @@
             <mat-label><span *ngIf="question.validators['required']" class="red">* </span> {{question.label}}</mat-label>
             <textarea matInput [formControlName]="question.key" readonly="{{question.readonly}}" rows="{{question.rows}}" [id]="question.key"></textarea>
         </mat-form-field>
+        <mat-form-field *ngSwitchCase="'htmlviewer'">
+            <mat-label><span *ngIf="question.validators['required']" class="red">* </span>{{question.label}}</mat-label>
+            <input matInput [formControlName]="question.key" [(ngModel)]="question.value" [id]="question.key" hidden/>
+            <div class="ck-editor__main pt12" [innerHTML]="question.value"></div>
+        </mat-form-field>
         <mat-form-field *ngSwitchCase="'dropdown'">
             <mat-label><span *ngIf="question.validators['required']" class="red">* </span> {{question.label}}</mat-label>
             <mat-select [id]="question.key" [(value)]='question.value' [multiple]="question.multiple" [formControlName]="question.key">

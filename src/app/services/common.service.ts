@@ -277,7 +277,7 @@ export class CommonService {
         let kanjiList: Kanjis[] = [];
         let result = [];
         if (kanji == null)
-            return result;
+            return '';
         for (var i = 0; i < kanji.length; i++) {
             if (this.isKanji(kanji[i])) {
                 kanjiList = kanjiList.concat(allKanjis.filter(element => {

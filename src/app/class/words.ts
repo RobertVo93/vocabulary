@@ -12,6 +12,7 @@ import { TextAreaQuestion } from './questions/question-textarea';
 import { CallbackReturn } from '../interface/callbackReturn';
 import { CommonService } from '../services/common.service';
 import { Kanjis } from './kanjis';
+import { HTMLViewerQuestion } from './questions/question-htmlviewer';
 
 export class Words {
     private config: Config;
@@ -67,9 +68,11 @@ export class Words {
      */
     private callbackKanjiUpdate(): CallbackReturn {
         let kanji = arguments[0];
+        let explain = this.common.getKanjiExplain(kanji, this.allKanjis);
+        explain = explain.replace(new RegExp('\r\n', 'g'), "<br \\>").replace(new RegExp('\n', 'g'), "<br \\>");
         let result: CallbackReturn = {
             targetField: 'explainKanjiTemp',
-            value: this.common.getKanjiExplain(kanji, this.allKanjis)
+            value: explain
         };
         return result;
     }
@@ -109,10 +112,10 @@ export class Words {
         }));
 
         //set up Kanji explain question
-        questions.push(new TextAreaQuestion({
+        questions.push(new HTMLViewerQuestion({
             key: 'explainKanjiTemp',
             label: 'Explain Kanji',
-            value: this.common.getKanjiExplain(this.kanji, this.allKanjis),
+            value: '',
             rows: 10,
             order: 25,
             readonly: true
