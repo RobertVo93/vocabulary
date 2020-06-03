@@ -43,10 +43,12 @@ import { AboutComponent } from './component/about/about.component';
 import { LoaderComponent } from './share-component/loader/loader.component';
 import { GrammarComponent } from './component/data-management/grammar/grammar.component';
 import { TrainGrammarComponent } from './component/training/train-grammar/train-grammar.component';
+import { SafeHtmlPipe } from './services/safeHtmlPipe';
 
 @NgModule({
   declarations: [
     AppComponent,
+    SafeHtmlPipe,
     TrainKanjiComponent,
     ConvertToWordComponent,
     ConvertToKanjiComponent,

@@ -131,6 +131,10 @@ textarea:read-only {
     opacity: 1;
 }
 
+.ck-editor__main {
+    display: inline-block;
+}
+
 .ck-editor__main p {
     margin-bottom: 0rem !important;
 }

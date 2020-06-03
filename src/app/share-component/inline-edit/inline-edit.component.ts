@@ -23,7 +23,7 @@ import { filter } from 'rxjs/operators';
     </div>
     
     <div *ngIf="Readonly" class="readonly-element">
-        <div rows="10" class="ck-editor__main" [innerHTML]="comment"></div>
+        <div rows="10" class="ck-editor__main" [innerHTML]="comment | safeHtml"></div>
         <mat-hint align="end">{{comment?.length || 0}}/1000</mat-hint>
     </div>
   `

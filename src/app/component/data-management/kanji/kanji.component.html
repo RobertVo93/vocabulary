@@ -117,7 +117,7 @@
             <mat-header-cell *matHeaderCellDef> Explain Kanji </mat-header-cell>
             <mat-cell *matCellDef="let element" [satPopoverAnchor]="p" (click)="p.open()">
                 <span class="explain cursor-pointer" *ngIf="element.explain">
-                    <div class="ck-editor__main" [innerHTML]="element.explain"></div>
+                    <div class="ck-editor__main" [innerHTML]="element.explain | safeHtml"></div>
                 </span>
                 <span class="add-comment cursor-pointer" *ngIf="!element.explain">
                     Add an explaination

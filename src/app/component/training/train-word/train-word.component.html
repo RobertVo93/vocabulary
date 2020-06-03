@@ -68,7 +68,7 @@
             <!-- <img [attr.title]="trainingWord.meaning"  src="assets/images/{{previousTrainingWord.pronun | lowercase}}.jpg" class="details-image row" /> -->
             <button mat-button (click)="onShowMore();">{{showHideButtonName}}</button>
             <div class="kanji-explain" [hidden]="!isShowMore">
-                <div class="ck-editor__main" [innerHTML]="previousTrainingWord.kanjiExplain"></div>
+                <div class="ck-editor__main" [innerHTML]="previousTrainingWord.kanjiExplain | safeHtml"></div>
             </div>
         </div>
 

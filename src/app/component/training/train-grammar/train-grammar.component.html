@@ -34,9 +34,9 @@
             <button class="button-border" mat-button (click)='onMoveNextGrammar()' title="Move Next">>>></button>
             <label class="ml20">Trained / Total: {{trained}} / {{total}} </label><br />
             <div class="fs20"> <strong>Grammar:</strong></div>
-            <div class='fs20 ml10' [innerHTML]="trainingGrammar.syntax"></div>
+            <div class='fs20 ml10' [innerHTML]="trainingGrammar.syntax | safeHtml"></div>
             <div class="fs20"> <strong>Explain:</strong></div>
-            <div class="ml10" class="ck-editor__main" [innerHTML]="trainingGrammar.explain"></div>
+            <div class="ml10" class="ck-editor__main" [innerHTML]="trainingGrammar.explain | safeHtml"></div>
             <div class="fs20"> <strong>Example:</strong></div>
             <div class="ml10">
                 <div>

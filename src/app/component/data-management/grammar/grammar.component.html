@@ -74,7 +74,7 @@
         <ng-container matColumnDef="explain">
             <mat-header-cell *matHeaderCellDef> Explain </mat-header-cell>
             <mat-cell class="explain-cell" *matCellDef="let element">
-                <div class="ck-editor__main" readonly [innerHTML]="element.explain"></div>
+                <div class="ck-editor__main" readonly [innerHTML]="element.explain | safeHtml"></div>
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
