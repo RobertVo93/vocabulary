@@ -186,7 +186,7 @@ export class Config {
         userSettings: `${environment.serverURL}/api/usersettings`,
         serverAPI: `${environment.serverURL}/api`,
         server: `${environment.serverURL}`,
-        resetTrainedNumber: 'resettrainednumber'
+        setTrainedNumber: 'settrainednumber'
     }
 
     returnAction = {

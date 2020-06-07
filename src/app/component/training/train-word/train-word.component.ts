@@ -113,7 +113,7 @@ export class TrainWordComponent implements OnInit {
 	 * Handle reset trained number
 	 */
 	onResetTrainedNumber(){
-		this.wordService.resetTraniedNumber().toPromise();
+		this.wordService.setTrainedNumber([]).toPromise();
 	}
 
 	/**
@@ -448,7 +448,7 @@ export class TrainWordComponent implements OnInit {
 			this.isLastWord = false;
 			if(this.trainingWord){
 				alert("Finish work. Stop typing");
-				this.wordService.updateData(this.wordData).toPromise();
+				this.wordService.setTrainedNumber(this.wordData).toPromise();
 				this.refreshPage();
 			}
 			return;

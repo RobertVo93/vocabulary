@@ -145,7 +145,7 @@ export class TrainKanjiComponent implements OnInit {
 	 * Handle reset trained number
 	 */
 	onResetTrainedNumber(){
-		this.kanjiService.resetTraniedNumber().toPromise();
+		this.kanjiService.setTrainedNumber([]).toPromise();
 	}
 
 	private updateDataBaseOnSelectedKanjiLevel(selected, selectedPartitions?) {
@@ -292,7 +292,7 @@ export class TrainKanjiComponent implements OnInit {
 			this.isLastKanji = false;
 			if(this.trainingKanji){
 				alert("Finish work. Stop typing");
-				this.kanjiService.updateData(this.kanjiData).toPromise();
+				this.kanjiService.setTrainedNumber(this.kanjiData).toPromise();
 				this.refreshPage();
 			}
 			return;

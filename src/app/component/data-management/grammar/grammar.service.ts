@@ -31,11 +31,12 @@ export class GrammarService {
 	}
 
 	/**
-	 * reset all trained number
+	 * update trained number
+	 * @param data list of data need to update trained number
 	 */
-	resetTraniedNumber(){
-		const url = `${this.serverURL}/${this.config.apiServiceURL.resetTrainedNumber}`;
-		return this.apiService.post([], url);
+	setTrainedNumber<T>(data: T){
+		const url = `${this.serverURL}/${this.config.apiServiceURL.setTrainedNumber}`;
+		return this.apiService.post(data, url);
 	}
 
 	/**

@@ -41,7 +41,7 @@ export class TrainGrammarComponent implements OnInit {
 	currentUserSetting: UserSetting;
 
 	constructor(private common: CommonService, private config: Config, private setting: UserSettingService, 
-		private Grammarservice: GrammarService, private tagService: TagsService) { }
+		private GrammarService: GrammarService, private tagService: TagsService) { }
 
 	ngOnInit() {
 		let promises = [
@@ -110,7 +110,7 @@ export class TrainGrammarComponent implements OnInit {
 	 * Handle reset trained number
 	 */
 	onResetTrainedNumber(){
-		this.Grammarservice.resetTraniedNumber().toPromise();
+		this.GrammarService.setTrainedNumber([]).toPromise();
 	}
 
 	/**
@@ -127,7 +127,7 @@ export class TrainGrammarComponent implements OnInit {
 	 * @param datasetId dataset Id
 	 */
 	private async getAllGrammar() {
-		let dataConverted = await this.Grammarservice.getAllData();
+		let dataConverted = await this.GrammarService.getAllData();
 		if (dataConverted) {
 			this.allGrammarData = dataConverted;
 			this.originalGrammarData = dataConverted;
@@ -253,7 +253,7 @@ export class TrainGrammarComponent implements OnInit {
 		//random new Grammar
 		if (this.listIndexGrammar.length == 0 && this.trainingGrammar) {
 			alert("Finish work. Stop typing");
-			this.Grammarservice.updateData(this.grammarData).toPromise();
+			this.GrammarService.setTrainedNumber(this.grammarData).toPromise();
 			this.refreshPage();
 			return;
 		}
