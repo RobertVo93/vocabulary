@@ -51,7 +51,7 @@
                 <div class="input-group-prepend w100-p">
                     <span *ngIf="question.validators['required']" class="red">* </span>{{question.label}}
                 </div>
-                <div class="w100-p">
+                <div class="w100-p" style="overflow: hidden;">
                     <ckeditor [editor]="Editor" (ready)="onReady($event)" matInput [formControlName]="question.key" [id]="question.key" [(ngModel)]="question.value"></ckeditor>
                 </div>
             </div>
