@@ -31,6 +31,7 @@ export class DynamicFormQuestionComponent implements OnInit{
 		if(this.question.controlType == "file" && this.question.value){
 			//bind preview image when it has value
 			this.previewSelectedImage = `${this.config.apiServiceURL.images}/${this.question.value}`;
+			this.question.readonly = true;
 		}
 		if(this.question.controlType == "dropdown"){
 			//in case of question.value == 0 then the dropdown list did not work well
@@ -60,6 +61,7 @@ export class DynamicFormQuestionComponent implements OnInit{
 			this.images = file;
 			//preview image
 			this.previewSelectedImage = this.domSanitizer.bypassSecurityTrustUrl(URL.createObjectURL(file));
+			this.question.readonly = false;
 		}
 	}
 
@@ -87,6 +89,7 @@ export class DynamicFormQuestionComponent implements OnInit{
 				var response = new ResponseData(res);
 				if (response.success) {
 					scope.question.value = response.returnObj;
+					scope.question.readonly = true;
 					this.alertService.success(this.config.commonMessage.createSuccessfull);
 				}
 				else {

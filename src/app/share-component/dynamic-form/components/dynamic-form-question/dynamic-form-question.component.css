@@ -69,3 +69,8 @@
     position: relative;
     z-index: 50;
 }
+
+button:disabled {
+    background-color: #757575;
+    cursor: not-allowed;
+}
