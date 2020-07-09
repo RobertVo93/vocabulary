@@ -56,7 +56,6 @@ export class JwtInterceptor implements HttpInterceptor {
 						observer.error(err);
 						if (err && err.status == 401) {
 							this.authenticationService.signOut();
-        					this.router.navigate(['/login']);
 						}
 					},
 					() => {
