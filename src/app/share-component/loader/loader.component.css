@@ -1,3 +1,10 @@
+.progress-loader {
+    top: 0px;
+    position: fixed;
+    width: 100%;
+    z-index: 10000;
+}
+
 .loading-spinner {
     background-color: #0000001f;
     position: absolute;
