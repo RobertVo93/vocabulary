@@ -190,4 +190,4 @@
     </mat-table>
     <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
 </div>
-<button (click)="updateDataToDatabase()">clone db</button>
+<button *ngIf="cloneDataToDatabase" (click)="updateDataToDatabase()">clone db</button>

@@ -391,6 +391,7 @@ export class ImagesComponent implements OnInit {
 	/**TODO: upload multiple images => uncomment the below code and in html */
 	// images;
 	// multipleImages = [];
+	// uploadMultipleImages = true;
 	// selectMultipleImage(event) {
 	// 	if (event.target.files.length > 0) {
 	// 		this.multipleImages = event.target.files;
