@@ -399,7 +399,7 @@ export class WordComponent implements OnInit {
 		let data = new Words();
 		let questions = await data.getQuestions(this.langService, this.dataSourceService, this.tagService, this.common, this.config, this.kanjis);
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
-			width: '800px',
+			width: '80vw',
 			data: {
 				title: 'Create new word'
 				, message: 'Please fill in the form'
@@ -445,6 +445,7 @@ export class WordComponent implements OnInit {
 		let data = new Words(this.selection._selected[0]);
 		let questions = await data.getQuestions(this.langService, this.dataSourceService, this.tagService, this.common, this.config, this.kanjis);
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
+			width: '80vw',
 			data: { 
 				title: 'Edit word'
 				,message: 'Please fill in the form' 

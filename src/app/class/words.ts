@@ -26,6 +26,7 @@ export class Words {
         this.pronun = (obj != null && obj.pronun != null) ? obj.pronun : null;
         this.meaning = (obj != null && obj.meaning != null) ? obj.meaning : null;
         this.example = (obj != null && obj.example != null) ? obj.example : null;
+        this.exampleTitle = (obj != null && obj.exampleTitle != null) ? obj.exampleTitle : null;
         this.exampleMeaning = (obj != null && obj.exampleMeaning != null) ? obj.exampleMeaning : null;
         this.kanjiExplain = (obj != null && obj.kanjiExplain != null) ? obj.kanjiExplain : null;
         this.chinaMeaning = (obj != null && obj.chinaMeaning != null) ? obj.chinaMeaning : null;
