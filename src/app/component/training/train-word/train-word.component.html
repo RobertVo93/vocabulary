@@ -44,6 +44,14 @@
         <button class="button-border ml20" mat-button (click)='onMoveNextWord()' title="Move Next">>>></button>
         <br />
         <div class="displayArea" *ngIf='previousTrainingWord'>
+            <mat-form-field class="mt15">
+                <mat-label>Add Tag</mat-label>
+                <mat-select [(value)]='previousTrainingWord.tags' multiple (selectionChange)='onTagSelectionChangeHandler($event)'>
+                    <mat-option *ngFor="let mode of tags" [value]="mode._id">
+                        {{mode.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
             <div><strong>
                     {{previousTrainingWord.word}}
                     ({{config.wordType[previousTrainingWord.type]}})

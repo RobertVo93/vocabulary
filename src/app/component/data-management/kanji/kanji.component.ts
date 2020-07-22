@@ -10,6 +10,7 @@ import { Kanjis } from 'src/app/class/kanjis';
 import { AlertService } from 'src/app/services/alert.service';
 import { UserSetting } from 'src/app/class/userSetting';
 import { UserSettingService } from 'src/app/services/user-setting.service';
+import { TagsService } from '../tag/tags.service';
 
 @Component({
 	selector: 'app-kanji',
@@ -33,7 +34,7 @@ export class KanjiComponent implements OnInit {
 	
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
-	constructor(public config: Config, public common: CommonService, private setting: UserSettingService,
+	constructor(public config: Config, public common: CommonService, private setting: UserSettingService, private tagService: TagsService, 
 		public service: KanjiService, public dialog: MatDialog, private alertService: AlertService) { }
 
 	ngOnInit() {
@@ -288,15 +289,16 @@ export class KanjiComponent implements OnInit {
 	/**
 	 * Handle create new record
 	 */
-	private createNew() {
+	private async createNew() {
 		let data = new Kanjis();
+		let questions = await data.getQuestions(this.common, this.config, this.allOriginalKanji, this.tagService);
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
 			width: '80vw',
 			data: {
 				title: 'Create new Kanji'
 				, message: 'Please fill in the form'
 				, record: data
-				, questions: data.getQuestions(this.common, this.config, this.allOriginalKanji)
+				, questions: questions
 				, action: {
 					save: true,
 					cancel: true
@@ -332,15 +334,16 @@ export class KanjiComponent implements OnInit {
 	/**
 	 * Handle edit record
 	 */
-	private editRecord(){
+	private async editRecord(){
 		let data = new Kanjis(this.selection._selected[0]);
+		let questions = await data.getQuestions(this.common, this.config, this.allOriginalKanji, this.tagService);
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
 			width: '80vw',
 			data: { 
 				title: 'Edit kanji'
 				,message: 'Please fill in the form' 
 				,record: data
-				,questions: data.getQuestions(this.common, this.config, this.allOriginalKanji) 
+				,questions: questions 
 				,action: {
 					save: true,
 					cancel: true

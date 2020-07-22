@@ -28,12 +28,13 @@ export class TrainGrammarComponent implements OnInit {
 
 	//data variables
 	filteredTags: Option[];				//list of filtered tags options
-	tags: Option[];						//list of tags options
+	tagOptions: Option[];						//list of tags options
 	originalGrammarData: Grammars[];	
 	allGrammarData: Grammars[];          //all filtered Grammar data
 	grammarData: Grammars[];             //selected Grammar data
 	trainingGrammar: Grammars;           //the current training Grammar
 	trainingGrammarIndex: number;     //the index of current training Grammar
+	tags: Tags[];
 
 	//setting variables
 	listIndexGrammar: number[] = [];  //list available index of Grammar that haven't trained yet
@@ -59,6 +60,14 @@ export class TrainGrammarComponent implements OnInit {
 
 			this.updateGrammarOnSelectedTags(this.selectedTags, userSetting.selectedPartitions);
 		});
+	}
+
+	/**
+	 * Handle tag selection changed
+	 * @param event event parameter
+	 */
+	onTagSelectionChangeHandler(event){
+		this.GrammarService.updateData([this.trainingGrammar]).toPromise();
 	}
 
 	/**
@@ -150,8 +159,9 @@ export class TrainGrammarComponent implements OnInit {
 		for (var i = 0; i < tags.length; i++) {
 			options.push({ value: tags[i]._id, viewValue: tags[i].name })
 		}
-		this.tags = options;
+		this.tagOptions = options;
 		this.filteredTags = options;
+		this.tags = tags;
 	}
 
 	/**

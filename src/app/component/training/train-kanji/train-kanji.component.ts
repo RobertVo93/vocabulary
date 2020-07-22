@@ -7,6 +7,8 @@ import { Kanjis } from 'src/app/class/kanjis';
 import { KanjiService } from '../../data-management/kanji/kanji.service';
 import { UserSetting } from 'src/app/class/userSetting';
 import { UserSettingService } from 'src/app/services/user-setting.service';
+import { Tags } from 'src/app/class/tags';
+import { TagsService } from '../../data-management/tag/tags.service';
 
 
 @Component({
@@ -44,19 +46,22 @@ export class TrainKanjiComponent implements OnInit {
 	ranges: Option[];               //all ranges test
 	kanjiLevels: Option[];    //option for dropdownlist 'level'
 	currentUserSetting: UserSetting;
+	tags: Tags[];
 
 	//flag
 	isAutoNext: boolean = false; //auto next kanji flag
 	isLastKanji: boolean = false; //flag check last training kanji
 
 	wordEnum = WordEnum;
-	constructor(private common: CommonService, private config: Config, private kanjiService: KanjiService, private setting: UserSettingService) { }
+	constructor(private common: CommonService, private config: Config, private kanjiService: KanjiService, 
+		private setting: UserSettingService, private tagService: TagsService) { }
 
 	ngOnInit() {
 		this.serverImagesURL = this.config.apiServiceURL.images;
 		let promises = [
 			this.getAllKanji(),
-			this.getUserSetting()
+			this.getUserSetting(),
+			this.getAllTags()
 		];
 		Promise.all(promises).then(()=>{
 			this.kanjiLevels = this.getListOfKanjiLevel(); //get all dataset
@@ -71,6 +76,14 @@ export class TrainKanjiComponent implements OnInit {
 			this.testModes = this.getAllTestMode(); //get test mode
 			this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel, userSetting.selectedPartitions);
 		});
+	}
+
+	/**
+	 * Handle tag selection changed
+	 * @param event event parameter
+	 */
+	onTagSelectionChangeHandler(event){
+		this.kanjiService.updateData([this.previousTrainingKanji]).toPromise();
 	}
 
 	/**
@@ -205,6 +218,13 @@ export class TrainKanjiComponent implements OnInit {
 	 */
 	private async getUserSetting() {
 		this.currentUserSetting = await this.setting.getUserSetting();
+	}
+
+	/**
+	 * Get all tags
+	 */
+	private async getAllTags(){
+        this.tags = await this.tagService.getAllData();
 	}
 
 	/**

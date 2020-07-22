@@ -9,7 +9,7 @@
                 <mat-form-field class="cell">
                     <mat-label>Tags</mat-label>
                     <mat-select class="pl10" [(value)]='selectedTags' multiple (selectionChange)='onTagChangeHandler($event)'>
-                        <mat-select-filter [array]="tags" [displayMember]="'viewValue'" (filteredReturn)="filteredTags = $event"></mat-select-filter>
+                        <mat-select-filter [array]="tagOptions" [displayMember]="'viewValue'" (filteredReturn)="filteredTags = $event"></mat-select-filter>
                         <mat-option *ngFor="let option of filteredTags" [value]="option.value">
                             {{option.viewValue}}
                         </mat-option>
@@ -32,6 +32,14 @@
     <div class="training-grammar" *ngIf='trainingGrammar'>
         <div align="left" class="grammar">
             <button class="button-border" mat-button (click)='onMoveNextGrammar()' title="Move Next">>>></button>
+            <mat-form-field class="ml20">
+                <mat-label>Add Tag</mat-label>
+                <mat-select [(value)]='trainingGrammar.tags' multiple (selectionChange)='onTagSelectionChangeHandler($event)'>
+                    <mat-option *ngFor="let mode of tags" [value]="mode._id">
+                        {{mode.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
             <label class="ml20">Trained / Total: {{trained}} / {{total}} </label><br />
             <div class="fs20"> <strong>Grammar:</strong></div>
             <div class='fs20 ml10' [innerHTML]="trainingGrammar.syntax | safeHtml"></div>

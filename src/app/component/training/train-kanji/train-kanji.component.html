@@ -65,6 +65,14 @@
         <label class="leftBodyTitle" i18n='@@leftBodyTitle'>Result </label> <br />
         <label>Trained / Total: {{trained}} / {{total}} </label> <br />
         <div class="displayArea" *ngIf='previousTrainingKanji'>
+            <mat-form-field class="mt15">
+                <mat-label>Add Tag</mat-label>
+                <mat-select [(value)]='previousTrainingKanji.tags' multiple (selectionChange)='onTagSelectionChangeHandler($event)'>
+                    <mat-option *ngFor="let mode of tags" [value]="mode._id">
+                        {{mode.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
             <!-- <img height="100" [attr.title]="previousTrainingKanji.fullName" class="details-image" src="{{serverImagesURL}}/{{previousTrainingKanji.fullName}}" /> -->
             <img height="100" [attr.title]="previousTrainingKanji.fullName" src="{{serverImagesURL}}/{{previousTrainingKanji.filename}}" class="details-image row" />
             <div *ngIf="previousTrainingKanji.explain" align="left" class="pl10">

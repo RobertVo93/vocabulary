@@ -10,6 +10,8 @@ import { KanjiService } from '../../data-management/kanji/kanji.service';
 import { Kanjis } from 'src/app/class/kanjis';
 import { UserSetting } from 'src/app/class/userSetting';
 import { UserSettingService } from 'src/app/services/user-setting.service';
+import { TagsService } from '../../data-management/tag/tags.service';
+import { Tags } from 'src/app/class/tags';
 
 @Component({
 	selector: 'app-train-word',
@@ -51,8 +53,9 @@ export class TrainWordComponent implements OnInit {
 	dataset: Option[];    //option for dropdownlist 'Dataset'
 	selectedDataSource: any;  //selected dataset
 	currentUserSetting: UserSetting;
+	tags: Tags[];
 	
-	constructor(private common: CommonService, public config: Config, private kanjiService: KanjiService,
+	constructor(private common: CommonService, public config: Config, private kanjiService: KanjiService, private tagService: TagsService,
 		private wordService: WordService, private dataSourceService: DataSourcesService, private setting: UserSettingService) { }
 
 	ngOnInit() {
@@ -61,7 +64,8 @@ export class TrainWordComponent implements OnInit {
 			this.getListOfDataset(),
 			this.getAllWordsDB(),
 			this.getAllKanjis(),
-			this.getUserSetting()
+			this.getUserSetting(),
+			this.getAllTags()
 		];
 		Promise.all(promises).then((result)=>{
 			//get user setting
@@ -87,6 +91,14 @@ export class TrainWordComponent implements OnInit {
 			this.viewColumns = this.getAllViewMode(); //get all view column
 			this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
 		});
+	}
+
+	/**
+	 * Handle tag selection changed
+	 * @param event event parameter
+	 */
+	onTagSelectionChangeHandler(event){
+		this.wordService.updateData([this.previousTrainingWord]).toPromise();
 	}
 
 	/**
@@ -141,6 +153,13 @@ export class TrainWordComponent implements OnInit {
 	 */
 	private async getUserSetting() {
 		this.currentUserSetting = await this.setting.getUserSetting();
+	}
+
+	/**
+	 * Get all tags
+	 */
+	private async getAllTags(){
+        this.tags = await this.tagService.getAllData();
 	}
 
 	/**

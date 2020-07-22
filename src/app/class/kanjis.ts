@@ -8,6 +8,7 @@ import { Option } from '../interface/option';
 import { CkeditorQuestion } from './questions/question-ckeditor';
 import { CallbackReturn } from '../interface/callbackReturn';
 import { CommonService } from '../services/common.service';
+import { TagsService } from '../component/data-management/tag/tags.service';
 
 export class Kanjis {
     private config: Config;
@@ -23,6 +24,7 @@ export class Kanjis {
         this.remember = (obj != null && obj.remember != null)? obj.remember : null;
         this.explain = (obj != null && obj.explain != null)? obj.explain : null;
         this.JLPTLevel = (obj != null && obj.JLPTLevel != null)? obj.JLPTLevel : null;
+        this.tags = (obj != null && obj.tags != null) ? obj.tags : null;
         this.filename = (obj != null && obj.filename != null)? obj.filename : null;
         this.trainedNumber = (obj != null && obj.trainedNumber != null)? obj.trainedNumber : 0;
         
@@ -40,6 +42,7 @@ export class Kanjis {
     remember: string;
     explain: string;
     JLPTLevel: number;
+    tags: string[];
     filename: string;
     trainedNumber: number;
     
@@ -73,7 +76,7 @@ export class Kanjis {
     /**
      * each attribute need add to question => load form
      */
-    public getQuestions(common: CommonService, config: Config, allKanjis: Kanjis[]){
+    public async getQuestions(common: CommonService, config: Config, allKanjis: Kanjis[], tagService: TagsService){
         this.common = common;
         this.config = config;
         this.allKanjis = allKanjis;
@@ -154,6 +157,24 @@ export class Kanjis {
             value: this.JLPTLevel,
             multiple: false,
             order: 70
+        }));
+
+        //set up tags question
+        let allTags = await tagService.getAllData();
+        options = [];
+        for (var i = 0; i < allTags.length; i++) {
+            options.push({
+                value: allTags[i]._id,
+                viewValue: allTags[i].name
+            });
+        }
+        questions.push(new DropdownQuestion({
+            key: 'tags',
+            label: 'Tags',
+            options: options,
+            multiple: true,
+            value: this.tags,
+            order: 75
         }));
 
         //set up meaning question
