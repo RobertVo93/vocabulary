@@ -9,11 +9,14 @@ import { CkeditorQuestion } from './questions/question-ckeditor';
 import { CallbackReturn } from '../interface/callbackReturn';
 import { CommonService } from '../services/common.service';
 import { TagsService } from '../component/data-management/tag/tags.service';
+import { HTMLViewerQuestion } from './questions/question-htmlviewer';
+import { Words } from './words';
 
 export class Kanjis {
     private config: Config;
     private common: CommonService;
     private allKanjis: Kanjis[];
+    private allWords: Words[];
     constructor(obj?){
         this._id = (obj != null && obj._id != null)? obj._id : null;
         this.word = (obj != null && obj.word != null)? obj.word : null;
@@ -25,6 +28,7 @@ export class Kanjis {
         this.explain = (obj != null && obj.explain != null)? obj.explain : null;
         this.JLPTLevel = (obj != null && obj.JLPTLevel != null)? obj.JLPTLevel : null;
         this.tags = (obj != null && obj.tags != null) ? obj.tags : null;
+        this.relatedWords = (obj != null && obj.relatedWords != null) ? obj.relatedWords : null;
         this.filename = (obj != null && obj.filename != null)? obj.filename : null;
         this.trainedNumber = (obj != null && obj.trainedNumber != null)? obj.trainedNumber : 0;
         
@@ -45,6 +49,7 @@ export class Kanjis {
     tags: string[];
     filename: string;
     trainedNumber: number;
+    relatedWords: string;
     
     createdBy: string;
     createdDate: Date;
@@ -56,19 +61,54 @@ export class Kanjis {
     /**
      * Update KanjiExplain when add kanji
      */
+    private callbackKanjiExplainUpdate(): CallbackReturn {
+        let kanji = arguments[0];
+        let result:CallbackReturn = {
+            targetField: 'kanji',
+            value: ''
+        };
+        if(kanji){
+            for(var i = 0; i < kanji.length; i++){
+                if(this.common.isKanji(kanji[i])){
+                    result.value = kanji[i];
+                    break;
+                }
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Update related words appropriate with the kanji
+     */
     private callbackKanjiUpdate(): CallbackReturn {
         let kanji = arguments[0];
-        if(!kanji)
-            return;
-        let result:CallbackReturn;
-        for(var i = 0; i < kanji.length; i++){
-            if(this.common.isKanji(kanji[i])){
-                result = {
-                    targetField: 'kanji',
-                    value: kanji[i]
-                };
-                break;
-            }
+        let result:CallbackReturn = {
+            targetField: 'relatedWords',
+            value: ''
+        };;
+        if(kanji){
+            let relatedWordsTableHTML = `
+            <table style="background-color:rgb(255, 255, 255);border-left:1px solid rgb(239, 238, 238);border-right:1px solid rgb(239, 238, 238);">
+                <tbody>
+                ${
+                    this.allWords.filter((val)=>{
+                        return val.kanji.indexOf(kanji) != -1;
+                    }).map((value)=> (
+                    `
+                    <tr>
+                        <td style="border-right:1px solid rgb(239, 238, 238);border-top:1px solid rgb(221, 221, 221);padding:4px !important;vertical-align:top;width:183.333px;">${value.kanji}</td>
+                        <td style="border-right:1px solid rgb(239, 238, 238);border-top:1px solid rgb(221, 221, 221);padding:4px !important;vertical-align:top;width:183.333px;">${value.word}</td>
+                        <td style="border-right:1px solid rgb(239, 238, 238);border-top:1px solid rgb(221, 221, 221);padding:4px !important;vertical-align:top;width:183.333px;">${value.chinaMeaning}</td>
+                        <td style="border-top:1px solid rgb(221, 221, 221);padding:4px !important;vertical-align:top;width:183.333px;">${value.meaning}</td>
+                    </tr>
+                    `
+                    ))
+                }
+                </tbody>
+            </table>`;
+        result.value = relatedWordsTableHTML;
         }
         return result;
     }
@@ -76,10 +116,11 @@ export class Kanjis {
     /**
      * each attribute need add to question => load form
      */
-    public async getQuestions(common: CommonService, config: Config, allKanjis: Kanjis[], tagService: TagsService){
+    public async getQuestions(common: CommonService, config: Config, allKanjis: Kanjis[], tagService: TagsService, allWords: Words[]){
         this.common = common;
         this.config = config;
         this.allKanjis = allKanjis;
+        this.allWords = allWords;
         let questions: QuestionBase<string>[] = [];
         //set up word question
         let validators = {};
@@ -126,17 +167,18 @@ export class Kanjis {
             label: 'Explain Kanji',
             value: this.explain,
             order: 60,
-            changeHandlerCallbackFunction: this.callbackKanjiUpdate.bind(this)
+            changeHandlerCallbackFunction: this.callbackKanjiExplainUpdate.bind(this)
         }));
 
         //set up Kanji explain question
         questions.push(new TextboxQuestion({
             key: 'kanji',
             label: 'Kanji',
-            value: this.common.getKanjiExplain(this.kanji, this.allKanjis),
+            value: this.kanji,
             rows: 10,
             order: 65,
-            readonly: true
+            readonly: true,
+            changeHandlerCallbackFunction: this.callbackKanjiUpdate.bind(this)
         }));
 
         let options:Option[] = [];
@@ -189,6 +231,15 @@ export class Kanjis {
             value: this.filename,
             validators: validators,
             order: 80
+        }));
+
+        //set up Related Words question
+        questions.push(new HTMLViewerQuestion({
+            key: 'relatedWords',
+            label: 'Related Words',
+            value: this.relatedWords,
+            order: 90,
+            readonly: true
         }));
 
         return of(questions.sort((a, b) => a.order - b.order));

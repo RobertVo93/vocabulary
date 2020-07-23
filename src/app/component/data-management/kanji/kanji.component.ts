@@ -11,6 +11,8 @@ import { AlertService } from 'src/app/services/alert.service';
 import { UserSetting } from 'src/app/class/userSetting';
 import { UserSettingService } from 'src/app/services/user-setting.service';
 import { TagsService } from '../tag/tags.service';
+import { Words } from 'src/app/class/words';
+import { WordService } from '../word/word.service';
 
 @Component({
 	selector: 'app-kanji',
@@ -30,17 +32,19 @@ export class KanjiComponent implements OnInit {
 	selection;
 	pageSizeOptions: number[];          //list of page size option
 	allOriginalKanji: Kanjis[];					//all original kanji
-	currentUserSetting: UserSetting;
+	currentUserSetting: UserSetting;	//user setting
+	allWords: Words[];					//all current words
 	
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
 	constructor(public config: Config, public common: CommonService, private setting: UserSettingService, private tagService: TagsService, 
-		public service: KanjiService, public dialog: MatDialog, private alertService: AlertService) { }
+		public service: KanjiService, public dialog: MatDialog, private alertService: AlertService, private wordService: WordService) { }
 
 	ngOnInit() {
 		this.serverImagesURL = this.config.apiServiceURL.images;
 		let promises = [
 			this.getAllData(),
+			this.getAllWords(),
 			this.getUserSetting()
 		];
 		Promise.all(promises).then(()=> {
@@ -156,6 +160,38 @@ export class KanjiComponent implements OnInit {
 	 */
 	onDisableAction(action){
 		return this.common.getActionOptionDisabled(action, this.selection._selected);
+	}
+
+	/**
+	 * Update related words
+	 */
+	onUpdateRelatedWords(){
+		this.allOriginalKanji.forEach((kanji, index)=> {
+			let filteredWord = this.allWords.filter((val)=>{
+				return val.kanji.indexOf(kanji.kanji) != -1;
+			});
+			if(filteredWord.length != 0){
+				let relatedWordsTableHTML = `
+				<table style="background-color:rgb(255, 255, 255);border-left:1px solid rgb(239, 238, 238);border-right:1px solid rgb(239, 238, 238);">
+					<tbody>
+					${
+						filteredWord.map((value)=> (
+						`
+						<tr>
+							<td style="border-right:1px solid rgb(239, 238, 238);border-top:1px solid rgb(221, 221, 221);padding:4px !important;vertical-align:top;width:183.333px;">${value.kanji}</td>
+							<td style="border-right:1px solid rgb(239, 238, 238);border-top:1px solid rgb(221, 221, 221);padding:4px !important;vertical-align:top;width:183.333px;">${value.word}</td>
+							<td style="border-right:1px solid rgb(239, 238, 238);border-top:1px solid rgb(221, 221, 221);padding:4px !important;vertical-align:top;width:183.333px;">${value.chinaMeaning}</td>
+							<td style="border-top:1px solid rgb(221, 221, 221);padding:4px !important;vertical-align:top;width:183.333px;">${value.meaning}</td>
+						</tr>
+						`
+						))
+					}
+					</tbody>
+				</table>`;
+				kanji.relatedWords = relatedWordsTableHTML;
+			}
+		});
+		this.service.updateData(this.allOriginalKanji).toPromise();
 	}
 
 	/**
@@ -280,6 +316,13 @@ export class KanjiComponent implements OnInit {
 	}
 
 	/**
+	 * get all words
+	 */
+	private async getAllWords() {
+		this.allWords = await this.wordService.getAllData();
+	}
+
+	/**
 	 * Get user setting
 	 */
 	private async getUserSetting() {
@@ -291,7 +334,7 @@ export class KanjiComponent implements OnInit {
 	 */
 	private async createNew() {
 		let data = new Kanjis();
-		let questions = await data.getQuestions(this.common, this.config, this.allOriginalKanji, this.tagService);
+		let questions = await data.getQuestions(this.common, this.config, this.allOriginalKanji, this.tagService, this.allWords);
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
 			width: '80vw',
 			data: {
@@ -336,7 +379,7 @@ export class KanjiComponent implements OnInit {
 	 */
 	private async editRecord(){
 		let data = new Kanjis(this.selection._selected[0]);
-		let questions = await data.getQuestions(this.common, this.config, this.allOriginalKanji, this.tagService);
+		let questions = await data.getQuestions(this.common, this.config, this.allOriginalKanji, this.tagService, this.allWords);
 		const dialogRef = this.dialog.open(CommonDialogComponent, {
 			width: '80vw',
 			data: { 

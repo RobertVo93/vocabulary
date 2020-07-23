@@ -26,6 +26,11 @@ export class DynamicFormComponent implements OnInit {
 		//handle callback function
 		for(let i = 0; i < this.questions.length; i++){
 			if(this.questions[i].changeHandlerCallbackFunction){
+				//init value when after loading
+				setTimeout(()=>{
+					var result = <CallbackReturn>this.questions[i].changeHandlerCallbackFunction(this.questions[i].value);
+					this.form.get(result.targetField).setValue(result.value);
+				});
 				this.form.get(this.questions[i].key).valueChanges.subscribe(val => {
 					if(!val)
 						return;

@@ -77,14 +77,13 @@
             <img height="100" [attr.title]="previousTrainingKanji.fullName" src="{{serverImagesURL}}/{{previousTrainingKanji.filename}}" class="details-image row" />
             <div *ngIf="previousTrainingKanji.explain" align="left" class="pl10">
                 <div class="ck-editor__main" [innerHTML]="previousTrainingKanji.explain | safeHtml"></div>
-                <label class="fs20">remember method: <span class="red">{{previousTrainingKanji.remember}}</span></label>
             </div>
             <div *ngIf="!previousTrainingKanji.explain" align="left" class="pl10">
                 <label class="fs20">Chinese: {{previousTrainingKanji.word}}</label><br />
-                <label class="fs20">meaning: {{previousTrainingKanji.word}} -
-                    {{previousTrainingKanji.meaning}}</label><br />
-                <label class="fs20">remember method: <span class="red">{{previousTrainingKanji.remember}}</span></label>
+                <label class="fs20">meaning: {{previousTrainingKanji.word}} - {{previousTrainingKanji.meaning}}</label><br />
             </div>
+            <label class="fs20">remember: <span class="red">{{previousTrainingKanji.remember}}</span></label><br />
+            <div class="related-word-div" [innerHTML]="previousTrainingKanji.relatedWords | safeHtml"></div>
         </div>
     </div>
 </div>

@@ -50,6 +50,10 @@
     background: #fff;
 }
 
+.related-word-div {
+    padding: 10px;
+}
+
 .mat-cell {
     text-align: left;
 }
