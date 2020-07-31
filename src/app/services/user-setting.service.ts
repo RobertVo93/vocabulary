@@ -25,49 +25,30 @@ export class UserSettingService {
 	 * Get user setting
 	 */
 	async getUserSetting() {
-		var result;
-		let setting = await this.getAllData();
 		let currentUser = this.authService.currentUserValue;
-		for(var i = 0; i < setting.length; i++){
-			if(setting[i].userId == currentUser._id){
-				result = setting[i];
-				break;
+		var result = JSON.parse(localStorage.getItem(`${this.config.storageKey.userSetting}_${currentUser._id}`));
+		if(result == null){
+			let setting = await this.getAllData();
+			for(var i = 0; i < setting.length; i++){
+				if(setting[i].userId == currentUser._id){
+					result = setting[i];
+					localStorage.setItem(`${this.config.storageKey.userSetting}_${currentUser._id}`, JSON.stringify(result));
+					break;
+				}
 			}
 		}
 		return result;
 	}
 
 	/**
-	 * Get data by id
-	 * @param id data's id
-	 */
-	getDataById(id: number) {
-		const url = `${this.serverURL}/${id}`;
-		return this.apiService.get(this.serverURL);
-	}
-
-	/**
-	 * Create new data
-	 * @param data data's data
-	 */
-	createData<T>(data: T) {
-		return this.apiService.post(data, this.serverURL);
-	}
-
-	/**
 	 * Update the existed data
 	 * @param data data's data
 	 */
-	updateData<T>(data: T[]) {
-		return this.apiService.update(data, this.serverURL);
-	}
-
-	/**
-	 * delete data
-	 * @param data list of deleted records
-	 */
-	deleteBulkData<T>(data: T[]) {
-		return this.apiService.deleteBulk(data, this.serverURL);
+	updateData(data: any[]) {
+		if(data.length == 1){
+			let currentUser = this.authService.currentUserValue;
+			localStorage.setItem(`${this.config.storageKey.userSetting}_${currentUser._id}`, JSON.stringify(data[0]));
+		}
 	}
 
 	/**

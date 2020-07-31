@@ -29,7 +29,7 @@ export class TrainGrammarComponent implements OnInit {
 	//data variables
 	filteredTags: Option[];				//list of filtered tags options
 	tagOptions: Option[];						//list of tags options
-	originalGrammarData: Grammars[];	
+	originalGrammarData: Grammars[];
 	allGrammarData: Grammars[];          //all filtered Grammar data
 	grammarData: Grammars[];             //selected Grammar data
 	trainingGrammar: Grammars;           //the current training Grammar
@@ -41,7 +41,7 @@ export class TrainGrammarComponent implements OnInit {
 	ranges: Option[];               //all ranges test
 	currentUserSetting: UserSetting;
 
-	constructor(private common: CommonService, private config: Config, private setting: UserSettingService, 
+	constructor(private common: CommonService, private config: Config, private setting: UserSettingService,
 		private GrammarService: GrammarService, private tagService: TagsService) { }
 
 	ngOnInit() {
@@ -66,7 +66,7 @@ export class TrainGrammarComponent implements OnInit {
 	 * Handle tag selection changed
 	 * @param event event parameter
 	 */
-	onTagSelectionChangeHandler(event){
+	onTagSelectionChangeHandler(event) {
 		this.GrammarService.updateData([this.trainingGrammar]).toPromise();
 	}
 
@@ -90,7 +90,7 @@ export class TrainGrammarComponent implements OnInit {
 			}
 			this.numberOfRandomGrammar = 0;
 			this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.grammarTrain, this.config.userSettingKey.selectedPartitions, this.selectedRanges);
-			this.setting.updateData([this.currentUserSetting]).toPromise();
+			this.setting.updateData([this.currentUserSetting]);
 		}//get list of training Grammars
 		this.reloadPage();
 	}
@@ -101,10 +101,8 @@ export class TrainGrammarComponent implements OnInit {
 	 */
 	onTagChangeHandler(event) {
 		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.grammarTrain, this.config.userSettingKey.selectedTags, this.selectedTags);
-		this.setting.updateData([this.currentUserSetting]).subscribe(()=> {
-			this.updateGrammarOnSelectedTags(this.selectedTags);
-		});
-		
+		this.setting.updateData([this.currentUserSetting]);
+		this.updateGrammarOnSelectedTags(this.selectedTags);
 	}
 
 	/**
@@ -118,7 +116,7 @@ export class TrainGrammarComponent implements OnInit {
 	/**
 	 * Handle reset trained number
 	 */
-	onResetTrainedNumber(){
+	onResetTrainedNumber() {
 		this.GrammarService.setTrainedNumber([]).toPromise();
 	}
 
@@ -130,7 +128,7 @@ export class TrainGrammarComponent implements OnInit {
 		this.allGrammarData = this.getTrainingGrammarBySelectedTags(selectedTags);
 		this.ranges = this.getAllRange(selectedPartitions);
 	}
-	
+
 	/**
 	 * get Grammars data source
 	 * @param datasetId dataset Id
@@ -176,10 +174,10 @@ export class TrainGrammarComponent implements OnInit {
 			positions.push({ value: i, viewValue: i.toString() })
 		}
 		this.selectedRanges = selectedPartitions
-				? selectedPartitions
-				: [positions.length - 1];
+			? selectedPartitions
+			: [positions.length - 1];
 		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.grammarTrain, this.config.userSettingKey.selectedPartitions, this.selectedRanges);
-		this.setting.updateData([this.currentUserSetting]).toPromise();
+		this.setting.updateData([this.currentUserSetting]);
 		this.reloadPage();
 		return positions;
 	}

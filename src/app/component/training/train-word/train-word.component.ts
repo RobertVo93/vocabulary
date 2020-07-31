@@ -54,7 +54,7 @@ export class TrainWordComponent implements OnInit {
 	selectedDataSource: any;  //selected dataset
 	currentUserSetting: UserSetting;
 	tags: Tags[];
-	
+
 	constructor(private common: CommonService, public config: Config, private kanjiService: KanjiService, private tagService: TagsService,
 		private wordService: WordService, private dataSourceService: DataSourcesService, private setting: UserSettingService) { }
 
@@ -67,7 +67,7 @@ export class TrainWordComponent implements OnInit {
 			this.getUserSetting(),
 			this.getAllTags()
 		];
-		Promise.all(promises).then((result)=>{
+		Promise.all(promises).then((result) => {
 			//get user setting
 			let userSetting = this.common.getUserSettingForPage(this.currentUserSetting, this.config.userSettingKey.page.wordTrain);
 			this.selectedViewColumn = userSetting.selectedViewColumn
@@ -77,7 +77,7 @@ export class TrainWordComponent implements OnInit {
 					, this.config.viewColumnsDef.meaning
 				];
 			this.selectedDataSource = userSetting.selectedDatasource
-				? userSetting.selectedDatasource 
+				? userSetting.selectedDatasource
 				: (this.dataset.length != 0)
 					? this.dataset[0].value
 					: 0;
@@ -97,7 +97,7 @@ export class TrainWordComponent implements OnInit {
 	 * Handle tag selection changed
 	 * @param event event parameter
 	 */
-	onTagSelectionChangeHandler(event){
+	onTagSelectionChangeHandler(event) {
 		this.wordService.updateData([this.previousTrainingWord]).toPromise();
 	}
 
@@ -105,9 +105,9 @@ export class TrainWordComponent implements OnInit {
 	 * Handle event change dropdown list training mode
 	 * @param event event parameter
 	 */
-	onTrainingModeChangeHandler(event){
+	onTrainingModeChangeHandler(event) {
 		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedTrainingMode, this.selectedTestMode);
-		this.setting.updateData([this.currentUserSetting]).toPromise();
+		this.setting.updateData([this.currentUserSetting]);
 	}
 
 	/**
@@ -116,34 +116,33 @@ export class TrainWordComponent implements OnInit {
 	 */
 	onChangeHandler(event) {
 		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedDatasource, this.selectedDataSource);
-		this.setting.updateData([this.currentUserSetting]).subscribe(()=> {
-			this.updateDataBaseOnSelectedDataset(this.selectedDataSource);
-		});
+		this.setting.updateData([this.currentUserSetting]);
+		this.updateDataBaseOnSelectedDataset(this.selectedDataSource);
 	}
 
 	/**
 	 * Handle reset trained number
 	 */
-	onResetTrainedNumber(){
+	onResetTrainedNumber() {
 		this.wordService.setTrainedNumber([]).toPromise();
 	}
 
 	/**
 	 * Get all word in db
 	 */
-	async getAllWordsDB(){
+	async getAllWordsDB() {
 		let dataConverted = await this.wordService.getAllData();
 		if (dataConverted) {
 			this.allWordDataInDB = dataConverted;
 		}
 	}
-	
+
 	/**
 	 * get all kanjis
 	 */
-	private async getAllKanjis(){
+	private async getAllKanjis() {
 		let dataConverted = await this.kanjiService.getAllData();
-		if(dataConverted){
+		if (dataConverted) {
 			this.kanjis = dataConverted;
 		}
 	}
@@ -158,18 +157,18 @@ export class TrainWordComponent implements OnInit {
 	/**
 	 * Get all tags
 	 */
-	private async getAllTags(){
-        this.tags = await this.tagService.getAllData();
+	private async getAllTags() {
+		this.tags = await this.tagService.getAllData();
 	}
 
 	/**
 	 * Get all dataset
 	 */
 	async getListOfDataset() {
-		let result:Option[] = [];
+		let result: Option[] = [];
 		let ds = await this.dataSourceService.getAllData();
-		if(ds){
-			for(var i = 0; i < ds.length; i++){
+		if (ds) {
+			for (var i = 0; i < ds.length; i++) {
 				result.push({
 					value: ds[i]._id,
 					viewValue: ds[i].name
@@ -195,7 +194,7 @@ export class TrainWordComponent implements OnInit {
 	onViewModeChangeHandler(event) {
 		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get display column
 		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedViewColumn, this.selectedViewColumn);
-		this.setting.updateData([this.currentUserSetting]).toPromise();
+		this.setting.updateData([this.currentUserSetting]);
 	}
 
 	/**
@@ -218,10 +217,10 @@ export class TrainWordComponent implements OnInit {
 	/**
 	 * get kanji detail by kanji_id
 	 */
-	private updateKanjiExplain(){
+	private updateKanjiExplain() {
 		this.allWordDataInDB.forEach(ele => {
 			var kanjiExplain = this.common.clone(ele.kanjiExplain);
-			if(typeof(kanjiExplain) === 'object'){	//array
+			if (typeof (kanjiExplain) === 'object') {	//array
 				ele.kanjiExplain = '';
 				kanjiExplain.forEach(element => {
 					ele.kanjiExplain += '\r\n' + this.getKanjiDetailById(element);
@@ -234,10 +233,10 @@ export class TrainWordComponent implements OnInit {
 	 * Get kanj by id
 	 * @param kanjiId kanji _id
 	 */
-	private getKanjiDetailById(kanjiId){
+	private getKanjiDetailById(kanjiId) {
 		let result = '';
-		for(var i = 0; i < this.kanjis.length; i++){
-			if(this.kanjis[i]._id == kanjiId){
+		for (var i = 0; i < this.kanjis.length; i++) {
+			if (this.kanjis[i]._id == kanjiId) {
 				result = this.kanjis[i].explain;
 				break;
 			}
@@ -299,12 +298,12 @@ export class TrainWordComponent implements OnInit {
 			this.numberOfRandomWords = parseInt(value);
 		}
 		else {
-			if(this.selectedRanges[0] == 0 && this.selectedRanges.length == 2){
+			if (this.selectedRanges[0] == 0 && this.selectedRanges.length == 2) {
 				this.selectedRanges = [this.selectedRanges[1]];
 			}
 			this.numberOfRandomWords = 0;
 			this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedPartitions, this.selectedRanges);
-			this.setting.updateData([this.currentUserSetting]).toPromise();
+			this.setting.updateData([this.currentUserSetting]);
 		}//get list of training words
 		this.reloadPage();
 	}
@@ -365,10 +364,10 @@ export class TrainWordComponent implements OnInit {
 			positions.push({ value: i, viewValue: i.toString() })
 		}
 		this.selectedRanges = selectedPartitions
-				? selectedPartitions
-				: [positions.length - 1];
+			? selectedPartitions
+			: [positions.length - 1];
 		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedPartitions, this.selectedRanges);
-		this.setting.updateData([this.currentUserSetting]).toPromise();
+		this.setting.updateData([this.currentUserSetting]);
 		this.reloadPage();
 		return positions;
 	}
@@ -465,7 +464,7 @@ export class TrainWordComponent implements OnInit {
 		//random new word
 		if (this.isLastWord) {
 			this.isLastWord = false;
-			if(this.trainingWord){
+			if (this.trainingWord) {
 				alert("Finish work. Stop typing");
 				this.wordService.setTrainedNumber(this.wordData).toPromise();
 				this.refreshPage();

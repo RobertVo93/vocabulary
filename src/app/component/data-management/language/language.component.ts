@@ -71,7 +71,7 @@ export class LanguageComponent implements OnInit {
 		if ((event.which == 13 || event.code == "Enter") && this.searchWord != null) {
 			this.dataSource.filter = this.searchWord.trim().toLowerCase();
 			this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.languageManagement, this.config.userSettingKey.searchWord, this.searchWord);
-			this.setting.updateData([this.currentUserSetting]).toPromise();
+			this.setting.updateData([this.currentUserSetting]);
 		}
 	}
 
@@ -82,7 +82,7 @@ export class LanguageComponent implements OnInit {
 	onViewModeChangeHandler(event) {
 		this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get display column
 		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.languageManagement, this.config.userSettingKey.selectedViewColumn, this.selectedViewColumn);
-		this.setting.updateData([this.currentUserSetting]).toPromise();
+		this.setting.updateData([this.currentUserSetting]);
 	}
 
 	/**

@@ -287,4 +287,8 @@ export class Config {
             grammarTrain: 'grammarTrain'
         }
     }
+
+    storageKey = {
+        userSetting:'USER_SETTING'
+    }
 }
