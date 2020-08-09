@@ -417,18 +417,7 @@ export class WordComponent implements OnInit {
 				result.record.kanjiExplain = this.common.getKanjiIds(result.record.kanji, this.kanjis);
 				this.service.createData([result.record]).subscribe(
 					(res) => {
-						this.dialog.open(CommonDialogComponent, {
-							width: '300px',
-							data: {
-								title: this.config.commonMessage.notification
-								, message: this.config.commonMessage.createSuccessfull
-								, action: {
-									ok: true
-								}
-							}
-						}).afterClosed().subscribe(response => {
-							location.reload();
-						});
+						location.reload();
 					},
 					(err) => {
 						this.alertService.error(this.config.commonMessage.createError);
@@ -525,19 +514,7 @@ export class WordComponent implements OnInit {
 			if (result != null && result.returnAction == this.config.returnAction.delete) {
 				this.service.deleteBulkData(this.selection._selected).subscribe(
 					(res) => {
-						console.log(res);
-						this.dialog.open(CommonDialogComponent, {
-							width: '300px',
-							data: {
-								title: this.config.commonMessage.notification
-								, message: this.config.commonMessage.deleteSuccessfull
-								, action: {
-									ok: true
-								}
-							}
-						}).afterClosed().subscribe(response => {
-							location.reload();
-						});
+						location.reload();
 					},
 					(err) => {
 						this.alertService.error(this.config.commonMessage.deleteError);

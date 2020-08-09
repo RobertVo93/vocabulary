@@ -353,18 +353,7 @@ export class KanjiComponent implements OnInit {
 			if (result != null && result.returnAction == this.config.returnAction.save) {
 				this.service.createData([result.record]).subscribe(
 					(res) => {
-						this.dialog.open(CommonDialogComponent, {
-							width: '300px',
-							data: {
-								title: this.config.commonMessage.notification
-								, message: this.config.commonMessage.createSuccessfull
-								, action: {
-									ok: true
-								}
-							}
-						}).afterClosed().subscribe(response => {
-							location.reload();
-						});
+						location.reload();
 					},
 					(err) => {
 						this.alertService.error(this.config.commonMessage.createError);
@@ -460,19 +449,7 @@ export class KanjiComponent implements OnInit {
 			if (result != null && result.returnAction == this.config.returnAction.delete) {
 				this.service.deleteBulkData(this.selection._selected).subscribe(
 					(res) => {
-						console.log(res);
-						this.dialog.open(CommonDialogComponent, {
-							width: '300px',
-							data: {
-								title: this.config.commonMessage.notification
-								, message: this.config.commonMessage.deleteSuccessfull
-								, action: {
-									ok: true
-								}
-							}
-						}).afterClosed().subscribe(response => {
-							location.reload();
-						});
+						location.reload();
 					},
 					(err) => {
 						this.alertService.error(this.config.commonMessage.deleteError);
@@ -508,18 +485,7 @@ export class KanjiComponent implements OnInit {
 		}
 		this.service.createData(dbData).subscribe(
 			(res) => {
-				this.dialog.open(CommonDialogComponent, {
-					width: '300px',
-					data: {
-						title: this.config.commonMessage.notification
-						, message: this.config.commonMessage.createSuccessfull
-						, action: {
-							ok: true
-						}
-					}
-				}).afterClosed().subscribe(response => {
-					location.reload();
-				});
+				location.reload();
 			},
 			(err) => {
 				console.log(err);
