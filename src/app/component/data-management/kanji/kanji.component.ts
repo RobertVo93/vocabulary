@@ -163,6 +163,23 @@ export class KanjiComponent implements OnInit {
 	}
 
 	/**
+	 * Get all updated data in DB
+	 */
+	async onGetUpdatedData(){
+		let dataConverted = await this.service.forceGetAllDataBase();
+		if (dataConverted) {
+			this.allOriginalKanji = dataConverted;
+			this.dataSource = new MatTableDataSource<Kanjis>(dataConverted);
+			this.dataSource.paginator = this.paginator;
+			this.dataSource.sort = this.sort;
+			this.pageSizeOptions = [20, 50, 100];
+			if (this.dataSource.data.length > 100) {
+				this.pageSizeOptions.push(this.dataSource.data.length);
+			}
+		}
+	}
+
+	/**
 	 * Update related words
 	 */
 	onUpdateRelatedWords(){

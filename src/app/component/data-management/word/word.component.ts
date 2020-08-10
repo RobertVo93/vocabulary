@@ -181,6 +181,16 @@ export class WordComponent implements OnInit {
 	}
 
 	/**
+	 * Get all updated data in DB
+	 */
+	async onGetUpdatedData(){
+		let dataConverted = await this.service.forceGetAllDataBase();
+		if (dataConverted) {
+			this.dataSourceAll = dataConverted
+		}
+	}
+
+	/**
 	 * Get all words by selected data source
 	 * @param source_id data source _id
 	 */

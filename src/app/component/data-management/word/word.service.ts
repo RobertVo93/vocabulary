@@ -21,6 +21,14 @@ export class WordService {
 	}
 
 	/**
+	 * Get all data
+	 */
+	async forceGetAllDataBase() {
+		let result = await this.apiService.get(`${this.serverURL}/new`).toPromise();
+		return this.convertListData(result);
+	}
+
+	/**
 	 * Get data by id
 	 * @param id data's id
 	 */
