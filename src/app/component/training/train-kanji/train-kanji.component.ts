@@ -9,7 +9,9 @@ import { UserSetting } from 'src/app/class/userSetting';
 import { UserSettingService } from 'src/app/services/user-setting.service';
 import { Tags } from 'src/app/class/tags';
 import { TagsService } from '../../data-management/tag/tags.service';
+import { KeyValue } from '@angular/common';
 
+const numberOfCard = 4;	//Define the number of training card
 
 @Component({
 	selector: 'app-train-kanji',
@@ -24,6 +26,7 @@ export class TrainKanjiComponent implements OnInit {
 	inputKanji: string = '';                  //current training kanji input by user
 	numberOfRandomKanji: number = 0;          //set number of random Kanji input by user
 	selectedKanjiLevel: number = 0;            //selected kanji level
+	isFastReview: boolean = false;				//flag check fast review or not
 
 	//display varibles
 	inputColor: string = this.config.color.blue;  //color for input text
@@ -47,6 +50,7 @@ export class TrainKanjiComponent implements OnInit {
 	kanjiLevels: Option[];    //option for dropdownlist 'level'
 	currentUserSetting: UserSetting;
 	tags: Tags[];
+	cards: KeyValue<string, string>[] = [];
 
 	//flag
 	isAutoNext: boolean = false; //auto next kanji flag
@@ -76,6 +80,14 @@ export class TrainKanjiComponent implements OnInit {
 			this.testModes = this.getAllTestMode(); //get test mode
 			this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel, userSetting.selectedPartitions);
 		});
+	}
+
+	/**
+	 * Handle when user click on a card
+	 * @param value value of card
+	 */
+	onCardSelected(value: string) {
+		this.compareCardSelection(value);
 	}
 
 	/**
@@ -318,6 +330,9 @@ export class TrainKanjiComponent implements OnInit {
 		}
 		this.previousTrainingKanji = this.common.clone(this.trainingKanji);
 		this.trainingKanji = this.common.clone(this.nextTrainingKanji);
+		//generate card list for selection
+		this.cards = this.buildListCards(numberOfCard, this.trainingKanji, this.common.clone(this.kanjiData));
+
 		if (this.listIndexKanji.length != 0) {
 			this.nextTrainingKanji = this.randomNewKanji();
 		}
@@ -365,6 +380,58 @@ export class TrainKanjiComponent implements OnInit {
 			this.kanjiData[i].rowColor = null;
 		}
 		this.processNewKanji();  //process the first element for testing
+	}
+
+	/**
+	 * Get all cards to show on selection mode
+	 * @param noCard number of cards need to generate
+	 * @param targetCard the card contain the right kanji for training
+	 * @param listAllCards all cards need to be trained
+	 */
+	private buildListCards(noCard: number, targetCard: Kanjis, listAllCards: Kanjis[]): KeyValue<string, string>[] {
+		//if there is no target card => no need to build list choices
+		if (!targetCard)
+			return;
+
+		let random: any = this.common.random(listAllCards.length);
+		//initial the return value with the right kanji
+		let result: KeyValue<string, string>[] = [{
+			key: random,
+			value: targetCard.word
+		}];
+		//add random kanji for trainer to select
+		for (let i = 1; i < noCard; i++) {
+			random = this.common.random(listAllCards.length);
+			let card = listAllCards[random];
+			//just add new kanji that different from the target kanji to card list
+			if (targetCard._id != card._id) {
+				result.push({
+					key: random,
+					value: card.word
+				});
+			}
+			else {
+				i--;
+			}
+			listAllCards.splice(random, 1);
+		}
+		return result.sort((a, b) => parseInt(a.key) - parseInt(b.key));
+	}
+
+	/**
+	 * Compare the selected card with the training kanji
+	 * @param value selected card
+	 */
+	private compareCardSelection(value: string) {
+		let isTheSame: boolean = this.common.compareInputKanjiWithTraining(value, this.trainingKanji, this.selectedTestMode);
+		//if input kanji not map any kanji available in data base => alert
+		if (!isTheSame) {
+			alert(`[${value}] is not correct`);
+		}
+		else {
+			this.trained++;
+			this.processNewKanji();
+		}
 	}
 
 	/**

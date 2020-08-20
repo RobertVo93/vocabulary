@@ -12,6 +12,9 @@ import { UserSetting } from 'src/app/class/userSetting';
 import { UserSettingService } from 'src/app/services/user-setting.service';
 import { TagsService } from '../../data-management/tag/tags.service';
 import { Tags } from 'src/app/class/tags';
+import { KeyValue } from '@angular/common';
+
+const numberOfCard = 4;	//Define the number of training card
 
 @Component({
 	selector: 'app-train-word',
@@ -44,6 +47,7 @@ export class TrainWordComponent implements OnInit {
 	nextTrainingWordIndex: number;  //the next index of current training word.
 	inputColor: string = this.config.color.blue;  //color for input text
 	isLastWord: boolean = false;   //check the training word is the last word
+	isFastReview: boolean = false;				//flag check fast review or not
 
 	wordEnum = WordEnum;  //use for checking condition in html page
 	viewColumns: Option[];  //list of column could be viewed
@@ -54,6 +58,7 @@ export class TrainWordComponent implements OnInit {
 	selectedDataSource: any;  //selected dataset
 	currentUserSetting: UserSetting;
 	tags: Tags[];
+	cards: KeyValue<string, string>[] = [];
 
 	constructor(private common: CommonService, public config: Config, private kanjiService: KanjiService, private tagService: TagsService,
 		private wordService: WordService, private dataSourceService: DataSourcesService, private setting: UserSettingService) { }
@@ -91,6 +96,14 @@ export class TrainWordComponent implements OnInit {
 			this.viewColumns = this.getAllViewMode(); //get all view column
 			this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
 		});
+	}
+
+	/**
+	 * Handle when user click on a card
+	 * @param value value of card
+	 */
+	onCardSelected(value: string) {
+		this.compareCardSelection(value);
 	}
 
 	/**
@@ -166,6 +179,7 @@ export class TrainWordComponent implements OnInit {
 	 */
 	async getListOfDataset() {
 		let result: Option[] = [];
+		result.push({ value: -1, viewValue: this.config.defaultDropDownOptions['-1'] });
 		let ds = await this.dataSourceService.getAllData();
 		if (ds) {
 			for (var i = 0; i < ds.length; i++) {
@@ -378,7 +392,7 @@ export class TrainWordComponent implements OnInit {
 	 */
 	getWordDataWithDatasetId(datasetId: number): Words[] {
 		let result = this.allWordDataInDB.filter((ele) => {
-			return ele.dataSource == datasetId;
+			return ele.dataSource == datasetId || this.selectedDataSource == -1;
 		});
 		return result;
 	}
@@ -473,7 +487,9 @@ export class TrainWordComponent implements OnInit {
 		}
 
 		this.previousTrainingWord = this.common.clone(this.trainingWord);
-		this.trainingWord = this.common.clone(this.nextTrainingWord);
+		this.trainingWord = this.common.clone(this.nextTrainingWord);//generate card list for selection
+		this.cards = this.buildListCards(numberOfCard, this.trainingWord, this.common.clone(this.wordData));
+
 		if (this.listIndexWord.length != 0) {
 			this.nextTrainingWord = this.randomNewWord();
 		}
@@ -511,6 +527,58 @@ export class TrainWordComponent implements OnInit {
 		this.nextTrainingWord = null;
 		this.inputColor = this.config.color.blue;
 		this.trainingWord = null;
+	}
+
+	/**
+	 * Get all cards to show on selection mode
+	 * @param noCard number of cards need to generate
+	 * @param targetCard the card contain the right word for training
+	 * @param listAllCards all cards need to be trained
+	 */
+	private buildListCards(noCard: number, targetCard: Words, listAllCards: Words[]): KeyValue<string, string>[] {
+		//if there is no target card => no need to build list choices
+		if (!targetCard)
+			return;
+
+		let random: any = this.common.random(listAllCards.length);
+		//initial the return value with the right word
+		let result: KeyValue<string, string>[] = [{
+			key: random,
+			value: targetCard.word
+		}];
+		//add random word for trainer to select
+		for (let i = 1; i < noCard; i++) {
+			random = this.common.random(listAllCards.length);
+			let card = listAllCards[random];
+			//just add new word that different from the target word to card list
+			if (targetCard._id != card._id) {
+				result.push({
+					key: random,
+					value: card.word
+				});
+			}
+			else {
+				i--;
+			}
+			listAllCards.splice(random, 1);
+		}
+		return result.sort((a, b) => parseInt(a.key) - parseInt(b.key));
+	}
+
+	/**
+	 * Compare the selected card with the training word
+	 * @param value selected card
+	 */
+	private compareCardSelection(value: string) {
+		let isTheSame: boolean = this.common.compareInputWordWithTraining(value, this.trainingWord, this.selectedTestMode);
+		//if input word not map any word available in data base => alert
+		if (!isTheSame) {
+			alert(`[${value}] is not correct`);
+		}
+		else {
+			this.trainedNO++;
+			this.processNewWord();
+		}
 	}
 
 	/**

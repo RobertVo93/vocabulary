@@ -36,13 +36,20 @@
                 <label class='fs40'>{{trainingWord.kanji}}</label>
             </div>
         </div>
+        <div class="training-container">
+            <div class="normal-training" [hidden]="isFastReview">
+                <mat-form-field class="example-full-width">
+                    <textarea matInput [ngClass]='inputColor' id="inputWordId" (keyup)='onKeyUpInput($event)' placeholder="Input word" [(ngModel)]='inputWord' i18n-placeholder="@@inputWord"></textarea>
+                </mat-form-field>
+                <button class="button-border ml20" mat-button (click)='onMoveNextWord()' title="Move Next">>>></button>
+            </div>
+            <div class="fast-review-training" [hidden]="!isFastReview">
+                <mat-card *ngFor="let card of cards" class="cursor-pointer card selection-card" (click)='onCardSelected(card.value)'>
+                    {{card.value}}
+                </mat-card>
+            </div>
+        </div>
 
-        <mat-form-field class="example-full-width">
-            <textarea matInput [ngClass]='inputColor' id="inputWordId" (keyup)='onKeyUpInput($event)' placeholder="Input word" [(ngModel)]='inputWord' i18n-placeholder="@@inputWord"></textarea>
-        </mat-form-field>
-        <!-- <br /> -->
-        <button class="button-border ml20" mat-button (click)='onMoveNextWord()' title="Move Next">>>></button>
-        <br />
         <div class="displayArea" *ngIf='previousTrainingWord'>
             <mat-form-field class="mt15">
                 <mat-label>Add Tag</mat-label>
@@ -96,6 +103,9 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
+        <mat-checkbox class="ml20" title="support for fast review vocabulary" [(ngModel)]="isFastReview">
+            Fast review
+        </mat-checkbox>
     </div>
 
     <div class="rightBody" align="center">

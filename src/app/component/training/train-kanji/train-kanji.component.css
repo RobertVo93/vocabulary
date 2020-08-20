@@ -79,6 +79,23 @@
     text-align: center;
 }
 
+.fast-review-training {
+    background-color: #d6d6d6;
+    margin: 15px 0px 15px 0px;
+    padding: 15px 0px 15px 0px;
+    width: 99%;
+    border-radius: 0.25rem;
+}
+
+.selection-card {
+    margin: 10px 0 10px 0;
+    width: 80%;
+}
+
+.selection-card:hover {
+    background-color: #ffa9a9;
+}
+
 @media (min-width:768px) {
     .rightBody {
         float: right;

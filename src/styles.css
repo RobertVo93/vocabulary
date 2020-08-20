@@ -29,6 +29,10 @@ body {
 
 /* margin */
 
+.mt5 {
+    margin-top: 5px !important;
+}
+
 .mt15 {
     margin-top: 15px !important;
 }
@@ -43,6 +47,14 @@ body {
 
 .ml10 {
     margin-left: 10px !important;
+}
+
+.mb15 {
+    margin-bottom: 15px !important;
+}
+
+.mb5 {
+    margin-bottom: 5px !important;
 }
 
 .mb0 {
@@ -124,6 +136,10 @@ body {
 
 .zindex10 {
     z-index: 10 !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }
 
 textarea:read-only {
