@@ -488,7 +488,7 @@ export class TrainWordComponent implements OnInit {
 
 		this.previousTrainingWord = this.common.clone(this.trainingWord);
 		this.trainingWord = this.common.clone(this.nextTrainingWord);//generate card list for selection
-		this.cards = this.buildListCards(numberOfCard, this.trainingWord, this.common.clone(this.wordData));
+		this.cards = this.buildListCards(numberOfCard, this.trainingWord, this.common.clone(this.allWordData));
 
 		if (this.listIndexWord.length != 0) {
 			this.nextTrainingWord = this.randomNewWord();
@@ -539,12 +539,27 @@ export class TrainWordComponent implements OnInit {
 		//if there is no target card => no need to build list choices
 		if (!targetCard)
 			return;
-
+		let property: string = '';
+		switch (this.selectedTestMode) {
+			case this.wordEnum.word:
+			case this.wordEnum.image:
+				property = 'word';
+				break;
+			case this.wordEnum.kanji:
+				property = 'chinaMeaning';
+				break;
+			case this.wordEnum.meaning:
+				property = 'meaning';
+				break;
+			default:
+				property = 'word';
+				break;
+		}
 		let random: any = this.common.random(listAllCards.length);
 		//initial the return value with the right word
 		let result: KeyValue<string, string>[] = [{
 			key: random,
-			value: targetCard.word
+			value: property == 'chinaMeaning' ? targetCard[property].substring(1, targetCard[property].length - 1).toLocaleLowerCase() : targetCard[property].toLocaleLowerCase()
 		}];
 		//add random word for trainer to select
 		for (let i = 1; i < noCard; i++) {
@@ -554,7 +569,7 @@ export class TrainWordComponent implements OnInit {
 			if (targetCard._id != card._id) {
 				result.push({
 					key: random,
-					value: card.word
+					value: property == 'chinaMeaning' ? card[property].substring(1, card[property].length - 1).toLocaleLowerCase() : card[property].toLocaleLowerCase()
 				});
 			}
 			else {
