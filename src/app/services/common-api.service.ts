@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -7,10 +7,18 @@ import { Observable } from 'rxjs';
 })
 export class CommonApiService {
 	private httpOptions = {
-		headers : new HttpHeaders({ 'Content-Type': 'application/json' })
+		headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 	}
-	constructor(private http: HttpClient) { 
-		
+	constructor(private http: HttpClient) {
+
+	}
+
+	/**
+	 * get the record base on provide url
+	 * @param url url
+	 */
+	getWithParams<T>(url: string, params: HttpParams): Observable<T> {
+		return this.http.get<T>(url, { params: params });
 	}
 
 	/**
@@ -57,7 +65,7 @@ export class CommonApiService {
 	 */
 	deleteBulk<T>(data: T[], url: string): Observable<T> {
 		let options = {
-			headers : new HttpHeaders({ 'Content-Type': 'application/json' }),
+			headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 			body: data
 		}
 		return this.http.delete<T>(url, options);

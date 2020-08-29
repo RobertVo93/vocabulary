@@ -1,8 +1,10 @@
 import { KanjiService } from './kanji.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {merge, fromEvent} from "rxjs";
+import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import { Option } from 'src/app/interface/option';
 import { Config } from 'src/app/configuration/config';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSelect } from '@angular/material';
+import { MatPaginator, MatSort, MatDialog, MatSelect } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CommonService } from 'src/app/services/common.service';
 import { CommonDialogComponent } from 'src/app/share-component/common-dialog/common-dialog.component';
@@ -13,13 +15,14 @@ import { UserSettingService } from 'src/app/services/user-setting.service';
 import { TagsService } from '../tag/tags.service';
 import { Words } from 'src/app/class/words';
 import { WordService } from '../word/word.service';
+import { KanjisDataSource } from 'src/app/services/mat-table/kanjis.datasource';
 
 @Component({
 	selector: 'app-kanji',
 	templateUrl: './kanji.component.html',
 	styleUrls: ['./kanji.component.css']
 })
-export class KanjiComponent implements OnInit {
+export class KanjiComponent implements OnInit, AfterViewInit {
 	searchWord: string = '';			//search keyword
 	serverImagesURL: string = '';		//url for image resources
 	kanjiLevels: Option[];				//list of kanji level from n0-n5
@@ -28,24 +31,29 @@ export class KanjiComponent implements OnInit {
 	selectedViewColumn: number[] = [];  //list of selected column to be view
 	selectedAction: number;				//selected action for selected rows
 	displayedColumns: string[];         //list of displaying column in the screen
-	dataSource;                         //data source for rendering table
 	selection;
 	pageSizeOptions: number[];          //list of page size option
 	allOriginalKanji: Kanjis[];					//all original kanji
 	currentUserSetting: UserSetting;	//user setting
 	allWords: Words[];					//all current words
-	
+	dataSources: KanjisDataSource;		//data sources for table
+	dataCount: number;					//number of kanjis
+    @ViewChild('input', { static: true }) input: ElementRef;
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
 	constructor(public config: Config, public common: CommonService, private setting: UserSettingService, private tagService: TagsService, 
 		public service: KanjiService, public dialog: MatDialog, private alertService: AlertService, private wordService: WordService) { }
 
 	ngOnInit() {
+		this.paginator.pageIndex = 0;
+		this.paginator.pageSize = 50;
+		this.dataSources = new KanjisDataSource(this.service);
 		this.serverImagesURL = this.config.apiServiceURL.images;
 		let promises = [
-			this.getAllData(),
+			this.getAllDataCount(),
 			this.getAllWords(),
-			this.getUserSetting()
+			this.getUserSetting(),
+			this.loadKanjisPage()
 		];
 		Promise.all(promises).then(()=> {
 			//get user setting
@@ -70,24 +78,51 @@ export class KanjiComponent implements OnInit {
 			this.selection = new SelectionModel<Kanjis>(true, []);
 
 			//fire search keyword
-			if (this.searchWord) {
+			if (userSetting.searchWord) {
 				var e = new KeyboardEvent("keyup", { code: "Enter" });
 				document.getElementById("searchWord").dispatchEvent(e);
 			}
 		});
 	}
 
-	/**
-	 * filter by text
-	 * @param event 
-	 */
-	onFilter(event: any) {
-		if ((event.which == 13 || event.code == "Enter") && this.searchWord != null) {
-			this.dataSource.filter = this.searchWord.trim().toLowerCase();
-			this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiManagement, this.config.userSettingKey.searchWord, this.searchWord);
-			this.setting.updateData([this.currentUserSetting]);
-		}
+	ngAfterViewInit() {
+		//subscribe sorting
+		this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+		//subscribe filtering
+        fromEvent(this.input.nativeElement,'keyup')
+            .pipe(
+                debounceTime(150),
+                distinctUntilChanged(),
+                tap((e) => {
+					if (e['which'] == 13 || e['code'] == "Enter") {
+						this.loadKanjisPage();
+						this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiManagement, this.config.userSettingKey.searchWord, e['target'].value);
+						this.setting.updateData([this.currentUserSetting]);
+						this.paginator.pageIndex = 0;
+					}
+                })
+            )
+            .subscribe();
+		//subscribe paging
+        merge(this.sort.sortChange, this.paginator.page)
+        .pipe(
+            tap(() => this.loadKanjisPage())
+        )
+        .subscribe();
+
 	}
+	
+	/**
+	 * Loading kanji selected page
+	 */
+	loadKanjisPage() {
+        this.dataSources.loadKanjis(
+            -1,
+            this.input.nativeElement.value,
+            this.sort.direction,
+            this.paginator.pageIndex,
+            this.paginator.pageSize);
+    }
 
 	/**
 	 * handle view column selection
@@ -139,7 +174,7 @@ export class KanjiComponent implements OnInit {
 	 */
 	onIsAllSelected() {
 		const numSelected = this.selection.selected.length;
-		const numRows = this.dataSource.data.length;
+		const numRows = this.dataSources.getKanjis().length;
 		return numSelected === numRows;
 	}
 
@@ -149,7 +184,7 @@ export class KanjiComponent implements OnInit {
 	onMasterToggle() {
 		this.onIsAllSelected() ?
 			this.selection.clear() :
-			this.dataSource.data.forEach(row => {
+			this.dataSources.getKanjis().forEach(row => {
 				this.selection.select(row)
 			});
 	}
@@ -166,17 +201,7 @@ export class KanjiComponent implements OnInit {
 	 * Get all updated data in DB
 	 */
 	async onGetUpdatedData(){
-		let dataConverted = await this.service.forceGetAllDataBase();
-		if (dataConverted) {
-			this.allOriginalKanji = dataConverted;
-			this.dataSource = new MatTableDataSource<Kanjis>(dataConverted);
-			this.dataSource.paginator = this.paginator;
-			this.dataSource.sort = this.sort;
-			this.pageSizeOptions = [20, 50, 100];
-			if (this.dataSource.data.length > 100) {
-				this.pageSizeOptions.push(this.dataSource.data.length);
-			}
-		}
+		this.dataCount = await this.service.forceGetAllDataBase();
 	}
 
 	/**
@@ -314,22 +339,13 @@ export class KanjiComponent implements OnInit {
 		});
 		return colDef;
 	}
+
 	/**
 	 * get data source
 	 * @param datasetId dataset Id
 	 */
-	private async getAllData() {
-		let dataConverted = await this.service.getAllData();
-		if (dataConverted) {
-			this.allOriginalKanji = dataConverted;
-			this.dataSource = new MatTableDataSource<Kanjis>(dataConverted);
-			this.dataSource.paginator = this.paginator;
-			this.dataSource.sort = this.sort;
-			this.pageSizeOptions = [20, 50, 100];
-			if (this.dataSource.data.length > 100) {
-				this.pageSizeOptions.push(this.dataSource.data.length);
-			}
-		}
+	private async getAllDataCount() {
+		this.dataCount = await this.service.getDataCount();
 	}
 
 	/**

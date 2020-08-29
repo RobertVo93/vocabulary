@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Observable } from "rxjs";
+import { HttpParams } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 import { CommonApiService } from 'src/app/services/common-api.service';
 import { Config } from 'src/app/configuration/config';
 import { Kanjis } from 'src/app/class/kanjis';
@@ -13,6 +16,35 @@ export class KanjiService {
 	}
 
 	/**
+	 * Get kanjis by filter
+	 * @param courseId dataset id
+	 * @param filter filter string
+	 * @param sortOrder sort order
+	 * @param pageNumber page number
+	 * @param pageSize page size
+	 */
+	getKanjisByFilter(courseId: number, filter = '', sortOrder = 'asc',
+		pageNumber = 0, pageSize = 3): Observable<Kanjis[]> {
+		let params = new HttpParams()
+			.set('courseId', courseId.toString())
+			.set('filter', filter)
+			.set('sortOrder', sortOrder)
+			.set('pageNumber', pageNumber.toString())
+			.set('pageSize', pageSize.toString());
+		return this.apiService.getWithParams(`${this.serverURL}/byfilter`, params).pipe(
+			map(res => this.convertListData(res))
+		);
+	}
+
+	/**
+	 * Get number of data
+	 */
+	async getDataCount() {
+		let result = await this.apiService.get<number>(`${this.serverURL}/count`).toPromise();
+		return result;
+	}
+
+	/**
 	 * Get all data
 	 */
 	async getAllData() {
@@ -24,8 +56,8 @@ export class KanjiService {
 	 * Get all data
 	 */
 	async forceGetAllDataBase() {
-		let result = await this.apiService.get(`${this.serverURL}/new`).toPromise();
-		return this.convertListData(result);
+		let result = await this.apiService.get<number>(`${this.serverURL}/new`).toPromise();
+		return result;
 	}
 
 	/**
@@ -41,7 +73,7 @@ export class KanjiService {
 	 * update trained number
 	 * @param data list of data need to update trained number
 	 */
-	setTrainedNumber<T>(data: T){
+	setTrainedNumber<T>(data: T) {
 		const url = `${this.serverURL}/${this.config.apiServiceURL.setTrainedNumber}`;
 		return this.apiService.post(data, url);
 	}
