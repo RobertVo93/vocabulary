@@ -1,19 +1,23 @@
 import { WordService } from './word.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
 import { Option } from 'src/app/interface/option';
 import { Config } from 'src/app/configuration/config';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSelect } from '@angular/material';
+import { AfterViewInit, Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {merge, fromEvent} from "rxjs";
+import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
+import { MatPaginator, MatSort, MatDialog, MatSelect } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CommonService } from 'src/app/services/common.service';
 import { CommonDialogComponent } from 'src/app/share-component/common-dialog/common-dialog.component';
 import { LanguageService } from '../language/language.service';
 import { Words } from 'src/app/class/words';
 import { TagsService } from '../tag/tags.service';
-import { DataSourcesService } from '../data-sources/data-sources.service'; import { AlertService } from 'src/app/services/alert.service';
+import { DataSourcesService } from '../data-sources/data-sources.service'; 
+import { AlertService } from 'src/app/services/alert.service';
 import { Kanjis } from 'src/app/class/kanjis';
 import { KanjiService } from '../kanji/kanji.service';
 import { UserSetting } from 'src/app/class/userSetting';
 import { UserSettingService } from 'src/app/services/user-setting.service';
+import { WordsDataSource } from 'src/app/services/mat-table/words.datasource';
 
 
 @Component({
@@ -21,7 +25,7 @@ import { UserSettingService } from 'src/app/services/user-setting.service';
 	templateUrl: './word.component.html',
 	styleUrls: ['./word.component.css']
 })
-export class WordComponent implements OnInit {
+export class WordComponent implements OnInit, AfterViewInit {
 	serverImagesURL: string = '';		//url for image resources
 	searchWord: string = '';			//search keyword
 	selectedDatasource: any;  			//selected data set Id
@@ -37,13 +41,13 @@ export class WordComponent implements OnInit {
 	selectedViewColumn: number[] = [];  //list of selected column to be view
 	selectedAction: number;				//selected action for selected rows
 	displayedColumns: string[];         //list of displaying column in the screen
-	dataSource;                         //data source for rendering table
-	dataSourceAll: Words[];				//all datasource
 	selection;
 	pageSizeOptions: number[];          //list of page size option
 	kanjis: Kanjis[];					//list of all kanji available in system
 	currentUserSetting: UserSetting;
+	dataSource: WordsDataSource;		//data sources for table
 
+    @ViewChild('input', { static: true }) input: ElementRef;
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
 	constructor(public config: Config, public common: CommonService, public service: WordService, public dialog: MatDialog, private kanjiService: KanjiService
@@ -51,12 +55,14 @@ export class WordComponent implements OnInit {
 		, private setting: UserSettingService) { }
 
 	ngOnInit() {
+		this.paginator.pageIndex = 0;
+		this.paginator.pageSize = 50;
+		this.dataSource = new WordsDataSource(this.service);
 		this.serverImagesURL = this.config.apiServiceURL.images;
 		let promises = [
 			this.setupAllLanguageOptions(),
 			this.setupAllTagOptions(),
 			this.setupAllDataSourceOptions(),
-			this.getAllData(),
 			this.getAllKanjis(),
 			this.getUserSetting()
 		];
@@ -76,7 +82,7 @@ export class WordComponent implements OnInit {
 				? userSetting.selectedDatasource : this.dataSources[0].value;
 			this.searchWord = userSetting.searchWord;
 
-			this.getWordByDataSourceFilter(this.selectedDatasource);
+			this.loadWordsPage();
 			this.actions = this.getAllActions();
 			this.types = this.getAllWordTypes();
 			this.viewColumns = this.getAllViewMode(); //get all view column
@@ -84,33 +90,60 @@ export class WordComponent implements OnInit {
 			this.selection = new SelectionModel<Words>(true, []);
 
 			//fire search keyword
-			if (this.searchWord) {
+			if (userSetting.searchWord) {
 				var e = new KeyboardEvent("keyup", { code: "Enter" });
 				document.getElementById("searchWord").dispatchEvent(e);
 			}
 		});
 	}
 
+	ngAfterViewInit() {
+		//subscribe sorting
+		this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+		//subscribe filtering
+        fromEvent(this.input.nativeElement,'keyup')
+            .pipe(
+                debounceTime(150),
+                distinctUntilChanged(),
+                tap((e) => {
+					if (e['which'] == 13 || e['code'] == "Enter") {
+						this.loadWordsPage();
+						this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordManagement, this.config.userSettingKey.searchWord, e['target'].value);
+						this.setting.updateData([this.currentUserSetting]);
+						this.paginator.pageIndex = 0;
+					}
+                })
+            )
+            .subscribe();
+		//subscribe paging
+        merge(this.sort.sortChange, this.paginator.page)
+        .pipe(
+            tap(() => this.loadWordsPage())
+        )
+        .subscribe();
+
+	}
+	
+	/**
+	 * Loading word selected page
+	 */
+	loadWordsPage() {
+        this.dataSource.loadWords(
+            this.selectedDatasource,
+            this.input.nativeElement.value,
+            this.sort.direction,
+            this.paginator.pageIndex,
+            this.paginator.pageSize);
+    }
+
 	/**
    * handle event change dropdown list dataset
    * @param event event parameter
    */
 	onChangeHandler(event) {
-		this.getWordByDataSourceFilter(this.selectedDatasource);
+		this.loadWordsPage();
 		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordManagement, this.config.userSettingKey.selectedDatasource, this.selectedDatasource);
 		this.setting.updateData([this.currentUserSetting]);
-	}
-
-	/**
-	 * filter by text
-	 * @param event 
-	 */
-	onFilter(event: any) {
-		if ((event.which == 13 || event.code == "Enter") && this.searchWord != null) {
-			this.dataSource.filter = this.searchWord.trim().toLowerCase();
-			this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordManagement, this.config.userSettingKey.searchWord, this.searchWord);
-			this.setting.updateData([this.currentUserSetting]);
-		}
 	}
 
 	/**
@@ -152,7 +185,7 @@ export class WordComponent implements OnInit {
 	 */
 	onIsAllSelected() {
 		const numSelected = this.selection.selected.length;
-		const numRows = this.dataSource.data.length;
+		const numRows = this.dataSource.getWords().length;
 		return numSelected === numRows;
 	}
 
@@ -167,7 +200,7 @@ export class WordComponent implements OnInit {
 	onMasterToggle() {
 		this.onIsAllSelected() ?
 			this.selection.clear() :
-			this.dataSource.data.forEach(row => {
+			this.dataSource.getWords().forEach(row => {
 				this.selection.select(row)
 			});
 	}
@@ -184,27 +217,7 @@ export class WordComponent implements OnInit {
 	 * Get all updated data in DB
 	 */
 	async onGetUpdatedData(){
-		let dataConverted = await this.service.forceGetAllDataBase();
-		if (dataConverted) {
-			this.dataSourceAll = dataConverted
-		}
-	}
-
-	/**
-	 * Get all words by selected data source
-	 * @param source_id data source _id
-	 */
-	private getWordByDataSourceFilter(source_id: any) {
-		let data = this.dataSourceAll.filter((value) => {
-			return value.dataSource == source_id || source_id == -1;
-		})
-		this.dataSource = new MatTableDataSource<Words>(data);
-		this.dataSource.paginator = this.paginator;
-		this.dataSource.sort = this.sort;
-		this.pageSizeOptions = [20, 50, 100];
-		if (this.dataSource.data.length > 100) {
-			this.pageSizeOptions.push(this.dataSource.data.length);
-		}
+		await this.service.forceGetAllDataBase();
 	}
 
 	/**
@@ -333,15 +346,6 @@ export class WordComponent implements OnInit {
 			}
 		});
 		return colDef;
-	}
-	/**
-	 * get data source
-	 */
-	private async getAllData() {
-		let dataConverted = await this.service.getAllData();
-		if (dataConverted) {
-			this.dataSourceAll = dataConverted
-		}
 	}
 
 	/**

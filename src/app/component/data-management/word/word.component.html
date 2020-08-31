@@ -3,7 +3,7 @@
         <div class="column text-align-left">
             <mat-form-field class="cell">
                 <mat-label>Search</mat-label>
-                <input matInput id="searchWord" [(ngModel)]="searchWord" (keyup)="onFilter($event)" placeholder="Ex. nhân">
+                <input #input matInput id="searchWord" [(ngModel)]="searchWord" placeholder="Ex. nhân">
             </mat-form-field>
         </div>
         <div class="column text-align-center">
@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <mat-table matSort [dataSource]="dataSource">
+    <mat-table [dataSource]="dataSource" matSort matSortActive="createdDate" matSortDirection="asc" matSortDisableClear>
         <!-- selection Column -->
         <ng-container matColumnDef="select">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -236,6 +236,6 @@
         <mat-row [ngClass]='row.rowColor' *matRowDef="let row; columns: displayedColumns;"></mat-row>
         <mat-footer-row class="darkgray" *matFooterRowDef="displayedColumns; sticky:true"></mat-footer-row>
     </mat-table>
-    <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
+    <mat-paginator [length]="dataSource.getCount()" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
 </div>
-<button mat-raised-button (click)="onGetUpdatedData()">Re-get kanjis in DB</button>
+<button mat-raised-button (click)="onGetUpdatedData()">Re-get words in DB</button>

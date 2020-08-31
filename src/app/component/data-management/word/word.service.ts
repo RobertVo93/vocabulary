@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Observable } from "rxjs";
+import { HttpParams } from '@angular/common/http';
 import { CommonApiService } from 'src/app/services/common-api.service';
 import { Config } from 'src/app/configuration/config';
 import { Words } from 'src/app/class/words';
+import { DataSourceResponse } from 'src/app/interface/dataSource.response';
 
 @Injectable({
 	providedIn: 'root'
@@ -10,6 +13,25 @@ export class WordService {
 	serverURL: string = '';
 	constructor(private apiService: CommonApiService, private config: Config) {
 		this.serverURL = this.config.apiServiceURL.words;
+	}
+
+	/**
+	 * Get words by filter
+	 * @param courseId dataset id
+	 * @param filter filter string
+	 * @param sortOrder sort order
+	 * @param pageNumber page number
+	 * @param pageSize page size
+	 */
+	getWordsByFilter(courseId: number, filter = '', sortOrder = 'asc',
+		pageNumber = 0, pageSize = 50): Observable<DataSourceResponse<Words[]>> {
+		let params = new HttpParams()
+			.set('courseId', courseId.toString())
+			.set('filter', filter)
+			.set('sortOrder', sortOrder)
+			.set('pageNumber', pageNumber.toString())
+			.set('pageSize', pageSize.toString());
+		return this.apiService.getWithParams(`${this.serverURL}/byfilter`, params);
 	}
 
 	/**
@@ -25,7 +47,7 @@ export class WordService {
 	 */
 	async forceGetAllDataBase() {
 		let result = await this.apiService.get(`${this.serverURL}/new`).toPromise();
-		return this.convertListData(result);
+		return result;
 	}
 
 	/**
@@ -41,7 +63,7 @@ export class WordService {
 	 * update trained number
 	 * @param data list of data need to update trained number
 	 */
-	setTrainedNumber<T>(data: T){
+	setTrainedNumber<T>(data: T) {
 		const url = `${this.serverURL}/${this.config.apiServiceURL.setTrainedNumber}`;
 		return this.apiService.post(data, url);
 	}

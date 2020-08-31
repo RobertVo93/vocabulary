@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
 import { HttpParams } from '@angular/common/http';
-import { map } from 'rxjs/operators';
 import { CommonApiService } from 'src/app/services/common-api.service';
 import { Config } from 'src/app/configuration/config';
 import { Kanjis } from 'src/app/class/kanjis';
