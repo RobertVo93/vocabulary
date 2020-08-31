@@ -37,7 +37,6 @@ export class KanjiComponent implements OnInit, AfterViewInit {
 	currentUserSetting: UserSetting;	//user setting
 	allWords: Words[];					//all current words
 	dataSources: KanjisDataSource;		//data sources for table
-	dataCount: number;					//number of kanjis
     @ViewChild('input', { static: true }) input: ElementRef;
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 	@ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -50,7 +49,6 @@ export class KanjiComponent implements OnInit, AfterViewInit {
 		this.dataSources = new KanjisDataSource(this.service);
 		this.serverImagesURL = this.config.apiServiceURL.images;
 		let promises = [
-			this.getAllDataCount(),
 			this.getAllWords(),
 			this.getUserSetting(),
 			this.loadKanjisPage()
@@ -201,7 +199,7 @@ export class KanjiComponent implements OnInit, AfterViewInit {
 	 * Get all updated data in DB
 	 */
 	async onGetUpdatedData(){
-		this.dataCount = await this.service.forceGetAllDataBase();
+		await this.service.forceGetAllDataBase();
 	}
 
 	/**
@@ -338,14 +336,6 @@ export class KanjiComponent implements OnInit, AfterViewInit {
 			}
 		});
 		return colDef;
-	}
-
-	/**
-	 * get data source
-	 * @param datasetId dataset Id
-	 */
-	private async getAllDataCount() {
-		this.dataCount = await this.service.getDataCount();
 	}
 
 	/**

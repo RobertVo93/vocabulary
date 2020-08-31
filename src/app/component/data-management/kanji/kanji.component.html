@@ -187,7 +187,7 @@
         <mat-row [ngClass]='row.rowColor' *matRowDef="let row; columns: displayedColumns;"></mat-row>
         <mat-footer-row class="darkgray" *matFooterRowDef="displayedColumns; sticky:true"></mat-footer-row>
     </mat-table>
-    <mat-paginator [length]="dataCount" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
+    <mat-paginator [length]="dataSources.getCount()" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
 </div>
 <button *ngIf="cloneDataToDatabase" (click)="updateDataToDatabase()">clone db</button>
 <button mat-raised-button (click)="onUpdateRelatedWords()">Update related words</button>

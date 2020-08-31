@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { CommonApiService } from 'src/app/services/common-api.service';
 import { Config } from 'src/app/configuration/config';
 import { Kanjis } from 'src/app/class/kanjis';
+import { DataSourceResponse } from 'src/app/interface/dataSource.response';
 
 @Injectable({
 	providedIn: 'root'
@@ -24,24 +25,14 @@ export class KanjiService {
 	 * @param pageSize page size
 	 */
 	getKanjisByFilter(courseId: number, filter = '', sortOrder = 'asc',
-		pageNumber = 0, pageSize = 3): Observable<Kanjis[]> {
+		pageNumber = 0, pageSize = 50): Observable<DataSourceResponse<Kanjis[]>> {
 		let params = new HttpParams()
 			.set('courseId', courseId.toString())
 			.set('filter', filter)
 			.set('sortOrder', sortOrder)
 			.set('pageNumber', pageNumber.toString())
 			.set('pageSize', pageSize.toString());
-		return this.apiService.getWithParams(`${this.serverURL}/byfilter`, params).pipe(
-			map(res => this.convertListData(res))
-		);
-	}
-
-	/**
-	 * Get number of data
-	 */
-	async getDataCount() {
-		let result = await this.apiService.get<number>(`${this.serverURL}/count`).toPromise();
-		return result;
+		return this.apiService.getWithParams(`${this.serverURL}/byfilter`, params);
 	}
 
 	/**
