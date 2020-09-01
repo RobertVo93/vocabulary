@@ -189,6 +189,7 @@ export class CommonService {
      * @param format format ex: yyyyMMdd or yyyyMMdd HHmmmSS ..etc
      */
     convertDateToStringByFormat(date: Date, format: string): string {
+        date = new Date(date);
         let result: string = '';
         var year = date.getFullYear();
         var month = date.getMonth() + 1;

@@ -44,6 +44,7 @@ export class KanjiComponent implements OnInit, AfterViewInit {
 		public service: KanjiService, public dialog: MatDialog, private alertService: AlertService, private wordService: WordService) { }
 
 	ngOnInit() {
+		this.pageSizeOptions = [20, 50, 100];
 		this.paginator.pageIndex = 0;
 		this.paginator.pageSize = 50;
 		this.dataSources = new KanjisDataSource(this.service);
@@ -116,7 +117,8 @@ export class KanjiComponent implements OnInit, AfterViewInit {
 	loadKanjisPage() {
         this.dataSources.loadKanjis(
             -1,
-            this.input.nativeElement.value,
+			this.input.nativeElement.value,
+			this.sort.active,
             this.sort.direction,
             this.paginator.pageIndex,
             this.paginator.pageSize);
@@ -272,15 +274,13 @@ export class KanjiComponent implements OnInit, AfterViewInit {
 			{ value: this.config.viewColumnsDef.meaning, viewValue: this.config.viewColumns.meaning },
 			{ value: this.config.viewColumnsDef.kanji, viewValue: this.config.viewColumns.kanji },
 			{ value: this.config.viewColumnsDef.JLPTLevel, viewValue: this.config.viewColumns.JLPTLevel },
-			// { value: this.config.viewColumnsDef.fullMeaning, viewValue: this.config.viewColumns.fullMeaning },
 			{ value: this.config.viewColumnsDef.remember, viewValue: this.config.viewColumns.remember },
 			{ value: this.config.viewColumnsDef.explain, viewValue: this.config.viewColumns.explain },
-			// { value: this.config.viewColumnsDef.fullName, viewValue: this.config.viewColumns.fullName },
 			{ value: this.config.viewColumnsDef.image, viewValue: this.config.viewColumns.image },
 			{ value: this.config.viewColumnsDef.createdDate, viewValue: this.config.viewColumns.createdDate },
 			{ value: this.config.viewColumnsDef.createdBy, viewValue: this.config.viewColumns.createdBy },
-			{ value: this.config.viewColumnsDef.updatedDate, viewValue: this.config.viewColumns.updatedDate },
-			{ value: this.config.viewColumnsDef.updatedBy, viewValue: this.config.viewColumns.updatedBy }
+			{ value: this.config.viewColumnsDef.modifiedDate, viewValue: this.config.viewColumns.modifiedDate },
+			{ value: this.config.viewColumnsDef.modifiedBy, viewValue: this.config.viewColumns.modifiedBy }
 		];
 	}
 
@@ -325,11 +325,11 @@ export class KanjiComponent implements OnInit, AfterViewInit {
 				case this.config.viewColumnsDef.createdBy:
 					colDef.push(this.config.viewColumns.createdBy);
 					break;
-				case this.config.viewColumnsDef.updatedDate:
-					colDef.push(this.config.viewColumns.updatedDate);
+				case this.config.viewColumnsDef.modifiedDate:
+					colDef.push(this.config.viewColumns.modifiedDate);
 					break;
-				case this.config.viewColumnsDef.updatedBy:
-					colDef.push(this.config.viewColumns.updatedBy);
+				case this.config.viewColumnsDef.modifiedBy:
+					colDef.push(this.config.viewColumns.modifiedBy);
 					break;
 				default:
 					break;

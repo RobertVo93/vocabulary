@@ -23,11 +23,12 @@ export class KanjiService {
 	 * @param pageNumber page number
 	 * @param pageSize page size
 	 */
-	getKanjisByFilter(courseId: number, filter = '', sortOrder = 'asc',
+	getKanjisByFilter(courseId: number, filter = '', sortActive: string, sortOrder = 'asc',
 		pageNumber = 0, pageSize = 50): Observable<DataSourceResponse<Kanjis[]>> {
 		let params = new HttpParams()
 			.set('courseId', courseId.toString())
 			.set('filter', filter)
+			.set('sortActive', sortActive)
 			.set('sortOrder', sortOrder)
 			.set('pageNumber', pageNumber.toString())
 			.set('pageSize', pageSize.toString());

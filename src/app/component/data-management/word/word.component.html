@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <mat-table [dataSource]="dataSource" matSort matSortActive="createdDate" matSortDirection="asc" matSortDisableClear>
+    <mat-table [dataSource]="dataSource" matSort matSortActive="createdDate" matSortDirection="desc" matSortDisableClear>
         <!-- selection Column -->
         <ng-container matColumnDef="select">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -62,7 +62,7 @@
 
         <!-- Word Column -->
         <ng-container matColumnDef="word">
-            <mat-header-cell *matHeaderCellDef> Word </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Word </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <input type="text" class="form-control" [(ngModel)]='element.word' />
             </mat-cell>
@@ -71,7 +71,7 @@
 
         <!-- tag Column -->
         <ng-container matColumnDef="type">
-            <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Type </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <mat-select class="pl10" [(value)]='element.type'>
                     <mat-option *ngFor="let option of types" [value]="option.value">
@@ -84,7 +84,7 @@
 
         <!-- Pronunciation Column -->
         <ng-container matColumnDef="pronun">
-            <mat-header-cell *matHeaderCellDef> Pronunciation </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Pronunciation </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <input type="text" class="form-control" [(ngModel)]='element.pronun' />
             </mat-cell>
@@ -93,7 +93,7 @@
 
         <!-- Kanji Column -->
         <ng-container matColumnDef="kanji">
-            <mat-header-cell *matHeaderCellDef> Kanji </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Kanji </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <input type="text" class="form-control" (ngModelChange)='onUpdateKanji(element, $event)' [(ngModel)]='element.kanji' />
             </mat-cell>
@@ -102,7 +102,7 @@
 
         <!-- Chinese meaning Column -->
         <ng-container matColumnDef="chinaMeaning">
-            <mat-header-cell *matHeaderCellDef> Chinese </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Chinese </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <input type="text" class="form-control" [(ngModel)]='element.chinaMeaning' />
             </mat-cell>
@@ -111,7 +111,7 @@
 
         <!-- Meaning Column -->
         <ng-container matColumnDef="meaning">
-            <mat-header-cell *matHeaderCellDef> Meaning </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Meaning </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <input type="text" class="form-control" [(ngModel)]='element.meaning' />
             </mat-cell>
@@ -120,7 +120,7 @@
 
         <!-- Example Column -->
         <ng-container matColumnDef="example">
-            <mat-header-cell *matHeaderCellDef> Example </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Example </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <input type="text" class="form-control" [(ngModel)]='element.example' />
             </mat-cell>
@@ -129,7 +129,7 @@
 
         <!-- Example Column -->
         <ng-container matColumnDef="title">
-            <mat-header-cell *matHeaderCellDef> Example Title </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Example Title </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <input type="text" class="form-control" [(ngModel)]='element.exampleTitle' />
             </mat-cell>
@@ -138,7 +138,7 @@
 
         <!-- exampleMeaning Column -->
         <ng-container matColumnDef="exampleMeaning">
-            <mat-header-cell *matHeaderCellDef> Example meaning </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Example meaning </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <input type="text" class="form-control" [(ngModel)]='element.exampleMeaning' />
             </mat-cell>
@@ -147,7 +147,7 @@
 
         <!-- language Column -->
         <ng-container matColumnDef="language">
-            <mat-header-cell *matHeaderCellDef> Language </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Language </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <mat-select class="pl10" [(value)]='element.language'>
                     <mat-select-filter [array]="languages" [displayMember]="'viewValue'" (filteredReturn)="filteredLanguages = $event"></mat-select-filter>
@@ -161,7 +161,7 @@
 
         <!-- data source Column -->
         <ng-container matColumnDef="dataSource">
-            <mat-header-cell *matHeaderCellDef> Data Source </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Data Source </mat-header-cell>
             <mat-cell *matCellDef="let element">
                 <mat-select class="pl10" [(value)]='element.dataSource'>
                     <mat-select-filter [array]="dataSources" [displayMember]="'viewValue'" (filteredReturn)="filteredDataSources = $event"></mat-select-filter>
@@ -200,34 +200,34 @@
         <ng-container matColumnDef="createdDate">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <input type="text" readonly class="form-control" [(ngModel)]='element.createdDate' />
+                <input type="text" readonly class="form-control" [value]="common.convertDateToStringByFormat(element.createdDate, 'yyyy-MM-dd')" />
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
         <!-- Created By Column -->
         <ng-container matColumnDef="createdBy">
-            <mat-header-cell *matHeaderCellDef> Created By </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Created By </mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <input type="text" readonly class="form-control" [(ngModel)]='element.createdBy' />
+                <input type="text" readonly class="form-control" [(ngModel)]='element.createdBy.email' />
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
         <!-- Updated Date Column -->
-        <ng-container matColumnDef="updatedDate">
+        <ng-container matColumnDef="modifiedDate">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Updated Date </mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <input type="text" readonly class="form-control" [(ngModel)]='element.modifiedDate' />
+                <input type="text" readonly class="form-control" [value]="common.convertDateToStringByFormat(element.modifiedDate, 'yyyy-MM-dd')" />
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
         <!-- Updated By Column -->
-        <ng-container matColumnDef="updatedBy">
-            <mat-header-cell *matHeaderCellDef> Updated By </mat-header-cell>
+        <ng-container matColumnDef="modifiedBy">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Updated By </mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <input type="text" readonly class="form-control" [(ngModel)]='element.updatedBy' />
+                <input type="text" readonly class="form-control" [(ngModel)]='element.modifiedBy.email' />
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>

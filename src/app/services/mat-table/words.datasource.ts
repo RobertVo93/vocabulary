@@ -11,8 +11,8 @@ export class WordsDataSource implements DataSource<Words> {
     constructor(private wordsService: WordService) {
 
     }
-    loadWords(courseId: number, filter: string, sortDirection: string, pageIndex: number, pageSize: number) {
-        this.wordsService.getWordsByFilter(courseId, filter, sortDirection,
+    loadWords(courseId: number, filter: string, sortActive: string, sortDirection: string, pageIndex: number, pageSize: number) {
+        this.wordsService.getWordsByFilter(courseId, filter, sortActive, sortDirection,
             pageIndex, pageSize).pipe(
                 catchError(() => of([]))
             )

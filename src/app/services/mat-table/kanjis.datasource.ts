@@ -14,8 +14,8 @@ export class KanjisDataSource implements DataSource<Kanjis> {
     constructor(private kanjisService: KanjiService) {
 
     }
-    loadKanjis(courseId: number, filter: string, sortDirection: string, pageIndex: number, pageSize: number) {
-        this.kanjisService.getKanjisByFilter(courseId, filter, sortDirection,
+    loadKanjis(courseId: number, filter: string, sortActive: string, sortDirection: string, pageIndex: number, pageSize: number) {
+        this.kanjisService.getKanjisByFilter(courseId, filter, sortActive, sortDirection,
             pageIndex, pageSize).pipe(
                 catchError(() => of([]))
             )

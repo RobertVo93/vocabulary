@@ -19,7 +19,7 @@
             </mat-form-field>
         </div>
     </div>
-    <mat-table [dataSource]="dataSources" matSort matSortActive="createdDate" matSortDirection="asc" matSortDisableClear>
+    <mat-table [dataSource]="dataSources" matSort matSortActive="createdDate" matSortDirection="desc" matSortDisableClear>
         <!-- selection Column -->
         <ng-container matColumnDef="select">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -151,7 +151,7 @@
         <ng-container matColumnDef="createdDate">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <input type="text" readonly class="form-control" [(ngModel)]='element.createdDate' />
+                <input type="text" readonly class="form-control" [value]="common.convertDateToStringByFormat(element.createdDate, 'yyyy-MM-dd')" />
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
@@ -160,25 +160,25 @@
         <ng-container matColumnDef="createdBy">
             <mat-header-cell *matHeaderCellDef> Created By </mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <input type="text" readonly class="form-control" [(ngModel)]='element.createdBy' />
+                <input type="text" readonly class="form-control" [(ngModel)]='element.createdBy.email' />
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
         <!-- Updated Date Column -->
-        <ng-container matColumnDef="updatedDate">
+        <ng-container matColumnDef="modifiedDate">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Updated Date </mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <input type="text" readonly class="form-control" [(ngModel)]='element.updatedDate' />
+                <input type="text" readonly class="form-control" [value]="common.convertDateToStringByFormat(element.modifiedDate, 'yyyy-MM-dd')" />
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
         <!-- Updated By Column -->
-        <ng-container matColumnDef="updatedBy">
+        <ng-container matColumnDef="modifiedBy">
             <mat-header-cell *matHeaderCellDef> Updated By </mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <input type="text" readonly class="form-control" [(ngModel)]='element.updatedBy' />
+                <input type="text" readonly class="form-control" [(ngModel)]="element.modifiedBy.email" />
             </mat-cell>
             <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>

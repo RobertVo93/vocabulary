@@ -47,7 +47,9 @@ export class Config {
         uploadDate: 'uploadDate',
         image: 'image',
         syntax: 'syntax',
-        level: 'level'
+        level: 'level',
+        modifiedDate: 'modifiedDate',
+        modifiedBy: 'modifiedBy'
     }
 
     viewColumnsDef = {
@@ -90,7 +92,9 @@ export class Config {
         uploadDate: 37,
         image: 38,
         syntax: 39,
-        level: 40
+        level: 40,
+        modifiedDate: 41,
+        modifiedBy: 42
     }
 
     optionValue = {
