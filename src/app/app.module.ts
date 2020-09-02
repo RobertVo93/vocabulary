@@ -44,6 +44,7 @@ import { LoaderComponent } from './share-component/loader/loader.component';
 import { GrammarComponent } from './component/data-management/grammar/grammar.component';
 import { TrainGrammarComponent } from './component/training/train-grammar/train-grammar.component';
 import { SafeHtmlPipe } from './services/safeHtmlPipe';
+import { SettingDialog } from './share-component/setting-dialog/setting-dialog.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { SafeHtmlPipe } from './services/safeHtmlPipe';
     InlineEditComponent,
     TagsComponent,
     CommonDialogComponent,
+    SettingDialog,
     DynamicFormComponent,
     DynamicFormQuestionComponent,
     UserManagementComponent,
@@ -98,7 +100,8 @@ import { SafeHtmlPipe } from './services/safeHtmlPipe';
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   entryComponents: [
-    CommonDialogComponent
+    CommonDialogComponent,
+    SettingDialog
   ],
   bootstrap: [AppComponent]
 })

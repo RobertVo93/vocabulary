@@ -317,6 +317,8 @@ export class CommonService {
             result.selectedPartitions = setting.userSetting[page][this.config.userSettingKey.selectedPartitions];
             result.selectedTrainingMode = setting.userSetting[page][this.config.userSettingKey.selectedTrainingMode];
             result.selectedTags = setting.userSetting[page][this.config.userSettingKey.selectedTags];
+            result.showTable = setting.userSetting[page][this.config.userSettingKey.showTable];
+            result.fastReview = setting.userSetting[page][this.config.userSettingKey.fastReview];
         }
         return result;
     }

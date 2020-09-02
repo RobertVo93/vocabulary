@@ -6,7 +6,9 @@
 }
 
 .leftBody {
-    border: solid 1px blue;
+    padding: 20px;
+    min-height: calc(100vh - 170px);
+    box-shadow: 0px 0px 10px 10px rgb(0 0 0 / 10%);
 }
 
 .leftBodyTitle {
@@ -30,8 +32,9 @@
 }
 
 .rightBody {
-    border: solid 1px blue;
-    min-height: calc(100vh - 150px);
+    padding: 20px;
+    min-height: calc(100vh - 170px);
+    box-shadow: 0px 0px 10px 10px rgb(0 0 0 / 10%);
 }
 
 .rightBodyTitle {
@@ -84,6 +87,7 @@
 .control-panel {
     display: table;
     width: 100%;
+    margin-bottom: 15px;
 }
 
 .column .cell {
@@ -123,11 +127,12 @@
     .rightBody {
         float: right;
         width: 49%;
+        min-height: calc(100vh - 170px);
     }
     .leftBody {
         float: left;
         width: 49%;
-        min-height: calc(100vh - 150px);
+        min-height: calc(100vh - 170px);
     }
     .column {
         display: table-cell;

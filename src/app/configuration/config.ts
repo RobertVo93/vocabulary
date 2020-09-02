@@ -270,6 +270,8 @@ export class Config {
         selectedPartitions: 'partitions',
         selectedTrainingMode: 'trainingMode',
         selectedTags: 'selectedTags',
+        showTable: 'showTable',
+        fastReview: 'fastReview',
         page: {
             dataSourceManagement: 'dataSourceManagement',
             dataSourceTrain: 'dataSourceTrain',

@@ -1,21 +1,6 @@
 <div class="train-container container">
     <div class="control-panel">
-        <div class="column text-align-left">
-            <button class="cell" (click)='onResetTrainedNumber()'>Reset trained number</button>
-        </div>
-        <div class="column text-align-center">
-            <mat-form-field class="cell">
-                <mat-label>Data sources</mat-label>
-                <mat-select [(value)]='selectedDataSource' (selectionChange)='onChangeHandler($event)'>
-                    <mat-option *ngFor="let data of dataset" [value]="data.value">
-                        {{data.viewValue}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div class="column text-align-right">
-            <div class="cell"></div>
-        </div>
+        <mat-icon (click)="onSettingCLick()" class="cursor-pointer float-right" title="Settings">settings</mat-icon>
     </div>
 
     <div class="leftBody" align="center">
@@ -27,10 +12,8 @@
                 <label class='fs40'>{{trainingWord.word}}</label>
             </div>
             <div *ngIf='selectedTestMode == wordEnum.image;'>
-                <img height="100" [attr.title]="nextTrainingWord.meaning" hidden="true" class="details-image" src="{{serverImagesURL}}/{{nextTrainingWord.filename}}" />
-                <img height="100" [attr.title]="trainingWord.meaning" class="details-image" src="{{serverImagesURL}}/{{trainingWord.filename}}" />
-                <!-- <img [attr.title]="trainingWord.meaning" src="assets/images/{{nextTrainingWord.pronun | lowercase}}.jpg" hidden="true" class="details-image" /> -->
-                <!-- <img [attr.title]="trainingWord.meaning" src="assets/images/{{trainingWord.pronun | lowercase}}.jpg" class="details-image" /> -->
+                <img height="150" [attr.title]="nextTrainingWord.meaning" hidden="true" class="details-image" src="{{serverImagesURL}}/{{nextTrainingWord.filename}}" />
+                <img height="150" [attr.title]="trainingWord.meaning" class="details-image" src="{{serverImagesURL}}/{{trainingWord.filename}}" />
             </div>
             <div *ngIf='selectedTestMode == wordEnum.kanji;'>
                 <label class='fs40'>{{trainingWord.kanji}}</label>
@@ -41,7 +24,7 @@
                 <mat-form-field class="example-full-width">
                     <textarea matInput [ngClass]='inputColor' id="inputWordId" (keyup)='onKeyUpInput($event)' placeholder="Input word" [(ngModel)]='inputWord' i18n-placeholder="@@inputWord"></textarea>
                 </mat-form-field>
-                <button class="button-border ml20" mat-button (click)='onMoveNextWord()' title="Move Next">>>></button>
+                <mat-icon (click)="onMoveNextWord()" class="cursor-pointer ml20" style="font-size: 40px" title="Move Next">skip_next</mat-icon>
             </div>
             <div class="fast-review-training" [hidden]="!isFastReview">
                 <mat-card *ngFor="let card of cards" class="cursor-pointer card selection-card" (click)='onCardSelected(card.value)'>
@@ -49,7 +32,93 @@
                 </mat-card>
             </div>
         </div>
+        <div>
+            <mat-form-field class="positionSelection">
+                <mat-label>Partitions</mat-label>
+                <mat-select [(value)]='selectedRanges' multiple (selectionChange)='onRangeChangeHandler($event)'>
+                    <mat-option *ngFor="let range of ranges" [value]="range.value">
+                        {{range.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="displayArea" *ngIf="showListWordTable">
+            <mat-form-field class="mt15">
+                <mat-label>Choose view column</mat-label>
+                <mat-select [(value)]='selectedViewColumn' multiple (selectionChange)='onViewModeChangeHandler($event)'>
+                    <mat-option *ngFor="let mode of viewColumns" [value]="mode.value" [disabled]="mode.value == config.viewColumnsDef.word || mode.value == config.viewColumnsDef.meaning">
+                        {{mode.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
 
+            <div class="table-container">
+                <mat-table [dataSource]="dataSource">
+                    <!-- word Column -->
+                    <ng-container matColumnDef="word">
+                        <mat-header-cell *matHeaderCellDef i18n="@@word"> Word </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.word}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> <label i18n="@@trained">Trained</label> / <label i18n="@@total">Total</label> </mat-footer-cell>
+                    </ng-container>
+
+                    <!-- type Column -->
+                    <ng-container matColumnDef="type">
+                        <mat-header-cell *matHeaderCellDef i18n="@@type"> Type </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{config.wordType[element.type]}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                    </ng-container>
+
+                    <!-- Pronunciation Column -->
+                    <ng-container matColumnDef="pronun">
+                        <mat-header-cell *matHeaderCellDef i18n="@@pronunciation"> Pronunciation </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.pronun}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                    </ng-container>
+
+                    <!-- Kanji Column -->
+                    <ng-container matColumnDef="kanji">
+                        <mat-header-cell *matHeaderCellDef i18n="@@kanji"> Kanji </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.kanji}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                    </ng-container>
+
+                    <!-- Chinese meaning Column -->
+                    <ng-container matColumnDef="chinaMeaning">
+                        <mat-header-cell *matHeaderCellDef i18n="@@chinese"> Chinese </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.chinaMeaning}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                    </ng-container>
+
+                    <!-- Meaning Column -->
+                    <ng-container matColumnDef="meaning">
+                        <mat-header-cell *matHeaderCellDef i18n="@@meaning"> Meaning </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.meaning}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> {{trainedNO}} / {{totalTraining}} </mat-footer-cell>
+                    </ng-container>
+
+                    <!-- Example Column -->
+                    <ng-container matColumnDef="example">
+                        <mat-header-cell *matHeaderCellDef i18n="@@example"> Example </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.example}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                    </ng-container>
+
+                    <!-- Title Column -->
+                    <ng-container matColumnDef="title">
+                        <mat-header-cell *matHeaderCellDef i18n="@@title"> Title </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                    </ng-container>
+
+                    <mat-header-row class="darkgray" *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+                    <mat-row [ngClass]='row.rowColor' *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    <mat-footer-row class="darkgray" *matFooterRowDef="displayedColumns; sticky:true"></mat-footer-row>
+                </mat-table>
+            </div>
+        </div>
+    </div>
+
+    <div class="rightBody" align="center">
         <div class="displayArea" *ngIf='previousTrainingWord'>
             <mat-form-field class="mt15">
                 <mat-label>Add Tag</mat-label>
@@ -80,106 +149,10 @@
                 </div>
             </div>
             <img height="100" [attr.title]="previousTrainingWord.meaning" class="details-image row" src="{{serverImagesURL}}/{{previousTrainingWord.filename}}" />
-            <!-- <img [attr.title]="trainingWord.meaning"  src="assets/images/{{previousTrainingWord.pronun | lowercase}}.jpg" class="details-image row" /> -->
             <button mat-button (click)="onShowMore();">{{showHideButtonName}}</button>
             <div class="kanji-explain" [hidden]="!isShowMore">
                 <div class="ck-editor__main" [innerHTML]="previousTrainingWord.kanjiExplain | safeHtml"></div>
             </div>
-        </div>
-
-        <mat-form-field>
-            <mat-label>Training Mode</mat-label>
-            <mat-select [(value)]='selectedTestMode' (selectionChange)="onTrainingModeChangeHandler($event)">
-                <mat-option *ngFor="let mode of testModes" [value]="mode.value">
-                    {{mode.viewValue}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field class="positionSelection ml20">
-            <mat-label>Partitions</mat-label>
-            <mat-select [(value)]='selectedRanges' multiple (selectionChange)='onRangeChangeHandler($event)'>
-                <mat-option *ngFor="let range of ranges" [value]="range.value">
-                    {{range.viewValue}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-checkbox class="ml20" title="support for fast review vocabulary" [(ngModel)]="isFastReview">
-            Fast review
-        </mat-checkbox>
-    </div>
-
-    <div class="rightBody" align="center">
-        <mat-form-field class="mt15">
-            <mat-label>Choose view column</mat-label>
-            <mat-select [(value)]='selectedViewColumn' multiple (selectionChange)='onViewModeChangeHandler($event)'>
-                <mat-option *ngFor="let mode of viewColumns" [value]="mode.value" [disabled]="mode.value == config.viewColumnsDef.word || mode.value == config.viewColumnsDef.meaning">
-                    {{mode.viewValue}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <div class="table-container">
-            <mat-table [dataSource]="dataSource">
-                <!-- word Column -->
-                <ng-container matColumnDef="word">
-                    <mat-header-cell *matHeaderCellDef i18n="@@word"> Word </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.word}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> <label i18n="@@trained">Trained</label> / <label i18n="@@total">Total</label> </mat-footer-cell>
-                </ng-container>
-
-                <!-- type Column -->
-                <ng-container matColumnDef="type">
-                    <mat-header-cell *matHeaderCellDef i18n="@@type"> Type </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{config.wordType[element.type]}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-                </ng-container>
-
-                <!-- Pronunciation Column -->
-                <ng-container matColumnDef="pronun">
-                    <mat-header-cell *matHeaderCellDef i18n="@@pronunciation"> Pronunciation </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.pronun}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-                </ng-container>
-
-                <!-- Kanji Column -->
-                <ng-container matColumnDef="kanji">
-                    <mat-header-cell *matHeaderCellDef i18n="@@kanji"> Kanji </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.kanji}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-                </ng-container>
-
-                <!-- Chinese meaning Column -->
-                <ng-container matColumnDef="chinaMeaning">
-                    <mat-header-cell *matHeaderCellDef i18n="@@chinese"> Chinese </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.chinaMeaning}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-                </ng-container>
-
-                <!-- Meaning Column -->
-                <ng-container matColumnDef="meaning">
-                    <mat-header-cell *matHeaderCellDef i18n="@@meaning"> Meaning </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.meaning}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> {{trainedNO}} / {{totalTraining}} </mat-footer-cell>
-                </ng-container>
-
-                <!-- Example Column -->
-                <ng-container matColumnDef="example">
-                    <mat-header-cell *matHeaderCellDef i18n="@@example"> Example </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.example}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-                </ng-container>
-
-                <!-- Title Column -->
-                <ng-container matColumnDef="title">
-                    <mat-header-cell *matHeaderCellDef i18n="@@title"> Title </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-                </ng-container>
-
-                <mat-header-row class="darkgray" *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
-                <mat-row [ngClass]='row.rowColor' *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                <mat-footer-row class="darkgray" *matFooterRowDef="displayedColumns; sticky:true"></mat-footer-row>
-            </mat-table>
         </div>
     </div>
 </div>

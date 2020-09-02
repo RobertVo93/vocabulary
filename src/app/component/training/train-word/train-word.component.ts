@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Option } from 'src/app/interface/option';
 import { CommonService } from 'src/app/services/common.service';
 import { WordEnum } from 'src/app/configuration/enums';
@@ -13,6 +14,7 @@ import { UserSettingService } from 'src/app/services/user-setting.service';
 import { TagsService } from '../../data-management/tag/tags.service';
 import { Tags } from 'src/app/class/tags';
 import { KeyValue } from '@angular/common';
+import { SettingDialog } from 'src/app/share-component/setting-dialog/setting-dialog.component';
 
 const numberOfCard = 4;	//Define the number of training card
 
@@ -48,6 +50,7 @@ export class TrainWordComponent implements OnInit {
 	inputColor: string = this.config.color.blue;  //color for input text
 	isLastWord: boolean = false;   //check the training word is the last word
 	isFastReview: boolean = false;				//flag check fast review or not
+	showListWordTable: boolean = true;	//show table list words
 
 	wordEnum = WordEnum;  //use for checking condition in html page
 	viewColumns: Option[];  //list of column could be viewed
@@ -61,7 +64,9 @@ export class TrainWordComponent implements OnInit {
 	cards: KeyValue<string, string>[] = [];
 
 	constructor(private common: CommonService, public config: Config, private kanjiService: KanjiService, private tagService: TagsService,
-		private wordService: WordService, private dataSourceService: DataSourcesService, private setting: UserSettingService) { }
+		private wordService: WordService, private dataSourceService: DataSourcesService, private setting: UserSettingService, public dialog: MatDialog) {
+		this.onResetTrainedNumber = this.onResetTrainedNumber.bind(this);
+	}
 
 	ngOnInit() {
 		this.serverImagesURL = this.config.apiServiceURL.images;
@@ -88,7 +93,8 @@ export class TrainWordComponent implements OnInit {
 					: 0;
 			this.selectedTestMode = userSetting.selectedTrainingMode
 				? userSetting.selectedTrainingMode : WordEnum.word;
-
+			this.showListWordTable = !!userSetting.showTable;
+			this.isFastReview = !!userSetting.fastReview;
 			this.updateKanjiExplain();
 			this.allWordData = this.getWordDataWithDatasetId(this.selectedDataSource);
 			this.ranges = this.getAllRange(userSetting.selectedPartitions);
@@ -115,29 +121,46 @@ export class TrainWordComponent implements OnInit {
 	}
 
 	/**
-	 * Handle event change dropdown list training mode
-	 * @param event event parameter
-	 */
-	onTrainingModeChangeHandler(event) {
-		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedTrainingMode, this.selectedTestMode);
-		this.setting.updateData([this.currentUserSetting]);
-	}
-
-	/**
-	 * handle event change dropdown list dataset
-	 * @param event event parameter
-	 */
-	onChangeHandler(event) {
-		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedDatasource, this.selectedDataSource);
-		this.setting.updateData([this.currentUserSetting]);
-		this.updateDataBaseOnSelectedDataset(this.selectedDataSource);
-	}
-
-	/**
 	 * Handle reset trained number
 	 */
 	onResetTrainedNumber() {
 		this.wordService.setTrainedNumber([]).toPromise();
+	}
+
+	/**
+	 * Handle click on setting icon
+	 */
+	onSettingCLick() {
+		const dialogRef = this.dialog.open(SettingDialog, {
+			width: '80vw',
+			data: {
+				sources: this.dataset,
+				selectedSource: this.selectedDataSource,
+				trainingModes: this.testModes,
+				selectedTrainingMode: this.selectedTestMode,
+				isFastReview: this.isFastReview,
+				showTable: this.showListWordTable,
+				onResetTrainedNumber: this.onResetTrainedNumber
+			}
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				//update setting config
+				this.selectedDataSource = result.selectedSource;
+				this.selectedTestMode = result.selectedTrainingMode;
+				this.isFastReview = result.isFastReview;
+				this.showListWordTable = result.showTable;
+				//store the setting config
+				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedDatasource, this.selectedDataSource);
+				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedTrainingMode, this.selectedTestMode);
+				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.fastReview, this.isFastReview);
+				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.showTable, this.showListWordTable);
+				this.setting.updateData([this.currentUserSetting]);
+				//update page
+				this.updateDataBaseOnSelectedDataset(this.selectedDataSource);
+			}
+		});
 	}
 
 	/**

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Config } from 'src/app/configuration/config';
 import { Option } from 'src/app/interface/option';
 import { WordEnum } from 'src/app/configuration/enums';
@@ -10,6 +11,7 @@ import { UserSettingService } from 'src/app/services/user-setting.service';
 import { Tags } from 'src/app/class/tags';
 import { TagsService } from '../../data-management/tag/tags.service';
 import { KeyValue } from '@angular/common';
+import { SettingDialog } from 'src/app/share-component/setting-dialog/setting-dialog.component';
 
 const numberOfCard = 4;	//Define the number of training card
 
@@ -27,6 +29,7 @@ export class TrainKanjiComponent implements OnInit {
 	numberOfRandomKanji: number = 0;          //set number of random Kanji input by user
 	selectedKanjiLevel: number = 0;            //selected kanji level
 	isFastReview: boolean = false;				//flag check fast review or not
+	showListWordTable: boolean = true;	//show table list words
 
 	//display varibles
 	inputColor: string = this.config.color.blue;  //color for input text
@@ -58,7 +61,9 @@ export class TrainKanjiComponent implements OnInit {
 
 	wordEnum = WordEnum;
 	constructor(private common: CommonService, private config: Config, private kanjiService: KanjiService,
-		private setting: UserSettingService, private tagService: TagsService) { }
+		private setting: UserSettingService, private tagService: TagsService, public dialog: MatDialog) {
+		this.onResetTrainedNumber = this.onResetTrainedNumber.bind(this);
+	}
 
 	ngOnInit() {
 		this.serverImagesURL = this.config.apiServiceURL.images;
@@ -76,7 +81,7 @@ export class TrainKanjiComponent implements OnInit {
 				: this.kanjiLevels[0].value;
 			this.selectedTestMode = userSetting.selectedTrainingMode
 				? userSetting.selectedTrainingMode : WordEnum.word;
-
+			this.isFastReview = !!userSetting.fastReview;
 			this.testModes = this.getAllTestMode(); //get test mode
 			this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel, userSetting.selectedPartitions);
 		});
@@ -96,6 +101,39 @@ export class TrainKanjiComponent implements OnInit {
 	 */
 	onTagSelectionChangeHandler(event) {
 		this.kanjiService.updateData([this.previousTrainingKanji]).toPromise();
+	}
+	
+	/**
+	 * Handle click on setting icon
+	 */
+	onSettingCLick() {
+		const dialogRef = this.dialog.open(SettingDialog, {
+			width: '80vw',
+			data: {
+				sources: this.kanjiLevels,
+				selectedSource: this.selectedKanjiLevel,
+				trainingModes: this.testModes,
+				selectedTrainingMode: this.selectedTestMode,
+				isFastReview: this.isFastReview,
+				onResetTrainedNumber: this.onResetTrainedNumber
+			}
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				//update setting config
+				this.selectedKanjiLevel = result.selectedSource;
+				this.selectedTestMode = result.selectedTrainingMode;
+				this.isFastReview = result.isFastReview;
+				//store the setting config
+				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.selectedDatasource, this.selectedKanjiLevel);
+				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.selectedTrainingMode, this.selectedTestMode);
+				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.fastReview, this.isFastReview);
+				this.setting.updateData([this.currentUserSetting]);
+				//update page
+				this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel);
+			}
+		});
 	}
 
 	/**
@@ -144,25 +182,6 @@ export class TrainKanjiComponent implements OnInit {
 	onMoveNextKanji() {
 		this.trained++;
 		this.processNewKanji();
-	}
-
-	/**
-	 * handle event change dropdown list dataset
-	 * @param event event parameter
-	 */
-	onChangeHandler(event) {
-		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.selectedDatasource, this.selectedKanjiLevel);
-		this.setting.updateData([this.currentUserSetting]);
-		this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel);
-	}
-
-	/**
-	 * Handle event change dropdown list training mode
-	 * @param event event parameter
-	 */
-	onTrainingModeChangeHandler(event) {
-		this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.selectedTrainingMode, this.selectedTestMode);
-		this.setting.updateData([this.currentUserSetting]);
 	}
 
 	/**

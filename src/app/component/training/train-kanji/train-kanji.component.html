@@ -1,21 +1,6 @@
 <div class="train-container container">
     <div class="control-panel">
-        <div class="column text-align-left">
-            <button class="cell" (click)='onResetTrainedNumber()'>Reset trained number</button>
-        </div>
-        <div class="column text-align-center">
-            <mat-form-field class="cell">
-                <mat-label>Kanji level</mat-label>
-                <mat-select [(value)]='selectedKanjiLevel' (selectionChange)='onChangeHandler($event)'>
-                    <mat-option *ngFor="let data of kanjiLevels" [value]="data.value">
-                        {{data.viewValue}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div class="column text-align-right">
-            <div class="cell"></div>
-        </div>
+        <mat-icon (click)="onSettingCLick()" class="cursor-pointer float-right" title="Settings">settings</mat-icon>
     </div>
 
     <div class="leftBody" align="center">
@@ -23,8 +8,8 @@
 
         <div class="training-kanji" *ngIf='trainingKanji'>
             <div *ngIf='selectedTestMode == wordEnum.word;'>
-                <img height="100" [attr.title]="nextTrainingKanji.word" class="details-image" hidden="true" src="{{serverImagesURL}}/{{nextTrainingKanji.filename}}" />
-                <img height="100" [attr.title]="trainingKanji.word" class="details-image" src="{{serverImagesURL}}/{{trainingKanji.filename}}" />
+                <img height="150" [attr.title]="nextTrainingKanji.word" class="details-image" hidden="true" src="{{serverImagesURL}}/{{nextTrainingKanji.filename}}" />
+                <img height="150" [attr.title]="trainingKanji.word" class="details-image" src="{{serverImagesURL}}/{{trainingKanji.filename}}" />
             </div>
             <div *ngIf='selectedTestMode == wordEnum.kanji;'>
                 <label class='fs20'>{{trainingKanji.word}} - {{trainingKanji.fullMeaning}}</label>
@@ -35,8 +20,7 @@
                 <mat-form-field class="example-full-width">
                     <textarea matInput [ngClass]='inputColor' id="inputKanjiId" (keyup)='onKeyUpInput($event)' placeholder="Input kanji" [(ngModel)]='inputKanji' i18n-placeholder="@@inputWord"></textarea>
                 </mat-form-field>
-                <!-- <mat-checkbox class="ml20" [(ngModel)]="isAutoNext"><label i18n='@@autoNext'>Auto Next</label></mat-checkbox> -->
-                <button class="button-border ml20" mat-button (click)='onMoveNextKanji()' title="Move Next">>>></button>
+                <mat-icon (click)="onMoveNextKanji()" class="cursor-pointer ml20" style="font-size: 40px" title="Move Next">skip_next</mat-icon>
             </div>
             <div class="fast-review-training" [hidden]="!isFastReview">
                 <mat-card *ngFor="let card of cards" class="cursor-pointer card selection-card" (click)='onCardSelected(card.value)'>
@@ -45,15 +29,7 @@
             </div>
         </div>
         <div class="training-control-container">
-            <mat-form-field>
-                <mat-label>Training Mode</mat-label>
-                <mat-select [(value)]='selectedTestMode' (selectionChange)="onTrainingModeChangeHandler($event)">
-                    <mat-option *ngFor="let mode of testModes" [value]="mode.value">
-                        {{mode.viewValue}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field class="positionSelection ml20">
+            <mat-form-field class="positionSelection">
                 <mat-label>Partitions</mat-label>
                 <mat-select [(value)]='selectedRanges' multiple (selectionChange)='onRangeChangeHandler($event)'>
                     <mat-option *ngFor="let range of ranges" [value]="range.value">
@@ -61,9 +37,6 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-checkbox class="ml20" title="support for fast review vocabulary" [(ngModel)]="isFastReview">
-                Fast review
-            </mat-checkbox>
         </div>
     </div>
 

@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>Training Configuration</h1>
+<div mat-dialog-content>
+    <div>
+        <mat-form-field class="w100-p">
+            <mat-label>Sources</mat-label>
+            <mat-select [(value)]='data.selectedSource'>
+                <mat-option *ngFor="let opt of data.sources" [value]="opt.value">
+                    {{opt.viewValue}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field class="w100-p">
+            <mat-label>Training Mode</mat-label>
+            <mat-select [(value)]='data.selectedTrainingMode'>
+                <mat-option *ngFor="let opt of data.trainingModes" [value]="opt.value">
+                    {{opt.viewValue}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-checkbox title="support for fast review vocabulary" [(ngModel)]="data.isFastReview">
+            Fast review
+        </mat-checkbox>
+    </div>
+    <div *ngIf="data.showTable != null">
+        <mat-checkbox title="Show list records" [(ngModel)]="data.showTable">
+            Show table records
+        </mat-checkbox>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <div style="width: 100%; display: block">
+        <button class="float-right" mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+        <button class="float-left" mat-button (click)='onResetTrainedNumber()'>Reset trained number</button>
+    </div>
+</div>

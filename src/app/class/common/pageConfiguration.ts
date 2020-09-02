@@ -6,4 +6,6 @@ export class PageConfiguration {
     selectedPartitions: number[];
     selectedTrainingMode: number;
     selectedTags: number[];
+    showTable: boolean;
+    fastReview: boolean;
 }
