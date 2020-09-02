@@ -99,6 +99,8 @@ THE SOFTWARE.
 
 @angular/material/form-field
 
+@angular/material/icon
+
 @angular/material/paginator
 
 @angular/material/progress-spinner
