@@ -431,6 +431,7 @@ export class WordComponent implements OnInit, AfterViewInit {
 		dialogRef.afterClosed().subscribe(result => {
 			if (result != null && result.returnAction == this.config.returnAction.save) {
 				result.record.kanjiExplain = this.common.getKanjiIds(result.record.kanji, this.kanjis);
+				result.record.mark = 0;
 				this.service.createData([result.record]).subscribe(
 					(res) => {
 						location.reload();

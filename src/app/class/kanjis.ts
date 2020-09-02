@@ -50,6 +50,7 @@ export class Kanjis {
     filename: string;
     trainedNumber: number;
     relatedWords: string;
+    mark: number;
     
     createdBy: string;
     createdDate: Date;

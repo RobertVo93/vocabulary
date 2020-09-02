@@ -104,12 +104,12 @@
 @media (min-width:768px) {
     .rightBody {
         float: right;
-        width: 48%;
+        width: 47%;
         min-height: calc(100vh - 170px);
     }
     .leftBody {
         float: left;
-        width: 48%;
+        width: 47%;
         min-height: calc(100vh - 170px);
     }
     .leftBodyTitle {

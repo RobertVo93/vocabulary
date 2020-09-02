@@ -19,10 +19,6 @@ export class SettingDialog {
         public dialogRef: MatDialogRef<SettingDialog>,
         @Inject(MAT_DIALOG_DATA) public data: SettingDialogData) { }
 
-    onNoClick(): void {
-        this.dialogRef.close();
-    }
-
     onResetTrainedNumber(): void {
         this.data.onResetTrainedNumber();
         this.dialogRef.close();

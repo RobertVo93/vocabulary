@@ -374,6 +374,7 @@ export class KanjiComponent implements OnInit, AfterViewInit {
 
 		dialogRef.afterClosed().subscribe(result => {
 			if (result != null && result.returnAction == this.config.returnAction.save) {
+				result.record.mark = 0;
 				this.service.createData([result.record]).subscribe(
 					(res) => {
 						location.reload();

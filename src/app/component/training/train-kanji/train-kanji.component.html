@@ -42,6 +42,13 @@
 
     <div class="rightBody" align="center">
         <div class="displayArea" *ngIf='previousTrainingKanji'>
+            <div class="w100-p">
+                <button (click)="onMarkTrainingWordHandler($event)" mat-icon-button class="float-right favorite-icon">
+                    <mat-icon *ngIf='previousTrainingKanji.mark == 0' title="Not remembered" style="color: #9E9E9E;">favorite</mat-icon>
+                    <mat-icon *ngIf='previousTrainingKanji.mark == 1' style="color: black;" title="Remember">favorite</mat-icon>
+                    <mat-icon *ngIf='previousTrainingKanji.mark == 2' style="color: green;" title="Deep remember">favorite</mat-icon>
+                </button>
+            </div>
             <label class="fs20">remember: <span class="red">{{previousTrainingKanji.remember}}</span></label><br />
             <div class="related-word-div" [innerHTML]="previousTrainingKanji.relatedWords | safeHtml"></div>
             <div *ngIf="previousTrainingKanji.explain" align="left" class="pl10">

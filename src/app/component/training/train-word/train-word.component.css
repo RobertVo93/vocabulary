@@ -80,10 +80,6 @@
     color: blue;
 }
 
-.container {
-    max-width: 100% !important;
-}
-
 .control-panel {
     display: table;
     width: 100%;
@@ -126,12 +122,12 @@
 @media (min-width:768px) {
     .rightBody {
         float: right;
-        width: 49%;
+        width: 48%;
         min-height: calc(100vh - 170px);
     }
     .leftBody {
         float: left;
-        width: 49%;
+        width: 48%;
         min-height: calc(100vh - 170px);
     }
     .column {

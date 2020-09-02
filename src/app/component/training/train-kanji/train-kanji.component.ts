@@ -102,6 +102,15 @@ export class TrainKanjiComponent implements OnInit {
 	onTagSelectionChangeHandler(event) {
 		this.kanjiService.updateData([this.previousTrainingKanji]).toPromise();
 	}
+
+	/**
+	 * Mark training word
+	 * @param event 
+	 */
+	onMarkTrainingWordHandler(event) {
+		this.previousTrainingKanji.mark = (this.previousTrainingKanji.mark + 1) % 3;
+		this.kanjiService.updateData([this.previousTrainingKanji]).toPromise();
+	}
 	
 	/**
 	 * Handle click on setting icon

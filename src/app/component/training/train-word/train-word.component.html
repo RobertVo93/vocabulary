@@ -120,6 +120,13 @@
 
     <div class="rightBody" align="center">
         <div class="displayArea" *ngIf='previousTrainingWord'>
+            <div class="w100-p">
+                <button (click)="onMarkTrainingWordHandler($event)" mat-icon-button class="float-right favorite-icon" aria-label="Example icon-button with heart icon">
+                    <mat-icon *ngIf='previousTrainingWord.mark == 0' title="Not remembered" style="color: #9E9E9E;">favorite</mat-icon>
+                    <mat-icon *ngIf='previousTrainingWord.mark == 1' style="color: black;" title="Remember">favorite</mat-icon>
+                    <mat-icon *ngIf='previousTrainingWord.mark == 2' style="color: green;" title="Deep remember">favorite</mat-icon>
+                </button>
+            </div>
             <mat-form-field class="mt15">
                 <mat-label>Add Tag</mat-label>
                 <mat-select [(value)]='previousTrainingWord.tags' multiple (selectionChange)='onTagSelectionChangeHandler($event)'>
@@ -128,7 +135,8 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <div><strong>
+            <div>
+                <strong>
                     {{previousTrainingWord.word}}
                     ({{config.wordType[previousTrainingWord.type]}})
                     /{{previousTrainingWord.pronun}}/

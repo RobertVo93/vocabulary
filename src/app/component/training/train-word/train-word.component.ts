@@ -121,6 +121,15 @@ export class TrainWordComponent implements OnInit {
 	}
 
 	/**
+	 * Mark training word
+	 * @param event 
+	 */
+	onMarkTrainingWordHandler(event) {
+		this.previousTrainingWord.mark = (this.previousTrainingWord.mark + 1) % 3;
+		this.wordService.updateData([this.previousTrainingWord]).toPromise();
+	}
+
+	/**
 	 * Handle reset trained number
 	 */
 	onResetTrainedNumber() {

@@ -57,6 +57,7 @@ export class Words {
     tags: string[];
     filename: string;
     trainedNumber: number;
+    mark: number;
 
     createdBy: string;
     createdDate: Date;
