@@ -23,15 +23,16 @@ export class WordService {
 	 * @param pageNumber page number
 	 * @param pageSize page size
 	 */
-	getWordsByFilter(courseId: number, filter = '', sortActive: string, sortOrder = 'asc',
-		pageNumber, pageSize): Observable<DataSourceResponse<Words[]>> {
+	getWordsByFilter(courseId: string, filter = '', sortActive: string, sortOrder = 'asc',
+		pageNumber: number, pageSize: number, mark: number = -1): Observable<DataSourceResponse<Words[]>> {
 		let params = new HttpParams()
 			.set('courseId', courseId.toString())
 			.set('filter', filter)
 			.set('sortActive', sortActive)
 			.set('sortOrder', sortOrder)
-			.set('pageNumber', pageNumber.toString())
-			.set('pageSize', pageSize.toString());
+			.set('pageNumber', pageNumber ? pageNumber.toString() : null)
+			.set('pageSize', pageSize ? pageSize.toString() : null)
+			.set('mark', mark.toString());
 		return this.apiService.getWithParams(`${this.serverURL}/byfilter`, params);
 	}
 
@@ -109,7 +110,7 @@ export class WordService {
 	 * Convert list source obj to data
 	 * @param obj list source obj
 	 */
-	private convertListData(obj): Words[] {
+	convertListData(obj): Words[] {
 		if (obj == null)
 			return obj;
 		let data = [];

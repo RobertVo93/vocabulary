@@ -68,7 +68,6 @@ export class TrainKanjiComponent implements OnInit {
 	ngOnInit() {
 		this.serverImagesURL = this.config.apiServiceURL.images;
 		let promises = [
-			this.getAllKanji(),
 			this.getUserSetting(),
 			this.getAllTags()
 		];
@@ -76,7 +75,7 @@ export class TrainKanjiComponent implements OnInit {
 			this.kanjiLevels = this.getListOfKanjiLevel(); //get all dataset
 			//get user setting
 			let userSetting = this.common.getUserSettingForPage(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain);
-			this.selectedKanjiLevel = userSetting.selectedDatasource
+			let selectedKanjiLevel:any = userSetting.selectedDatasource
 				? parseInt(userSetting.selectedDatasource)
 				: this.kanjiLevels[0].value;
 			this.selectedTestMode = userSetting.selectedTrainingMode
@@ -84,7 +83,7 @@ export class TrainKanjiComponent implements OnInit {
 			this.isFastReview = !!userSetting.fastReview;
 			this.mark = userSetting.mark ? userSetting.mark : 0;
 			this.testModes = this.getAllTestMode(); //get test mode
-			this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel, userSetting.selectedPartitions);
+			this.getTrainingWordByFilter(selectedKanjiLevel, this.mark, userSetting.selectedPartitions);
 		});
 	}
 
@@ -111,6 +110,13 @@ export class TrainKanjiComponent implements OnInit {
 	onMarkTrainingWordHandler(event) {
 		this.previousTrainingKanji.mark = (this.previousTrainingKanji.mark + 1) % 3;
 		this.kanjiService.updateData([this.previousTrainingKanji]).toPromise();
+		//update to word list
+		this.originalData = this.originalData.map((val)=>{
+			if(val._id == this.previousTrainingKanji._id){
+				val.mark = this.previousTrainingKanji.mark;
+			}
+			return val;
+		});
 	}
 
 	/**
@@ -135,21 +141,37 @@ export class TrainKanjiComponent implements OnInit {
 				//update setting config
 				this.selectedTestMode = result.selectedTrainingMode;
 				this.isFastReview = result.isFastReview;
-				this.mark = result.mark;
 				//store the setting config
-				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.selectedDatasource, this.selectedKanjiLevel);
+				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.selectedDatasource, result.selectedSource);
+				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.mark, result.mark);
 				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.selectedTrainingMode, this.selectedTestMode);
 				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.fastReview, this.isFastReview);
-				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.mark, this.mark);
 				this.setting.updateData([this.currentUserSetting]);
 				//update page
-				this.cards = this.buildListCards(numberOfCard, this.trainingKanji, this.common.clone(this.kanjiData));
-				if (this.selectedKanjiLevel != result.selectedSource) {
-					this.selectedKanjiLevel = result.selectedSource;
-					this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel);
+				if (this.selectedKanjiLevel != result.selectedSource || this.mark != result.mark){
+					this.getTrainingWordByFilter(result.selectedSource, result.mark);
+				}
+				else{
+					this.cards = this.buildListCards(numberOfCard, this.trainingKanji, this.common.clone(this.originalData));
 				}
 			}
 		});
+	}
+
+	async getTrainingWordByFilter(dataSource: string, mark: number, selectedPartitions?: any) {
+		this.mark = mark;
+		if (this.selectedKanjiLevel.toString() != dataSource) {
+			this.selectedKanjiLevel = parseInt(dataSource);
+			let data = await this.kanjiService.getKanjisByFilter(dataSource,
+				'',
+				null,
+				null,
+				null,
+				null).toPromise();
+			this.originalData = this.kanjiService.convertListData(data.data);
+		}
+		this.allKanjiData = this.originalData.filter((val) => val.mark == this.mark || this.mark == -1);
+		this.ranges = this.getAllRange(selectedPartitions);
 	}
 
 	/**
@@ -207,12 +229,6 @@ export class TrainKanjiComponent implements OnInit {
 		this.kanjiService.setTrainedNumber([]).toPromise();
 	}
 
-	private updateDataBaseOnSelectedKanjiLevel(selected, selectedPartitions?) {
-		this.allKanjiData = this.common.clone(this.originalData.filter(function (val, index) {
-			return val.JLPTLevel == selected || selected == -1;	//-1 is all
-		}));
-		this.ranges = this.getAllRange(selectedPartitions);
-	}
 	/**
 	 * Get all dataset
 	 */
@@ -226,17 +242,6 @@ export class TrainKanjiComponent implements OnInit {
 			})
 		}
 		return options.sort((a, b) => a.value - b.value);
-	}
-
-	/**
-	 * get kanjis data source
-	 * @param datasetId dataset Id
-	 */
-	private async getAllKanji() {
-		let dataConverted = await this.kanjiService.getAllData();
-		if (dataConverted) {
-			this.originalData = dataConverted;
-		}
 	}
 
 	/**
@@ -366,7 +371,7 @@ export class TrainKanjiComponent implements OnInit {
 		this.previousTrainingKanji = this.common.clone(this.trainingKanji);
 		this.trainingKanji = this.common.clone(this.nextTrainingKanji);
 		//generate card list for selection
-		this.cards = this.buildListCards(numberOfCard, this.trainingKanji, this.common.clone(this.kanjiData));
+		this.cards = this.buildListCards(numberOfCard, this.trainingKanji, this.common.clone(this.originalData));
 
 		if (this.listIndexKanji.length != 0) {
 			this.nextTrainingKanji = this.randomNewKanji();

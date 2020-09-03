@@ -116,7 +116,7 @@ export class KanjiComponent implements OnInit, AfterViewInit {
 	 */
 	loadKanjisPage() {
         this.dataSources.loadKanjis(
-            -1,
+            "-1",
 			this.input.nativeElement.value,
 			this.sort.active,
             this.sort.direction,

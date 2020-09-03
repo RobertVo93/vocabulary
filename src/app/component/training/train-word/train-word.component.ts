@@ -70,7 +70,6 @@ export class TrainWordComponent implements OnInit {
 		this.serverImagesURL = this.config.apiServiceURL.images;
 		let promises = [
 			this.getListOfDataset(),
-			this.getAllWordsDB(),
 			this.getUserSetting(),
 			this.getAllTags()
 		];
@@ -83,7 +82,7 @@ export class TrainWordComponent implements OnInit {
 					this.config.viewColumnsDef.word
 					, this.config.viewColumnsDef.meaning
 				];
-			this.selectedDataSource = userSetting.selectedDatasource
+			let selectedDataSource:any = userSetting.selectedDatasource
 				? userSetting.selectedDatasource
 				: (this.dataset.length != 0)
 					? this.dataset[0].value
@@ -93,8 +92,7 @@ export class TrainWordComponent implements OnInit {
 			this.showListWordTable = !!userSetting.showTable;
 			this.isFastReview = !!userSetting.fastReview;
 			this.mark = userSetting.mark ? userSetting.mark : 0;
-			this.allWordData = this.getWordDataWithDatasetId(this.selectedDataSource);
-			this.ranges = this.getAllRange(userSetting.selectedPartitions);
+			this.getTrainingWordByFilter(selectedDataSource, this.mark, userSetting.selectedPartitions);
 			this.testModes = this.getAllTestMode(); //get test mode
 			this.viewColumns = this.getAllViewMode(); //get all view column
 			this.displayedColumns = this.getColumnDef(this.selectedViewColumn); //get displaying column
@@ -124,6 +122,13 @@ export class TrainWordComponent implements OnInit {
 	onMarkTrainingWordHandler(event) {
 		this.previousTrainingWord.mark = (this.previousTrainingWord.mark + 1) % 3;
 		this.wordService.updateData([this.previousTrainingWord]).toPromise();
+		//update to word list
+		this.allWordDataInDB = this.allWordDataInDB.map((val)=>{
+			if(val._id == this.previousTrainingWord._id){
+				val.mark = this.previousTrainingWord.mark;
+			}
+			return val;
+		});
 	}
 
 	/**
@@ -157,32 +162,38 @@ export class TrainWordComponent implements OnInit {
 				this.selectedTestMode = result.selectedTrainingMode;
 				this.isFastReview = result.isFastReview;
 				this.showListWordTable = result.showTable;
-				this.mark = result.mark;
 				//store the setting config
-				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedDatasource, this.selectedDataSource);
+				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedDatasource, result.selectedSource);
+				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.mark, result.mark);
 				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedTrainingMode, this.selectedTestMode);
 				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.fastReview, this.isFastReview);
 				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.showTable, this.showListWordTable);
-				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.mark, this.mark);
 				this.setting.updateData([this.currentUserSetting]);
 				//update page
-				this.cards = this.buildListCards(numberOfCard, this.trainingWord, this.common.clone(this.allWordData));
-				if (this.selectedDataSource != result.selectedSource) {
-					this.selectedDataSource = result.selectedSource;
-					this.updateDataBaseOnSelectedDataset(this.selectedDataSource);
+				if (this.selectedDataSource != result.selectedSource || this.mark != result.mark){
+					this.getTrainingWordByFilter(result.selectedSource, result.mark);
+				}
+				else{
+					this.cards = this.buildListCards(numberOfCard, this.trainingWord, this.common.clone(this.allWordDataInDB));
 				}
 			}
 		});
 	}
 
-	/**
-	 * Get all word in db
-	 */
-	async getAllWordsDB() {
-		let dataConverted = await this.wordService.getAllData();
-		if (dataConverted) {
-			this.allWordDataInDB = dataConverted;
+	async getTrainingWordByFilter(dataSource: string, mark: number, selectedPartitions?: any) {
+		this.mark = mark;
+		if (this.selectedDataSource != dataSource) {
+			this.selectedDataSource = dataSource;
+			let data = await this.wordService.getWordsByFilter(dataSource,
+				'',
+				null,
+				null,
+				null,
+				null).toPromise();
+			this.allWordDataInDB = this.wordService.convertListData(data.data);
 		}
+		this.allWordData = this.allWordDataInDB.filter((val) => val.mark == this.mark || this.mark == -1);
+		this.ranges = this.getAllRange(selectedPartitions);
 	}
 
 	/**
@@ -215,15 +226,6 @@ export class TrainWordComponent implements OnInit {
 			}
 		}
 		this.dataset = result;
-	}
-
-	/**
-	 * Trigger update data
-	 * @param selectedDataset target dataset Id
-	 */
-	updateDataBaseOnSelectedDataset(selectedDatasetID: number): any {
-		this.allWordData = this.getWordDataWithDatasetId(selectedDatasetID);
-		this.ranges = this.getAllRange();
 	}
 
 	/**
@@ -397,17 +399,6 @@ export class TrainWordComponent implements OnInit {
 	}
 
 	/**
-	 * get words data source
-	 * @param datasetId dataset Id
-	 */
-	getWordDataWithDatasetId(datasetId: number): Words[] {
-		let result = this.allWordDataInDB.filter((ele) => {
-			return ele.dataSource == datasetId || this.selectedDataSource == -1;
-		});
-		return result;
-	}
-
-	/**
 	 * Get all training words base on selected parts
 	 * @param parts list of selected parts for training
 	 */
@@ -498,7 +489,7 @@ export class TrainWordComponent implements OnInit {
 
 		this.previousTrainingWord = this.common.clone(this.trainingWord);
 		this.trainingWord = this.common.clone(this.nextTrainingWord);//generate card list for selection
-		this.cards = this.buildListCards(numberOfCard, this.trainingWord, this.common.clone(this.allWordData));
+		this.cards = this.buildListCards(numberOfCard, this.trainingWord, this.common.clone(this.allWordDataInDB));
 
 		if (this.listIndexWord.length != 0) {
 			this.nextTrainingWord = this.randomNewWord();

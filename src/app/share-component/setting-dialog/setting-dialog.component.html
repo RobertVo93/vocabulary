@@ -31,17 +31,19 @@
         </mat-checkbox>
     </div>
     <div class="w100-p">
-        Mark
-        <button (click)="onMarkChangeHandler($event)" mat-icon-button class="favorite-icon">
-            <mat-icon *ngIf='data.mark == 0' title="Not remembered" style="color: #9E9E9E;">favorite</mat-icon>
-            <mat-icon *ngIf='data.mark == 1' style="color: black;" title="Remember">favorite</mat-icon>
-            <mat-icon *ngIf='data.mark == 2' style="color: green;" title="Deep remember">favorite</mat-icon>
-        </button>
+        <mat-checkbox title="Show record mark" (change)="onShowMarkClick()" [(ngModel)]="showRecordMark">
+            Show mark
+        </mat-checkbox><br/>
+        <button *ngIf="showRecordMark" (click)="onMarkChangeHandler($event)" mat-icon-button class="favorite-icon ml20">
+            <mat-icon *ngIf='data.mark == 0' title="Not remember" style="color: #9E9E9E;">favorite</mat-icon>
+            <mat-icon *ngIf='data.mark == 1' style="color: black;" title="Remembered">favorite</mat-icon>
+            <mat-icon *ngIf='data.mark == 2' style="color: green;" title="Deep remembered">favorite</mat-icon>
+        </button> {{ data.mark == 0 ? 'Not remember': (data.mark == 1 ? 'Remembered' : (data.mark == 2 ? 'Deep remembered' : '')) }}
     </div>
 </div>
 <div mat-dialog-actions>
     <div style="width: 100%; display: block">
-        <button class="float-right" mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+        <button class="float-right" mat-button (click)='onClickOk()' cdkFocusInitial>Ok</button>
         <button class="float-left" mat-button (click)='onResetTrainedNumber()'>Reset trained number</button>
     </div>
 </div>
