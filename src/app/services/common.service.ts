@@ -319,6 +319,7 @@ export class CommonService {
             result.selectedTags = setting.userSetting[page][this.config.userSettingKey.selectedTags];
             result.showTable = setting.userSetting[page][this.config.userSettingKey.showTable];
             result.fastReview = setting.userSetting[page][this.config.userSettingKey.fastReview];
+            result.mark = setting.userSetting[page][this.config.userSettingKey.mark];
         }
         return result;
     }

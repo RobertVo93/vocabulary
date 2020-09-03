@@ -7,6 +7,7 @@ interface SettingDialogData {
     selectedTrainingMode: string,
     isFastReview: boolean,
     showTable: boolean,
+    mark: number,
     onResetTrainedNumber: () => void
 }
 @Component({
@@ -17,11 +18,17 @@ export class SettingDialog {
 
     constructor(
         public dialogRef: MatDialogRef<SettingDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: SettingDialogData) { }
+        @Inject(MAT_DIALOG_DATA) public data: SettingDialogData) {
+        this.data.mark = this.data.mark || 0;
+    }
 
     onResetTrainedNumber(): void {
         this.data.onResetTrainedNumber();
         this.dialogRef.close();
+    }
+
+    onMarkChangeHandler(event) {
+        this.data.mark = (this.data.mark + 1) % 3;
     }
 
 }

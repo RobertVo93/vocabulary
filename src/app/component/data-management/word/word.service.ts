@@ -24,7 +24,7 @@ export class WordService {
 	 * @param pageSize page size
 	 */
 	getWordsByFilter(courseId: number, filter = '', sortActive: string, sortOrder = 'asc',
-		pageNumber = 0, pageSize = 50): Observable<DataSourceResponse<Words[]>> {
+		pageNumber, pageSize): Observable<DataSourceResponse<Words[]>> {
 		let params = new HttpParams()
 			.set('courseId', courseId.toString())
 			.set('filter', filter)

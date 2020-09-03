@@ -30,6 +30,14 @@
             Show table records
         </mat-checkbox>
     </div>
+    <div class="w100-p">
+        Mark
+        <button (click)="onMarkChangeHandler($event)" mat-icon-button class="favorite-icon">
+            <mat-icon *ngIf='data.mark == 0' title="Not remembered" style="color: #9E9E9E;">favorite</mat-icon>
+            <mat-icon *ngIf='data.mark == 1' style="color: black;" title="Remember">favorite</mat-icon>
+            <mat-icon *ngIf='data.mark == 2' style="color: green;" title="Deep remember">favorite</mat-icon>
+        </button>
+    </div>
 </div>
 <div mat-dialog-actions>
     <div style="width: 100%; display: block">

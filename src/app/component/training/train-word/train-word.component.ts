@@ -7,8 +7,6 @@ import { Config } from 'src/app/configuration/config';
 import { WordService } from '../../data-management/word/word.service';
 import { Words } from 'src/app/class/words';
 import { DataSourcesService } from '../../data-management/data-sources/data-sources.service';
-import { KanjiService } from '../../data-management/kanji/kanji.service';
-import { Kanjis } from 'src/app/class/kanjis';
 import { UserSetting } from 'src/app/class/userSetting';
 import { UserSettingService } from 'src/app/services/user-setting.service';
 import { TagsService } from '../../data-management/tag/tags.service';
@@ -34,7 +32,6 @@ export class TrainWordComponent implements OnInit {
 	showHideButtonName: string = "Show more";  //button's name
 	isShowMore: boolean = false;  //flag show kanji explain
 
-	kanjis: Kanjis[];			//all kanjis
 	allWordDataInDB: Words[];	//all word's data in Database
 	allWordData: Words[];  		//all word's data base on selected dataset
 	wordData: Words[];     		//word's data for training
@@ -51,6 +48,7 @@ export class TrainWordComponent implements OnInit {
 	isLastWord: boolean = false;   //check the training word is the last word
 	isFastReview: boolean = false;				//flag check fast review or not
 	showListWordTable: boolean = true;	//show table list words
+	mark: number = 0;				//mark of training number not remember, remember, deep remember
 
 	wordEnum = WordEnum;  //use for checking condition in html page
 	viewColumns: Option[];  //list of column could be viewed
@@ -63,7 +61,7 @@ export class TrainWordComponent implements OnInit {
 	tags: Tags[];
 	cards: KeyValue<string, string>[] = [];
 
-	constructor(private common: CommonService, public config: Config, private kanjiService: KanjiService, private tagService: TagsService,
+	constructor(private common: CommonService, public config: Config, private tagService: TagsService,
 		private wordService: WordService, private dataSourceService: DataSourcesService, private setting: UserSettingService, public dialog: MatDialog) {
 		this.onResetTrainedNumber = this.onResetTrainedNumber.bind(this);
 	}
@@ -73,7 +71,6 @@ export class TrainWordComponent implements OnInit {
 		let promises = [
 			this.getListOfDataset(),
 			this.getAllWordsDB(),
-			this.getAllKanjis(),
 			this.getUserSetting(),
 			this.getAllTags()
 		];
@@ -95,7 +92,7 @@ export class TrainWordComponent implements OnInit {
 				? userSetting.selectedTrainingMode : WordEnum.word;
 			this.showListWordTable = !!userSetting.showTable;
 			this.isFastReview = !!userSetting.fastReview;
-			this.updateKanjiExplain();
+			this.mark = userSetting.mark ? userSetting.mark : 0;
 			this.allWordData = this.getWordDataWithDatasetId(this.selectedDataSource);
 			this.ranges = this.getAllRange(userSetting.selectedPartitions);
 			this.testModes = this.getAllTestMode(); //get test mode
@@ -149,6 +146,7 @@ export class TrainWordComponent implements OnInit {
 				selectedTrainingMode: this.selectedTestMode,
 				isFastReview: this.isFastReview,
 				showTable: this.showListWordTable,
+				mark: this.mark,
 				onResetTrainedNumber: this.onResetTrainedNumber
 			}
 		});
@@ -156,18 +154,23 @@ export class TrainWordComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(result => {
 			if (result) {
 				//update setting config
-				this.selectedDataSource = result.selectedSource;
 				this.selectedTestMode = result.selectedTrainingMode;
 				this.isFastReview = result.isFastReview;
 				this.showListWordTable = result.showTable;
+				this.mark = result.mark;
 				//store the setting config
 				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedDatasource, this.selectedDataSource);
 				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.selectedTrainingMode, this.selectedTestMode);
 				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.fastReview, this.isFastReview);
 				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.showTable, this.showListWordTable);
+				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.wordTrain, this.config.userSettingKey.mark, this.mark);
 				this.setting.updateData([this.currentUserSetting]);
 				//update page
-				this.updateDataBaseOnSelectedDataset(this.selectedDataSource);
+				this.cards = this.buildListCards(numberOfCard, this.trainingWord, this.common.clone(this.allWordData));
+				if (this.selectedDataSource != result.selectedSource) {
+					this.selectedDataSource = result.selectedSource;
+					this.updateDataBaseOnSelectedDataset(this.selectedDataSource);
+				}
 			}
 		});
 	}
@@ -179,16 +182,6 @@ export class TrainWordComponent implements OnInit {
 		let dataConverted = await this.wordService.getAllData();
 		if (dataConverted) {
 			this.allWordDataInDB = dataConverted;
-		}
-	}
-
-	/**
-	 * get all kanjis
-	 */
-	private async getAllKanjis() {
-		let dataConverted = await this.kanjiService.getAllData();
-		if (dataConverted) {
-			this.kanjis = dataConverted;
 		}
 	}
 
@@ -260,35 +253,20 @@ export class TrainWordComponent implements OnInit {
 		];
 	}
 
-	/**
-	 * get kanji detail by kanji_id
-	 */
-	private updateKanjiExplain() {
-		this.allWordDataInDB.forEach(ele => {
-			var kanjiExplain = this.common.clone(ele.kanjiExplain);
-			if (typeof (kanjiExplain) === 'object') {	//array
-				ele.kanjiExplain = '';
-				kanjiExplain.forEach(element => {
-					ele.kanjiExplain += '\r\n' + this.getKanjiDetailById(element);
-				});
-			}
-		});
-	}
-
-	/**
-	 * Get kanj by id
-	 * @param kanjiId kanji _id
-	 */
-	private getKanjiDetailById(kanjiId) {
-		let result = '';
-		for (var i = 0; i < this.kanjis.length; i++) {
-			if (this.kanjis[i]._id == kanjiId) {
-				result = this.kanjis[i].explain;
-				break;
-			}
-		}
-		return result;
-	}
+	// /**
+	//  * get kanji detail by kanji_id
+	//  */
+	// private updateKanjiExplain() {
+	// 	this.allWordDataInDB.forEach(ele => {
+	// 		var kanjiExplain = this.common.clone(ele.kanjiExplain);
+	// 		if (typeof (kanjiExplain) === 'object') {	//array
+	// 			ele.kanjiExplain = '';
+	// 			kanjiExplain.forEach(element => {
+	// 				ele.kanjiExplain += '\r\n' + this.getKanjiDetailById(element);
+	// 			});
+	// 		}
+	// 	});
+	// }
 
 	/**
 	 * get all displaying column

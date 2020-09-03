@@ -7,8 +7,8 @@
         <label class="leftBodyTitle" i18n='@@leftBodyTitle'>Typing your kanji </label> <br />
 
         <div class="training-kanji" *ngIf='trainingKanji'>
+            <img height="150" [attr.title]="nextTrainingKanji.word" class="details-image" hidden="true" src="{{serverImagesURL}}/{{nextTrainingKanji.filename}}" />
             <div *ngIf='selectedTestMode == wordEnum.word;'>
-                <img height="150" [attr.title]="nextTrainingKanji.word" class="details-image" hidden="true" src="{{serverImagesURL}}/{{nextTrainingKanji.filename}}" />
                 <img height="150" [attr.title]="trainingKanji.word" class="details-image" src="{{serverImagesURL}}/{{trainingKanji.filename}}" />
             </div>
             <div *ngIf='selectedTestMode == wordEnum.kanji;'>
@@ -45,8 +45,8 @@
             <div class="w100-p">
                 <button (click)="onMarkTrainingWordHandler($event)" mat-icon-button class="float-right favorite-icon">
                     <mat-icon *ngIf='previousTrainingKanji.mark == 0' title="Not remembered" style="color: #9E9E9E;">favorite</mat-icon>
-                    <mat-icon *ngIf='previousTrainingKanji.mark == 1' style="color: black;" title="Remember">favorite</mat-icon>
-                    <mat-icon *ngIf='previousTrainingKanji.mark == 2' style="color: green;" title="Deep remember">favorite</mat-icon>
+                    <mat-icon *ngIf='previousTrainingKanji.mark == 1' title="Remember" style="color: black;">favorite</mat-icon>
+                    <mat-icon *ngIf='previousTrainingKanji.mark == 2' title="Deep remember" style="color: green;">favorite</mat-icon>
                 </button>
             </div>
             <label class="fs20">remember: <span class="red">{{previousTrainingKanji.remember}}</span></label><br />

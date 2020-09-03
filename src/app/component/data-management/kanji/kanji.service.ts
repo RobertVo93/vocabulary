@@ -24,7 +24,7 @@ export class KanjiService {
 	 * @param pageSize page size
 	 */
 	getKanjisByFilter(courseId: number, filter = '', sortActive: string, sortOrder = 'asc',
-		pageNumber = 0, pageSize = 50): Observable<DataSourceResponse<Kanjis[]>> {
+		pageNumber, pageSize): Observable<DataSourceResponse<Kanjis[]>> {
 		let params = new HttpParams()
 			.set('courseId', courseId.toString())
 			.set('filter', filter)

@@ -272,6 +272,7 @@ export class Config {
         selectedTags: 'selectedTags',
         showTable: 'showTable',
         fastReview: 'fastReview',
+        mark: 'mark',
         page: {
             dataSourceManagement: 'dataSourceManagement',
             dataSourceTrain: 'dataSourceTrain',

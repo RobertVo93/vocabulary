@@ -8,4 +8,5 @@ export class PageConfiguration {
     selectedTags: number[];
     showTable: boolean;
     fastReview: boolean;
+    mark: number;
 }

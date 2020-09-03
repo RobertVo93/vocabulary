@@ -29,7 +29,7 @@ export class TrainKanjiComponent implements OnInit {
 	numberOfRandomKanji: number = 0;          //set number of random Kanji input by user
 	selectedKanjiLevel: number = 0;            //selected kanji level
 	isFastReview: boolean = false;				//flag check fast review or not
-	showListWordTable: boolean = true;	//show table list words
+	mark: number = 0;							//mark of training number not remember, remember, deep remember
 
 	//display varibles
 	inputColor: string = this.config.color.blue;  //color for input text
@@ -82,6 +82,7 @@ export class TrainKanjiComponent implements OnInit {
 			this.selectedTestMode = userSetting.selectedTrainingMode
 				? userSetting.selectedTrainingMode : WordEnum.word;
 			this.isFastReview = !!userSetting.fastReview;
+			this.mark = userSetting.mark ? userSetting.mark : 0;
 			this.testModes = this.getAllTestMode(); //get test mode
 			this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel, userSetting.selectedPartitions);
 		});
@@ -111,7 +112,7 @@ export class TrainKanjiComponent implements OnInit {
 		this.previousTrainingKanji.mark = (this.previousTrainingKanji.mark + 1) % 3;
 		this.kanjiService.updateData([this.previousTrainingKanji]).toPromise();
 	}
-	
+
 	/**
 	 * Handle click on setting icon
 	 */
@@ -124,6 +125,7 @@ export class TrainKanjiComponent implements OnInit {
 				trainingModes: this.testModes,
 				selectedTrainingMode: this.selectedTestMode,
 				isFastReview: this.isFastReview,
+				mark: this.mark,
 				onResetTrainedNumber: this.onResetTrainedNumber
 			}
 		});
@@ -131,16 +133,21 @@ export class TrainKanjiComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(result => {
 			if (result) {
 				//update setting config
-				this.selectedKanjiLevel = result.selectedSource;
 				this.selectedTestMode = result.selectedTrainingMode;
 				this.isFastReview = result.isFastReview;
+				this.mark = result.mark;
 				//store the setting config
 				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.selectedDatasource, this.selectedKanjiLevel);
 				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.selectedTrainingMode, this.selectedTestMode);
 				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.fastReview, this.isFastReview);
+				this.currentUserSetting = this.common.updateUserSetting(this.currentUserSetting, this.config.userSettingKey.page.kanjiTrain, this.config.userSettingKey.mark, this.mark);
 				this.setting.updateData([this.currentUserSetting]);
 				//update page
-				this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel);
+				this.cards = this.buildListCards(numberOfCard, this.trainingKanji, this.common.clone(this.kanjiData));
+				if (this.selectedKanjiLevel != result.selectedSource) {
+					this.selectedKanjiLevel = result.selectedSource;
+					this.updateDataBaseOnSelectedKanjiLevel(this.selectedKanjiLevel);
+				}
 			}
 		});
 	}
