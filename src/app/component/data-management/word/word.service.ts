@@ -30,7 +30,7 @@ export class WordService {
 			.set('filter', filter)
 			.set('sortActive', sortActive)
 			.set('sortOrder', sortOrder)
-			.set('pageNumber', pageNumber ? pageNumber.toString() : null)
+			.set('pageNumber', pageNumber.toString())
 			.set('pageSize', pageSize ? pageSize.toString() : null)
 			.set('mark', mark.toString());
 		return this.apiService.getWithParams(`${this.serverURL}/byfilter`, params);

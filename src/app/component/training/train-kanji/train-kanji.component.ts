@@ -166,7 +166,7 @@ export class TrainKanjiComponent implements OnInit {
 				'',
 				null,
 				null,
-				null,
+				0,
 				null).toPromise();
 			this.originalData = this.kanjiService.convertListData(data.data);
 		}

@@ -188,7 +188,7 @@ export class TrainWordComponent implements OnInit {
 				'',
 				null,
 				null,
-				null,
+				0,
 				null).toPromise();
 			this.allWordDataInDB = this.wordService.convertListData(data.data);
 		}
