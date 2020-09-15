@@ -6,6 +6,7 @@
     <div class="leftBody" align="center">
         <div class="pt5" *ngIf='trainingWord'>
             <img height="150" [attr.title]="nextTrainingWord.meaning" hidden="true" class="details-image" src="{{serverImagesURL}}/{{nextTrainingWord.filename}}" />
+            <img height="150" [attr.title]="trainingWord.meaning" hidden="true" class="details-image" src="{{serverImagesURL}}/{{trainingWord.filename}}" />
             <div *ngIf='selectedTestMode == wordEnum.word;'>
                 <label class='fs40'>{{trainingWord.meaning}}</label>
             </div>
@@ -162,5 +163,6 @@
                 <div class="ck-editor__main" [innerHTML]="previousTrainingWord.kanjiExplain | safeHtml"></div>
             </div>
         </div>
+        <label>Trained / Total: {{trainedNO}} / {{totalTraining}} </label> <br />
     </div>
 </div>

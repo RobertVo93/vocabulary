@@ -459,8 +459,8 @@ export class TrainWordComponent implements OnInit {
 		this.nextTrainingWordIndex = this.listIndexWord[randomNumber];
 		//get word
 		let word: Words = this.wordData[this.nextTrainingWordIndex];
-		if (word.kanjiExplain)
-			word.kanjiExplain = word.kanjiExplain.replace(new RegExp('\r\n', 'g'), "<br \\>").replace(new RegExp('\n', 'g'), "<br \\>");
+		// if (word.kanjiExplain)
+		// 	word.kanjiExplain = word.kanjiExplain.replace(new RegExp('\r\n', 'g'), "<br \\>").replace(new RegExp('\n', 'g'), "<br \\>");
 		//remove index from list available training words
 		this.listIndexWord.splice(randomNumber, 1);
 		return word;
