@@ -65,11 +65,9 @@ MongoClient.connect(uri, {
 
 Step 1: `npm install -g angular-cli-ghpages` (Run only for the first time when your environment haven't installed angular-cli-ghpages yet.
 
-step 2: `ng build --prod --base-href https://robertvo93.github.io/vocabulary/`
+Step 2: Create 2 env files in src/environments: environment.prod.ts and environment.ts
 
-step 3: `ng build --prod --base-href=/vocabulary/`
-
-step 4: `ngh --dir=dist/vocabulary`
+step 3: `npm run deploy`
 
 ## Deploy heroku cloud (https://itnext.io/how-to-deploy-angular-application-to-heroku-1d56e09c5147)
 
